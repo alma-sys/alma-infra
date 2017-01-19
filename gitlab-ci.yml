@@ -1,0 +1,67 @@
+variables:
+  SOLUTION: "Alma.Infra.sln"
+  CONFIGURATION: "Release"
+  BUILDACTION: "Clean,Build"
+
+  MSBUILD: "14.0"
+  VISUALSTUDIO: "14.0"
+  VERBOSITY: "minimal"
+
+  PUBLISHDBPROJ: ""
+  PUBLISHPROJ: ""
+  DEVELOPMENTPROFILE: ""
+  STAGINGPROFILE: ""
+  STAGINGPASSWORD: ""
+  PRODUCTIONPROFILE: ""
+
+  NUGETREPOSITORY: "https://dev.almasistemas.com.br/nuget/alma"
+  NUGETAPIKEY: "alma!321"
+
+before_script:
+  - nuget.exe restore
+
+cache:
+    key: "$CI_PROJECT_PATH/$CI_BUILD_REF_NAME"
+    paths:
+        - "packages"
+        - "*/bin"
+        - "*/*/bin"
+        - "*/*/*/bin"
+
+stages:
+  - build
+  - test
+  - deploy
+
+Build:
+  stage: build
+  script:
+    - gitlab-msbuild.sh "$SOLUTION" -t:$BUILDACTION -tv:$MSBUILD -verbosity:$VERBOSITY -p:Configuration=$CONFIGURATION\;VisualStudioVersion=$VISUALSTUDIO
+  tags:
+    - windows
+
+Test:
+  stage: test
+  script:
+    - gitlab-mstest.sh
+  tags:
+    - windows
+  artifacts:
+    when: always
+    paths: 
+      - TestResults/*.trx
+      - TestResults/*.html
+
+ProGet:
+  stage: deploy
+  environment: Producao
+  script:
+    - gitlab-msbuild.sh "$SOLUTION" -t:$BUILDACTION -tv:$MSBUILD -verbosity:$VERBOSITY -p:Configuration=$CONFIGURATION\;VisualStudioVersion=$VISUALSTUDIO
+    - shopt -s globstar
+    - for i in **/*.nupkg; do # Whitespace-safe and recursive
+    -     nuget push -ApiKey $NUGETAPIKEY -Source $NUGETREPOSITORY "$i"
+    - done
+  only:
+    - master
+  tags:
+    - windows
