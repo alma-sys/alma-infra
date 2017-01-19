@@ -24,9 +24,6 @@ cache:
     key: "$CI_PROJECT_PATH/$CI_BUILD_REF_NAME"
     paths:
         - "packages"
-        - "*/bin"
-        - "*/*/bin"
-        - "*/*/*/bin"
 
 stages:
   - build
@@ -58,7 +55,7 @@ ProGet:
   script:
     - gitlab-msbuild.sh "$SOLUTION" -t:$BUILDACTION -tv:$MSBUILD -verbosity:$VERBOSITY -p:Configuration=$CONFIGURATION\;VisualStudioVersion=$VISUALSTUDIO
     - shopt -s globstar
-    - for i in **/*.nupkg; do # Whitespace-safe and recursive
+    - for i in **/bin/$CONFIGURATION/*.nupkg; do # Whitespace-safe and recursive
     -     nuget push -ApiKey $NUGETAPIKEY -Source $NUGETREPOSITORY "$i"
     - done
   only:
