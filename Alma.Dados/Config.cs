@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Reflection;
-using Autofac;
 
 namespace Alma.Dados
 {
@@ -27,18 +26,6 @@ namespace Alma.Dados
 
     public static class Config
     {
-        private static bool _startWasCalled;
-        public static void Start(ContainerBuilder builder)
-        {
-
-            if (_startWasCalled) return;
-            _startWasCalled = true;
-
-            builder.RegisterModule<RepositoriosModule>();
-
-        }
-
-
         public static ORM ORM
         {
             get
@@ -104,6 +91,19 @@ namespace Alma.Dados
         }
 
         public static IDictionary<string, Assembly[]> AssembliesMapeadas => Core.Config.AssembliesMapeadas;
+
+        public static string ResolveConnectionName(Type type)
+        {
+            var assemblies = Alma.Dados.Config.AssembliesMapeadas;
+            var assembly = type.Assembly;
+            foreach (var key in assemblies.Keys)
+            {
+                if (assemblies[key].Contains(assembly))
+                    return key;
+            }
+            return null;
+        }
+
 
     }
 }
