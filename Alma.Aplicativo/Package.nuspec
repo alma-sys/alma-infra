@@ -15,14 +15,12 @@
     <dependencies>
       <group>
         <dependency id="Autofac" version="4.3.0" />
-        <dependency id="AutoMapper" version="5.2.0" />
       </group>
     </dependencies>
     <frameworkAssemblies>
+      <frameworkAssembly assemblyName="Microsoft.CSharp" />
       <frameworkAssembly assemblyName="System" />
-      <frameworkAssembly assemblyName="System.Configuration" />
-      <frameworkAssembly assemblyName="System.Drawing" />
-      <frameworkAssembly assemblyName="System.Xml" />
+      <frameworkAssembly assemblyName="System.Core" />
     </frameworkAssemblies>
     <references>
       <group>

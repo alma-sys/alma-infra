@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>$id$</title>
+    <authors>$author$</authors>
+    <owners>$author$</owners>
+    <licenseUrl>https://www.almasistemas.com.br/license</licenseUrl>
+    <projectUrl>https://www.almasistemas.com.br</projectUrl>
+    <iconUrl>https://www.almasistemas.com.br/favicon.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>$description$</description>
+    <summary>$description$</summary>
+    <dependencies>
+      <group>
+        <dependency id="Microsoft.AspNet.WebApi.Client" version="5.2.3" />
+        <dependency id="Microsoft.AspNet.WebApi.Core" version="5.2.3" />
+        <dependency id="Microsoft.AspNet.WebApi.Owin" version="5.2.3" />
+        <dependency id="Microsoft.AspNet.WebApi.OwinSelfHost" version="5.2.3" />
+        <dependency id="Microsoft.Owin" version="3.0.1" />
+        <dependency id="Microsoft.Owin.Host.HttpListener" version="3.0.1" />
+        <dependency id="Microsoft.Owin.Hosting" version="3.0.1" />
+        <dependency id="Microsoft.SqlServer.Dac" version="1.0.3" />
+        <dependency id="Newtonsoft.Json" version="9.0.1" />
+        <dependency id="Owin" version="1.0" />
+        <dependency id="RestSharp" version="105.2.3" />
+        <dependency id="SpecFlow" version="2.1.0" />
+      </group>
+    </dependencies>
+    <frameworkAssemblies>
+      <frameworkAssembly assemblyName="Microsoft.CSharp" />
+      <frameworkAssembly assemblyName="Microsoft.Build" />
+      <frameworkAssembly assemblyName="Microsoft.Build.Framework" />
+      <frameworkAssembly assemblyName="Microsoft.Data.Tools.Schema.Sql" />
+      <frameworkAssembly assemblyName="Microsoft.Data.Tools.Utilities" />
+      <frameworkAssembly assemblyName="Microsoft.SqlServer.Dac" />
+      <frameworkAssembly assemblyName="Microsoft.VisualStudio.QualityTools.UnitTestFramework" />
+      <frameworkAssembly assemblyName="System" />
+      <frameworkAssembly assemblyName="System.Configuration" />
+      <frameworkAssembly assemblyName="System.Data" />
+      <frameworkAssembly assemblyName="System.Core" />
+      <frameworkAssembly assemblyName="System.Xml" />
+      <frameworkAssembly assemblyName="System.Net.Http" />
+    </frameworkAssemblies>
+    <references>
+      <group>
+        <reference file="$id$.dll" />
+      </group>
+    </references>
+  </metadata>
+  <!--<files>
+    <file src="bin\$configuration$\$id$.dll" target="lib\net452\" />
+  </files>-->
+</package>

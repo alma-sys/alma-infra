@@ -14,14 +14,19 @@
     <summary>$description$</summary>
     <dependencies>
       <group>
+        <dependency id="Alma.Dados" version="$version$" />
         <dependency id="Autofac" version="4.3.0" />
-        <dependency id="AutoMapper" version="5.2.0" />
+        <dependency id="Iesi.Collections" version="4.0.1.4000" />
+        <dependency id="log4net" version="2.0.7" />
+        <dependency id="NHibernate" version="4.1.0.4000" />
       </group>
     </dependencies>
     <frameworkAssemblies>
+      <frameworkAssembly assemblyName="Microsoft.CSharp" />
       <frameworkAssembly assemblyName="System" />
       <frameworkAssembly assemblyName="System.Configuration" />
-      <frameworkAssembly assemblyName="System.Drawing" />
+      <frameworkAssembly assemblyName="System.Core" />
+      <frameworkAssembly assemblyName="System.Data" />
       <frameworkAssembly assemblyName="System.Xml" />
     </frameworkAssemblies>
     <references>

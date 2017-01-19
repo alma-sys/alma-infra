@@ -14,15 +14,15 @@
     <summary>$description$</summary>
     <dependencies>
       <group>
+        <dependency id="Alma.Core" version="$version$" />
         <dependency id="Autofac" version="4.3.0" />
-        <dependency id="AutoMapper" version="5.2.0" />
+        <dependency id="FluentValidation" version="6.2.1.0" />
       </group>
     </dependencies>
     <frameworkAssemblies>
+      <frameworkAssembly assemblyName="Microsoft.CSharp" />
       <frameworkAssembly assemblyName="System" />
-      <frameworkAssembly assemblyName="System.Configuration" />
-      <frameworkAssembly assemblyName="System.Drawing" />
-      <frameworkAssembly assemblyName="System.Xml" />
+      <frameworkAssembly assemblyName="System.Core" />
     </frameworkAssemblies>
     <references>
       <group>
