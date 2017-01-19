@@ -2,7 +2,6 @@
 using System.Data;
 using System.Linq;
 using System.Reflection;
-using Alma.Infra.Dados;
 using Autofac;
 using NHibernate;
 //[assembly: PreApplicationStartMethod(typeof(Alma.Dados.OrmNHibernate.Config), "Start")]
@@ -21,14 +20,11 @@ namespace Alma.Dados.OrmNHibernate
             if (_startWasCalled) return;
             _startWasCalled = true;
 
-            if (Alma.Infra.Config.ORM != Alma.Infra.ORM.NHibernate)
+            if (Alma.Dados.Config.ORM != Alma.Dados.ORM.NHibernate)
                 throw new InvalidOperationException("This is not a NHibernate application.");
 
             Config.SetupLog();
-
             Config.SetupIoC(builder);
-            Alma.Infra.Config.ConfigurarIoC(builder); //chamar o IoC comum a qualquer OrM.
-
             Config.SetupLinq();
         }
 
@@ -59,7 +55,7 @@ namespace Alma.Dados.OrmNHibernate
 
         private static void SetupIoC(ContainerBuilder builder)
         {
-            var assemblies = Alma.Infra.Config.AssembliesMapeadas;
+            var assemblies = Alma.Dados.Config.AssembliesMapeadas;
             if (assemblies.Keys.Count > 1)
             {
                 foreach (var key in assemblies.Keys)
@@ -71,7 +67,8 @@ namespace Alma.Dados.OrmNHibernate
 
                     builder.Register(c => GetSession(c.ResolveNamed<ISessionFactory>(key)))
                         .Named<ISession>(key)
-                        .InstancePerLifetimeScope();
+                        .InstancePerRequest();
+                    //.InstancePerLifetimeScope();
                     builder.RegisterGeneric(typeof(Repositorio<>))
                          .As(typeof(IRepositorio<>))
                          .WithParameter(new Autofac.Core.ResolvedParameter(
@@ -93,7 +90,7 @@ namespace Alma.Dados.OrmNHibernate
 
         internal static string ResolveConnectionName(Type type)
         {
-            var assemblies = Alma.Infra.Config.AssembliesMapeadas;
+            var assemblies = Alma.Dados.Config.AssembliesMapeadas;
             var assembly = type.Assembly;
             foreach (var key in assemblies.Keys)
             {
@@ -105,7 +102,7 @@ namespace Alma.Dados.OrmNHibernate
 
         private static void SetupLinq()
         {
-            if (Alma.Infra.Config.ORM == Alma.Infra.ORM.NHibernate)
+            if (Alma.Dados.Config.ORM == Alma.Dados.ORM.NHibernate)
             {
                 LinqExtensions.Current = new NhLinqExtensions();
 

@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alma.Infra", "Alma.Infra\Alma.Infra.csproj", "{1F3D8A36-9402-46B6-80E1-F356F402206C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alma.Core", "Alma.Core\Alma.Core.csproj", "{1F3D8A36-9402-46B6-80E1-F356F402206C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alma.Dados.OrmNHibernate", "Alma.Dados.OrmNHibernate\Alma.Dados.OrmNHibernate.csproj", "{77C6F236-B4C2-48F9-B0E6-3068C75D8FE4}"
 EndProject
@@ -13,6 +13,22 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alma.Dados", "Alma.Dados\Alma.Dados.csproj", "{36722228-B90A-4FA5-BD18-30BA8D700A45}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "5-Dados", "5-Dados", "{B8FB6536-D1F1-4713-A3C1-73979FC25F8D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1-Core", "1-Core", "{B1F37A83-8858-46C9-BB78-0BB11F52E46F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4-Dominio", "4-Dominio", "{81703DA2-11D7-41B8-8238-354885A429FA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alma.Dominio", "Alma.Dominio\Alma.Dominio.csproj", "{02C52EF0-2524-41BD-B2B4-CBF81109C45D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3-Aplicativo", "3-Aplicativo", "{DFADFD2F-711A-4B60-806D-9E7A2D6222F4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2-Api", "2-Api", "{1D93CB06-AFB7-4640-AE10-5EAB216FF286}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alma.ApiExtensions", "Alma.ApiExtensions\Alma.ApiExtensions.csproj", "{1D44995C-D2A1-4587-84C5-1A036661A5D5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alma.Aplicativo", "Alma.Aplicativo\Alma.Aplicativo.csproj", "{5B2A3FF5-F5E2-45E1-B7C7-D3F9AED3A857}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -32,9 +48,29 @@ Global
 		{36722228-B90A-4FA5-BD18-30BA8D700A45}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{36722228-B90A-4FA5-BD18-30BA8D700A45}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{36722228-B90A-4FA5-BD18-30BA8D700A45}.Release|Any CPU.Build.0 = Release|Any CPU
+		{02C52EF0-2524-41BD-B2B4-CBF81109C45D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{02C52EF0-2524-41BD-B2B4-CBF81109C45D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{02C52EF0-2524-41BD-B2B4-CBF81109C45D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{02C52EF0-2524-41BD-B2B4-CBF81109C45D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1D44995C-D2A1-4587-84C5-1A036661A5D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1D44995C-D2A1-4587-84C5-1A036661A5D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1D44995C-D2A1-4587-84C5-1A036661A5D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1D44995C-D2A1-4587-84C5-1A036661A5D5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5B2A3FF5-F5E2-45E1-B7C7-D3F9AED3A857}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B2A3FF5-F5E2-45E1-B7C7-D3F9AED3A857}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B2A3FF5-F5E2-45E1-B7C7-D3F9AED3A857}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B2A3FF5-F5E2-45E1-B7C7-D3F9AED3A857}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{1F3D8A36-9402-46B6-80E1-F356F402206C} = {B1F37A83-8858-46C9-BB78-0BB11F52E46F}
+		{77C6F236-B4C2-48F9-B0E6-3068C75D8FE4} = {B8FB6536-D1F1-4713-A3C1-73979FC25F8D}
+		{36722228-B90A-4FA5-BD18-30BA8D700A45} = {B8FB6536-D1F1-4713-A3C1-73979FC25F8D}
+		{02C52EF0-2524-41BD-B2B4-CBF81109C45D} = {81703DA2-11D7-41B8-8238-354885A429FA}
+		{1D44995C-D2A1-4587-84C5-1A036661A5D5} = {1D93CB06-AFB7-4640-AE10-5EAB216FF286}
+		{5B2A3FF5-F5E2-45E1-B7C7-D3F9AED3A857} = {DFADFD2F-711A-4B60-806D-9E7A2D6222F4}
 	EndGlobalSection
 	GlobalSection(CodealikeProperties) = postSolution
 		SolutionGuid = 0179f8c4-8e16-4ad2-bf90-da747ec2c051

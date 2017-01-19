@@ -38,7 +38,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Iesi.Collections, Version=4.0.0.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
-      <HintPath>..\packages\Iesi.Collections.4.0.0.4000\lib\net40\Iesi.Collections.dll</HintPath>
+      <HintPath>..\packages\Iesi.Collections.4.0.1.4000\lib\net40\Iesi.Collections.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="log4net, Version=2.0.7.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
@@ -68,6 +68,7 @@
     <Compile Include="Conventions\TableNameConvention.cs" />
     <Compile Include="Dados\NhLinqExtensions.cs" />
     <Compile Include="Dados\Repositorio.cs" />
+    <Compile Include="Dados\RepositorioStatic.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Types\EnumCharType.cs" />
     <Compile Include="Types\EnumInt32Type.cs" />
@@ -76,6 +77,7 @@
     <Compile Include="Types\TimeSpanFormattedType.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
