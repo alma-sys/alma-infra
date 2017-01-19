@@ -7,8 +7,8 @@
     <ProjectGuid>{1F3D8A36-9402-46B6-80E1-F356F402206C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Alma.Infra</RootNamespace>
-    <AssemblyName>Alma.Infra</AssemblyName>
+    <RootNamespace>Alma.Core</RootNamespace>
+    <AssemblyName>Alma.Core</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -62,7 +62,7 @@
     <Compile Include="Validacao\ValidacaoException.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
+    <None Include="Package.nuspec" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />

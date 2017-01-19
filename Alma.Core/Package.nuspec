@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+    <metadata>
+        <id>Alma.Core</id>
+        <version>@Version</version>
+        <title>Alma.Core</title>
+        <authors>Marcos Junior,Alex Durães</authors>
+        <owners>Marcos Junior,Alex Durães</owners>
+        <licenseUrl>https://www.almasistemas.com.br/license</licenseUrl>
+        <projectUrl>https://www.almasistemas.com.br</projectUrl>
+        <iconUrl>https://www.almasistemas.com.br/favicon.png</iconUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>Provides a implementation of common architecture to our applications.</description>
+        <summary>Provides a implementation of common architecture to our applications.</summary>
+        <dependencies>
+            <group targetFramework=".NETFramework4.5.2">
+                <dependency id="Autofac" version="4.3.0" />
+                <dependency id="AutoMapper" version="5.2.0" />
+            </group>
+        </dependencies>
+        <frameworkAssemblies>
+            <frameworkAssembly assemblyName="System" targetFramework=".NETFramework4.5.2" />
+            <frameworkAssembly assemblyName="System.Configuration" targetFramework=".NETFramework4.5.2" />
+            <frameworkAssembly assemblyName="System.Drawing" targetFramework=".NETFramework4.5.2" />
+            <frameworkAssembly assemblyName="System.Xml" targetFramework=".NETFramework4.5.2" />
+        </frameworkAssemblies>
+    </metadata>
+    <files>
+        <file src="bin\Release\Alma.Core.dll" target="lib\net452\Alma.Core.dll" />
+    </files>
+</package>
