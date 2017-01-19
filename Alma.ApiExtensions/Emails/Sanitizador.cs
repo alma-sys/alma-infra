@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using HtmlAgilityPack;
 
-namespace Alma.Infra.Html
+namespace Alma.ApiExtensions.Html
 {
     public static class Sanitizador
     {

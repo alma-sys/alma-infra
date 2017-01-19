@@ -8,7 +8,7 @@ using System.Text;
 using System.Web.Razor;
 using Alma.Core;
 
-namespace Alma.Infra.Emails
+namespace Alma.ApiExtensions.Emails
 {
 
     public static class ExecutorModelo

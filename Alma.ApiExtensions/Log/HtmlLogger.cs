@@ -3,7 +3,7 @@ using System.IO;
 using System.Text;
 using System.Web;
 
-namespace Alma.Infra.Log
+namespace Alma.ApiExtensions.Log
 {
     static class HtmlLogger
     {

@@ -4,7 +4,7 @@ using System.Net.Mail;
 using System.Web;
 using System.Web.Http.ExceptionHandling;
 
-namespace Alma.Infra.Log
+namespace Alma.ApiExtensions.Log
 {
     public class LogModule : IHttpModule
     {

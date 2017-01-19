@@ -8,7 +8,7 @@ using Alma.Core;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
-namespace Alma.Infra.Filtros
+namespace Alma.ApiExtensions.Filtros
 {
     public class FiltroValidacoes : ExceptionFilterAttribute
     {

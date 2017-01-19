@@ -1,4 +1,4 @@
-﻿namespace Alma.Infra.Log
+﻿namespace Alma.ApiExtensions.Log
 {
     class JsonLogger
     {
