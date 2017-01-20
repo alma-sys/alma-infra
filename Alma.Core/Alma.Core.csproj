@@ -53,6 +53,7 @@
     </Compile>
     <Compile Include="Config.cs" />
     <Compile Include="Dto\CodigoDescricao.cs" />
+    <Compile Include="Dto\IdNome.cs" />
     <Compile Include="Dto\IListaPaginada.cs" />
     <Compile Include="Extensions\ImageExtensions.cs" />
     <Compile Include="IIdNome.cs" />
