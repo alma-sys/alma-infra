@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Alma.Core;
 
-namespace Alma.Dominio.Entidades
+namespace Alma.Dominio
 {
     public class Perfil : Entidade<int>, IIdNome
     {

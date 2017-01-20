@@ -1,6 +1,6 @@
 ﻿using Alma.Core;
 
-namespace Alma.Dominio.Entidades
+namespace Alma.Dominio
 {
     public class Permissao : Entidade<int>, IIdNome
     {

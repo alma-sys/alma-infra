@@ -59,6 +59,7 @@
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Mapper\IMapperHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Seguranca\Hash.cs" />
     <Compile Include="Validacao\ValidacaoException.cs" />
   </ItemGroup>
   <ItemGroup>

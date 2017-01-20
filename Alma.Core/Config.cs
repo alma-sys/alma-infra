@@ -7,8 +7,6 @@ using System.Reflection;
 
 namespace Alma.Core
 {
-
-
     public static class Config
     {
         private static Dictionary<string, Assembly[]> ListarAssembliesDeMapeamento()
