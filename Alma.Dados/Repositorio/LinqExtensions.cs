@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using Alma.Dados.Paginador;
+using Alma.Core;
+using Alma.Core.Dto;
 
 namespace Alma.Dados
 {
@@ -49,7 +50,7 @@ namespace Alma.Dados
         /// <param name="paginaAtual">1-based current page index</param>
         /// <param name="pageSize"></param>
         /// <returns></returns>
-        public static ListaPaginada<T> ParaListaPaginada<T>(this IQueryable<T> query, int paginaAtual, int tamanhoPagina = ListaPaginada<T>.TamanhoPaginaPadrao) where T : class
+        public static IListaPaginada<T> ParaListaPaginada<T>(this IQueryable<T> query, int paginaAtual, int tamanhoPagina = ListaPaginada<T>.TamanhoPaginaPadrao) where T : class
         {
             var recordCount = query.Count();
             IList<T> pageRecords;
@@ -66,15 +67,15 @@ namespace Alma.Dados
 
             } while (pageRecords.Count == 0 && paginaAtual != 0);
 
-            return new ListaPaginada<T>(paginaAtual, tamanhoPagina, recordCount, pageRecords);
+            return new ListaPaginada<T>(paginaAtual, recordCount, pageRecords, tamanhoPagina);
         }
 
 
-        public static ListaPaginada<TResult> Select<T, TResult>(this ListaPaginada<T> query, Func<T, TResult> select)
+        public static IListaPaginada<TResult> Select<T, TResult>(this IListaPaginada<T> query, Func<T, TResult> select)
             where T : class
             where TResult : class
         {
-            var paged = new ListaPaginada<TResult>(query.Pagina, query.TamanhoPagina, query.TotalItens, query.Lista.Select(select).ToList());
+            var paged = new ListaPaginada<TResult>(query.Pagina, query.TotalItens, query.Lista.Select(select).ToList(), query.TamanhoPagina);
             return paged;
         }
 
