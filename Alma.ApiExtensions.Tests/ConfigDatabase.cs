@@ -1,14 +1,14 @@
-﻿using Microsoft.Build.Evaluation;
-using Microsoft.Build.Framework;
-using Microsoft.SqlServer.Dac;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
+﻿using System;
 using System.Configuration;
 using System.Data.Common;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Microsoft.Build.Evaluation;
+using Microsoft.Build.Framework;
+using Microsoft.SqlServer.Dac;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Alma.ApiExtensions.Tests
 {
@@ -20,7 +20,7 @@ namespace Alma.ApiExtensions.Tests
         {
             get
             {
-                var config = ConfigurationManager.AppSettings["alma:orm:conexao"];
+                var config = ConfigurationManager.AppSettings["alma:conexao"];
                 Assert.IsNotNull(config);
                 var cn = ConfigurationManager.ConnectionStrings[config];
                 Assert.IsNotNull(cn);
@@ -65,6 +65,8 @@ namespace Alma.ApiExtensions.Tests
 
         public static void BuildAndDeploy(TestContext testContext, string projetoBanco)
         {
+            Trace.Write("Levantando banco de dados...");
+
             var projectPath = Path.Combine(projetoBanco, projetoBanco + ".sqlproj");
 
 
