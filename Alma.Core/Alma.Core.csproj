@@ -59,6 +59,7 @@
     <Compile Include="IIdNome.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="Mapper\AutoMapperConfig.cs" />
     <Compile Include="Mapper\IMapperHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Seguranca\Hash.cs" />

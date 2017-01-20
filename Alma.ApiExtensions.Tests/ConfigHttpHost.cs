@@ -1,11 +1,11 @@
-﻿using Microsoft.Owin.Hosting;
-using Owin;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Web.Http;
+using Microsoft.Owin.Hosting;
+using Owin;
 
 namespace Alma.ApiExtensions.Tests
 {
@@ -31,6 +31,7 @@ namespace Alma.ApiExtensions.Tests
         /// <param name="setConfig"></param>
         internal static void BuildAndDeployOwin(Type factory, Uri hostBase, Action<IAppBuilder, HttpConfiguration> setConfig)
         {
+            Trace.Write("Levantando http host... ");
             if (hostBase == null)
                 throw new ArgumentNullException(nameof(hostBase));
 
@@ -39,7 +40,6 @@ namespace Alma.ApiExtensions.Tests
 
             var iisInfo = new IISInfo();
 
-            Trace.WriteLine("Levantando http host");
             var options = new StartOptions(hostBase.ToString())
             {
                 ServerFactory = factory.Namespace
