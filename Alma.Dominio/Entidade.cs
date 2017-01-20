@@ -1,12 +1,12 @@
 ﻿using Alma.Core;
 
-namespace Alma.Dominio.Entidades
+namespace Alma.Dominio
 {
     public abstract class Entidade : Entidade<int>
     {
 
     }
-    public abstract class Entidade<T> : IId<T> where T : struct
+    public abstract class Entidade<T> : EntidadeBase, IId<T> where T : struct
     {
         public virtual T Id { get; set; }
 
@@ -20,5 +20,18 @@ namespace Alma.Dominio.Entidades
         {
             return Id.GetHashCode();
         }
+
+        public override string ToString()
+        {
+            if (typeof(IIdNome<T>).IsAssignableFrom(this.GetType()))
+                return ((IIdNome<T>)this).Nome;
+            else
+                return base.ToString() + "_" + GetHashCode().ToString();
+        }
+    }
+
+    public abstract class EntidadeBase
+    {
+
     }
 }

@@ -33,6 +33,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alma.Aplicativo", "Alma.Apl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alma.ApiExtensions.Tests", "Alma.ApiExtensions.Tests\Alma.ApiExtensions.Tests.csproj", "{1A541B05-2703-4C6B-976D-384D7F8B3334}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alma.Dados.OrmEntityFramework", "Alma.Dados.OrmEntityFramework\Alma.Dados.OrmEntityFramework.csproj", "{8D2D432A-65BF-4FAF-9CA3-73DB16A2505B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -67,6 +69,10 @@ Global
 		{1A541B05-2703-4C6B-976D-384D7F8B3334}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1A541B05-2703-4C6B-976D-384D7F8B3334}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1A541B05-2703-4C6B-976D-384D7F8B3334}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8D2D432A-65BF-4FAF-9CA3-73DB16A2505B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D2D432A-65BF-4FAF-9CA3-73DB16A2505B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8D2D432A-65BF-4FAF-9CA3-73DB16A2505B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D2D432A-65BF-4FAF-9CA3-73DB16A2505B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -79,6 +85,7 @@ Global
 		{1D44995C-D2A1-4587-84C5-1A036661A5D5} = {1D93CB06-AFB7-4640-AE10-5EAB216FF286}
 		{5B2A3FF5-F5E2-45E1-B7C7-D3F9AED3A857} = {DFADFD2F-711A-4B60-806D-9E7A2D6222F4}
 		{1A541B05-2703-4C6B-976D-384D7F8B3334} = {1D93CB06-AFB7-4640-AE10-5EAB216FF286}
+		{8D2D432A-65BF-4FAF-9CA3-73DB16A2505B} = {B8FB6536-D1F1-4713-A3C1-73979FC25F8D}
 	EndGlobalSection
 	GlobalSection(CodealikeProperties) = postSolution
 		SolutionGuid = 0179f8c4-8e16-4ad2-bf90-da747ec2c051

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Security.Cryptography;
 
-namespace Alma.ApiExtensions.Seguranca
+namespace Alma.Core.Seguranca
 {
     public static class Hash
     {
