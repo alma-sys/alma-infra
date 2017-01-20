@@ -49,8 +49,8 @@
     <Compile Include="Config.cs" />
     <Compile Include="Repositorio\IRepositorio.cs" />
     <Compile Include="Repositorio\LinqExtensions.cs" />
-    <Compile Include="Paginador\ListaPaginada.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositorio\ListaPaginada.cs" />
     <Compile Include="Repositorio\RepositorioBase.cs" />
     <Compile Include="RepositoriosModule.cs" />
   </ItemGroup>
