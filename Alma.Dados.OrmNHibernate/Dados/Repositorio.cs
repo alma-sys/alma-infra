@@ -10,7 +10,7 @@ using NHibernate.Proxy;
 
 namespace Alma.Dados.OrmNHibernate
 {
-    sealed class Repositorio<TEntity> : IRepositorio<TEntity> where TEntity : class
+    sealed class Repositorio<TEntity> : IQueryable<TEntity>, IRepositorio<TEntity> where TEntity : class
     {
 
 

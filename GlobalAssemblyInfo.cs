@@ -6,6 +6,12 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCopyright("Copyright © Alma Sistemas 2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
-[assembly: AssemblyVersion("2.1.0.5")]
-[assembly: AssemblyFileVersion("2.1.0.5")]
+[assembly: AssemblyVersion(AssemblyValues.Version)]
+[assembly: AssemblyFileVersion(AssemblyValues.Version)]
 [assembly: ComVisible(false)]
+
+
+static class AssemblyValues
+{
+    public const string Version = "2.1.0.6";
+}
