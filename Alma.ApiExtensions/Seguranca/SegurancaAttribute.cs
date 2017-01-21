@@ -21,7 +21,8 @@ namespace Alma.ApiExtensions.Seguranca
 
         protected override bool IsAuthorized(HttpActionContext actionContext)
         {
-            if (!actionContext.RequestContext.Principal.Identity.IsAuthenticated)
+            if (actionContext.RequestContext.Principal == null ||
+                !actionContext.RequestContext.Principal.Identity.IsAuthenticated)
                 return false;
 
             var identity = actionContext.RequestContext.Principal.Identity as ClaimsIdentity;
