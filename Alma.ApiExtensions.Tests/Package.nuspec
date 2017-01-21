@@ -21,7 +21,7 @@
         <dependency id="Microsoft.Owin" version="3.0.1" />
         <dependency id="Microsoft.Owin.Host.HttpListener" version="3.0.1" />
         <dependency id="Microsoft.Owin.Hosting" version="3.0.1" />
-        <dependency id="Microsoft.SqlServer.Dac" version="1.0.3" />
+        <dependency id="Microsoft.SqlServer.Dac" version="1.0.1" />
         <dependency id="Newtonsoft.Json" version="9.0.1" />
         <dependency id="Owin" version="1.0" />
         <dependency id="RestSharp" version="105.2.3" />
@@ -32,9 +32,6 @@
       <frameworkAssembly assemblyName="Microsoft.CSharp" />
       <frameworkAssembly assemblyName="Microsoft.Build" />
       <frameworkAssembly assemblyName="Microsoft.Build.Framework" />
-      <frameworkAssembly assemblyName="Microsoft.Data.Tools.Schema.Sql" />
-      <frameworkAssembly assemblyName="Microsoft.Data.Tools.Utilities" />
-      <frameworkAssembly assemblyName="Microsoft.SqlServer.Dac" />
       <frameworkAssembly assemblyName="Microsoft.VisualStudio.QualityTools.UnitTestFramework" />
       <frameworkAssembly assemblyName="System" />
       <frameworkAssembly assemblyName="System.Configuration" />

@@ -26,23 +26,37 @@ namespace Alma.Dados.OrmNHibernate
 
                     builder.Register(c => GetSession(c.ResolveNamed<ISessionFactory>(key)))
                         .Named<ISession>(key)
-                        .InstancePerRequest();
+                        .InstancePerLifetimeScope();
+
                     //.InstancePerLifetimeScope();
                     builder.RegisterGeneric(typeof(Repositorio<>))
-                         .As(typeof(IRepositorio<>))
+                         .AsImplementedInterfaces()
                          .WithParameter(new Autofac.Core.ResolvedParameter(
                              (pi, c) => pi.ParameterType == typeof(ISession),
                              (pi, c) => c.ResolveNamed<ISession>(
-                                 Config.ResolveConnectionName(pi.Member.DeclaringType.GetGenericArguments()[0]))));
+                                 Config.ResolveConnectionName(pi.Member.DeclaringType.GetGenericArguments()[0]))))
+                         .InstancePerLifetimeScope();
                 }
             }
             else
             {
                 var key = assemblies.Keys.First();
-                builder.RegisterInstance(GetFactory(key, assemblies[key])).As<ISessionFactory>();
-                builder.Register(t => GetSession(t.Resolve<ISessionFactory>())).As<ISession>().InstancePerLifetimeScope();
-                builder.Register(t => GetCommand(t.Resolve<ISession>())).As<IDbCommand>().InstancePerLifetimeScope();
-                builder.RegisterGeneric(typeof(Repositorio<>)).As(typeof(IRepositorio<>));
+                builder.RegisterInstance(GetFactory(key, assemblies[key]))
+                    .As<ISessionFactory>()
+                    .SingleInstance();
+
+                builder.Register(t => GetSession(t.Resolve<ISessionFactory>()))
+                    .As<ISession>()
+                    .InstancePerLifetimeScope();
+
+                builder.Register(t => GetCommand(t.Resolve<ISession>()))
+                    .As<IDbCommand>()
+                    .InstancePerLifetimeScope();
+
+
+                builder.RegisterGeneric(typeof(Repositorio<>))
+                    .As(typeof(IQueryable<>), typeof(IRepositorio<>))
+                    .InstancePerLifetimeScope();
             }
 
 
