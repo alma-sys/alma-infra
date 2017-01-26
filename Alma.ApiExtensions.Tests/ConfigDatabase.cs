@@ -1,14 +1,14 @@
-﻿using System;
+﻿using Microsoft.Build.Evaluation;
+using Microsoft.Build.Framework;
+using Microsoft.SqlServer.Dac;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Configuration;
 using System.Data.Common;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Microsoft.Build.Evaluation;
-using Microsoft.Build.Framework;
-using Microsoft.SqlServer.Dac;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Alma.ApiExtensions.Tests
 {
@@ -21,9 +21,9 @@ namespace Alma.ApiExtensions.Tests
             get
             {
                 var config = ConfigurationManager.AppSettings["alma:conexao"];
-                Assert.IsNotNull(config);
+                Assert.IsNotNull(config, "Conexão alma:conexao não encontrada.");
                 var cn = ConfigurationManager.ConnectionStrings[config];
-                Assert.IsNotNull(cn);
+                Assert.IsNotNull(cn, "Conexão alma:conexao não encontrada.");
                 return cn;
             }
         }
@@ -37,11 +37,13 @@ namespace Alma.ApiExtensions.Tests
                     .CreateConnectionStringBuilder();
                 connectionSb.ConnectionString = cnn.ConnectionString;
 
-                object dbName = null;
-                if (!connectionSb.TryGetValue("Initial Catalog", out dbName))
-                    connectionSb.TryGetValue("Database", out dbName);
+                object dbNameobj = null;
+                if (!connectionSb.TryGetValue("Initial Catalog", out dbNameobj))
+                    connectionSb.TryGetValue("Database", out dbNameobj);
 
-                return dbName as string;
+                var dbname = dbNameobj as string;
+                Assert.IsNotNull(dbname, "Database não encontrado.");
+                return dbname;
             }
         }
 
@@ -54,11 +56,13 @@ namespace Alma.ApiExtensions.Tests
                     .CreateConnectionStringBuilder();
                 connectionSb.ConnectionString = cnn.ConnectionString;
 
-                object dbName = null;
-                if (!connectionSb.TryGetValue("Data Source", out dbName))
-                    connectionSb.TryGetValue("Server", out dbName);
+                object dbNameobj = null;
+                if (!connectionSb.TryGetValue("Data Source", out dbNameobj))
+                    connectionSb.TryGetValue("Server", out dbNameobj);
 
-                return dbName as string;
+                var dbname = dbNameobj as string;
+                Assert.IsNotNull(dbname, "Server não encontrado.");
+                return dbname;
             }
         }
 
@@ -69,15 +73,10 @@ namespace Alma.ApiExtensions.Tests
 
             var projectPath = Path.Combine(projetoBanco, projetoBanco + ".sqlproj");
 
-
-            Assert.IsNotNull(ConnectionString);
-            Assert.IsNotNull(DatabaseName);
-
-
             var dbProject = new DirectoryInfo(testContext.DeploymentDirectory).Parent.Parent.Parent.FullName;
             dbProject = Path.Combine(dbProject, projectPath);
 
-            Assert.IsTrue(File.Exists(dbProject));
+            Assert.IsTrue(File.Exists(dbProject), "Arquivo " + dbProject + " não encontrado.");
 
 
             var sw = new Stopwatch();
