@@ -7,10 +7,10 @@ namespace Alma.ApiExtensions.Serializadores.Tests
     {
         enum ParaTestar
         {
-            Valor1,
-            Valor2,
+            Valor1 = 1,
+            Valor2 = 2,
             [System.ComponentModel.Description("Valor 3")]
-            Valor3
+            Valor3 = 3
         }
 
 
@@ -21,16 +21,38 @@ namespace Alma.ApiExtensions.Serializadores.Tests
             var resultado = SerializadorConstantes.SerializarEnum(typeof(ParaTestar), true, true);
             Assert.AreEqual(@"[
   {
-    ""codigo"": 0,
+    ""id"": 1,
     ""nome"": ""Valor1""
   },
   {
-    ""codigo"": 1,
+    ""id"": 2,
     ""nome"": ""Valor2""
   },
   {
-    ""codigo"": 2,
+    ""id"": 3,
     ""nome"": ""Valor 3""
+  }
+]", resultado);
+        }
+
+
+        [TestMethod()]
+        public void DeveSerializarEnumsComTextoEmCodigoDescricao()
+        {
+
+            var resultado = SerializadorConstantes.SerializarEnumChar(typeof(ParaTestar), true, true);
+            Assert.AreEqual(@"[
+  {
+    ""codigo"": ""Valor1"",
+    ""descricao"": ""Valor1""
+  },
+  {
+    ""codigo"": ""Valor2"",
+    ""descricao"": ""Valor2""
+  },
+  {
+    ""codigo"": ""Valor3"",
+    ""descricao"": ""Valor 3""
   }
 ]", resultado);
         }

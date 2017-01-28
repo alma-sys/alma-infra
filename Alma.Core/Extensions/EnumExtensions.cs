@@ -9,12 +9,12 @@ namespace Alma.Core
 {
     public static class EnumExtensions
     {
-        public static IEnumerable<CodigoNome> ToCodigoNomeFlags(this Enum enumeration)
+        public static IEnumerable<IIdNome> ToCodigoNomeFlags(this Enum enumeration)
         {
             var valores = enumeration.GetFlags();
             foreach (var item in valores)
             {
-                yield return item.ToCodigoNome();
+                yield return item.ToIdNome();
             }
         }
 
