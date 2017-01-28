@@ -56,9 +56,9 @@ namespace Alma.ApiExtensions.Serializadores
             }
 
             if (orderByCodigo)
-                lista = lista.OrderBy(t => t.Nome).ToList();
-            else
                 lista = lista.OrderBy(t => t.Codigo).ToList();
+            else
+                lista = lista.OrderBy(t => t.Nome).ToList();
 
             serializer.Serialize(writer, lista);
 
