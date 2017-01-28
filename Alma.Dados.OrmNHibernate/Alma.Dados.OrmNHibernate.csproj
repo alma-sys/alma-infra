@@ -67,7 +67,8 @@
     <Compile Include="Conventions\TableNameConvention.cs" />
     <Compile Include="Dados\NhLinqExtensions.cs" />
     <Compile Include="Dados\Repositorio.cs" />
-    <Compile Include="Dados\RepositorioStatic.cs" />
+    <Compile Include="Dados\SessionFactory.cs" />
+    <Compile Include="Mapper\GlobalFilterMapping.cs" />
     <Compile Include="NHibernateModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Types\EnumCharType.cs" />
