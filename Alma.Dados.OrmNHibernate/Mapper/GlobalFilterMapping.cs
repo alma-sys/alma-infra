@@ -10,7 +10,7 @@ namespace Alma.Dados.OrmNHibernate.Mapper
 
         internal IDictionary<string, FilterDefinition> filters = new Dictionary<string, FilterDefinition>();
 
-        protected void RegisterFilter<T>(string name) where T : struct
+        protected void RegisterFilter<T>(string name) where T : IConvertible
         {
             filters.Add(
                 name,
