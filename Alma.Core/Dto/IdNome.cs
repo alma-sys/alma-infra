@@ -2,6 +2,16 @@
 {
     public class IdNome : IIdNome
     {
+        public IdNome() {}
+
+        public IdNome(int id, string nome) : this()
+        {
+            this.Id = id;
+            this.Nome = nome;
+        }
+
+        public IdNome(IdNome src) : this( src.Id, src.Nome) {}
+
         public int Id { get; set; }
 
         public string Nome { get; set; }
