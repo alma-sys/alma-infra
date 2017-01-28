@@ -380,5 +380,16 @@ namespace Alma.Dados.OrmNHibernate
                 throw new InvalidOperationException("Connection is invalid or closed.");
 
         }
+
+        public void EnableFilter(string name, object value)
+        {
+            Session.EnableFilter(name)
+                .SetParameter(name, value);
+        }
+
+        public void DisableFilter(string name)
+        {
+            Session.DisableFilter(name);
+        }
     }
 }

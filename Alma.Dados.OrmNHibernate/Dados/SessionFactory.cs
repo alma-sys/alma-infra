@@ -100,10 +100,20 @@ namespace Alma.Dados.OrmNHibernate
                     throw new NotImplementedException("Not implemented provider: " + Alma.Dados.Config.DeterminarDBMS(connectionKey));
             }
 
+            var types =
+                assemblies.SelectMany(a => a.GetTypes());
+
+            var filters = types.Where(x => typeof(Mapper.GlobalFilterMapping).IsAssignableFrom(x)).ToArray();
+            foreach (var fmapType in filters)
+            {
+                var map = (Mapper.GlobalFilterMapping)Activator.CreateInstance(fmapType);
+                foreach (var fd in map.filters)
+                    cfg.FilterDefinitions.Add(fd);
+            }
+
             var mapper = new ModelMapper();
             mapper.AddConventions();
-            foreach (var a in assemblies)
-                mapper.AddMappings(a.GetExportedTypes());
+            mapper.AddMappings(types);
 
             var hbm = mapper.CompileMappingForAllExplicitlyAddedEntities();
             hbm.autoimport = true;

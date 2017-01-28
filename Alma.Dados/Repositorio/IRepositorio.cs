@@ -38,6 +38,8 @@ namespace Alma.Dados
         IList<TEntity> UnProxy(IList<TEntity> list);
         TEntity UnProxy(TEntity instance);
 
+        void EnableFilter(string name, object value);
+        void DisableFilter(string name);
 
     }
 

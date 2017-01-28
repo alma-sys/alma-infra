@@ -166,6 +166,14 @@ namespace Alma.Dados.OrmEntityFramework
             throw new NotImplementedException();
         }
 
+        public void EnableFilter(string name, object value)
+        {
+            throw new NotImplementedException();
+        }
 
+        public void DisableFilter(string name)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
