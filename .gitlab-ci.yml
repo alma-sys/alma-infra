@@ -39,6 +39,7 @@ Build:
 Test:
   stage: test
   script:
+    - gitlab-msbuild.sh "$SOLUTION" -t:$BUILDACTION -tv:$MSBUILD -verbosity:$VERBOSITY -p:Configuration=$CONFIGURATION\;VisualStudioVersion=$VISUALSTUDIO
     - gitlab-mstest.sh
   tags:
     - windows
