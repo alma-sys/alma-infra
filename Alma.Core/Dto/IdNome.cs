@@ -10,7 +10,7 @@
             this.Nome = nome;
         }
 
-        public IdNome(IdNome src) : this( src.Id, src.Nome) {}
+        public IdNome(IIdNome src) : this( src.Id, src.Nome) {}
 
         public int Id { get; set; }
 

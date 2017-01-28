@@ -15,7 +15,6 @@ variables:
   PRODUCTIONPROFILE: ""
 
   NUGETREPOSITORY: "https://dev.almasistemas.com.br/nuget/alma"
-  NUGETAPIKEY: "alma!321"
 
 before_script:
   - nuget.exe restore
