@@ -15,11 +15,11 @@ namespace Alma.ApiExtensions.Tests.SpecFlow
     public abstract partial class GenericSteps
     {
 
-        private readonly ScenarioContext scenarioContext;
+        public virtual ScenarioContext ScenarioContext { get; private set; }
         public GenericSteps(ScenarioContext scenarioContext)
         {
             if (scenarioContext == null) throw new ArgumentNullException(nameof(scenarioContext));
-            this.scenarioContext = scenarioContext;
+            this.ScenarioContext = scenarioContext;
         }
 
 
@@ -47,7 +47,7 @@ namespace Alma.ApiExtensions.Tests.SpecFlow
                     break;
             }
 
-            scenarioContext.HttpMethod(metodo);
+            ScenarioContext.HttpMethod(metodo);
         }
 
         [Given(@"a seguinte lista de argumentos do tipo '(.*)':")]
@@ -62,26 +62,26 @@ namespace Alma.ApiExtensions.Tests.SpecFlow
             var jsonSerializerSettings = new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() };
             var json = JsonConvert.SerializeObject(arg, Formatting.Indented, jsonSerializerSettings);
 
-            scenarioContext.JsonArgumento(json);
-            scenarioContext.ListaArgumentos(table);
+            ScenarioContext.JsonArgumento(json);
+            ScenarioContext.ListaArgumentos(table);
         }
 
         [Given(@"que a url do endpoint é '(.*)'")]
         public virtual void DadoQueAUrlDoEndpointE(string p0)
         {
-            scenarioContext.Endpoint(p0);
+            ScenarioContext.Endpoint(p0);
         }
 
         [Given(@"os seguintes parâmetros de url:")]
         public virtual void DadoOsSeguintesParametrosDeUrl(Table table)
         {
-            scenarioContext.ParametroUrl(table);
+            ScenarioContext.ParametroUrl(table);
         }
 
         [Given(@"informei o parâmetro de url '(.*)' com o id do cenário")]
         public virtual void DadoInformeiOParametroDeUrlComOIdDoCenario(string parametro)
         {
-            Int64 id = scenarioContext.IdEntidade();
+            Int64 id = ScenarioContext.IdEntidade();
             AdicionaParametroUrl(parametro, id.ToString());
         }
 
@@ -93,12 +93,12 @@ namespace Alma.ApiExtensions.Tests.SpecFlow
 
         private void AdicionaParametroUrl(String parametro, String valor)
         {
-            var table = scenarioContext.ParametroUrl();
+            var table = ScenarioContext.ParametroUrl();
             if (table == null)
                 table = new Table("Field", "Value");
 
             table.AddRow(parametro, valor);
-            scenarioContext.ParametroUrl(table);
+            ScenarioContext.ParametroUrl(table);
         }
 
         [Given(@"o seguinte argumento do tipo '(.*)':")]
@@ -113,15 +113,15 @@ namespace Alma.ApiExtensions.Tests.SpecFlow
             var jsonSerializerSettings = new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() };
             var json = JsonConvert.SerializeObject(arg, Formatting.Indented, jsonSerializerSettings);
 
-            scenarioContext.JsonArgumento(json);
-            scenarioContext.TipoModel(nomeTipo);
-            scenarioContext.Argumento(table);
+            ScenarioContext.JsonArgumento(json);
+            ScenarioContext.TipoModel(nomeTipo);
+            ScenarioContext.Argumento(table);
         }
 
         [Then(@"statuscode da resposta deverá ser '(.*)'")]
         public virtual void EntaoStatuscodeDaRespostaDeveraSer(string p0)
         {
-            var response = scenarioContext.Response();
+            var response = ScenarioContext.Response();
 
             Assert.AreEqual(p0, response.StatusCode.ToString(),
                 response.StatusCode == HttpStatusCode.InternalServerError ?
@@ -148,7 +148,7 @@ namespace Alma.ApiExtensions.Tests.SpecFlow
         [When(@"chamar o servico")]
         public virtual void QuandoChamarOServico()
         {
-            var url = (String)scenarioContext.Endpoint();
+            var url = (String)ScenarioContext.Endpoint();
             var endpoint = Config.HostBase.ToString();
             if (!endpoint.EndsWith("/"))
                 endpoint += "/";
@@ -161,7 +161,7 @@ namespace Alma.ApiExtensions.Tests.SpecFlow
         public virtual void EntaoUmaRespostaDoTipoXSerRetornadaComOsSeguintesValores(string tipoModel, Table table)
         {
             var tipoModelType = LocalizarTipo(tipoModel);
-            scenarioContext.TipoModel(tipoModel);
+            ScenarioContext.TipoModel(tipoModel);
             try
             {
                 //executar ValidarResposta generica
@@ -184,7 +184,7 @@ namespace Alma.ApiExtensions.Tests.SpecFlow
         public virtual void EntaoUmaRespostaDoTipoXSerRetornadaComUmItemComOsSeguintesValores(string tipoModel, Table table)
         {
             var tipoModelType = LocalizarTipo(tipoModel);
-            scenarioContext.TipoModel(tipoModel);
+            ScenarioContext.TipoModel(tipoModel);
             try
             {
                 //executar ValidarResposta generica
@@ -207,7 +207,7 @@ namespace Alma.ApiExtensions.Tests.SpecFlow
         [Then(@"a propriedade '(.*)' de todos os itens deve ser '(.*)'")]
         public virtual void EntaoAPropriedadeDeTodosOsItensDeveSer(string propriedade, string valor)
         {
-            var tipoModel = scenarioContext.TipoModel();
+            var tipoModel = ScenarioContext.TipoModel();
             if (string.IsNullOrWhiteSpace(tipoModel))
                 throw new InvalidOperationException("Validar se a lista foi retornada com dados antes de validar propriedades.");
             var tipoModelType = LocalizarTipo(tipoModel);
@@ -235,7 +235,7 @@ namespace Alma.ApiExtensions.Tests.SpecFlow
         public virtual void EntaoUmaRespostaComUmaListaDoTipoXSerRetornadaComItens(string tipoModel)
         {
             var tipoModelType = LocalizarTipo(tipoModel);
-            scenarioContext.TipoModel(tipoModel);
+            ScenarioContext.TipoModel(tipoModel);
             try
             {
                 //executar ValidarResposta generica
@@ -261,11 +261,11 @@ namespace Alma.ApiExtensions.Tests.SpecFlow
             try
             {
 
-                var tipoModel = scenarioContext.TipoModel();
+                var tipoModel = ScenarioContext.TipoModel();
                 var tipoModelType = LocalizarTipo(tipoModel);
 
 
-                var response = scenarioContext.Response();
+                var response = ScenarioContext.Response();
                 var content = response.Content;
                 var objetoRetorno = JsonConvert.DeserializeObject(content, tipoModelType);
 
@@ -296,7 +296,7 @@ namespace Alma.ApiExtensions.Tests.SpecFlow
         [Given(@"que não tenho uma sessão de usuário ativa")]
         public virtual void DadoQueNaoTenhoUmaSessaoDeUsuarioAtiva()
         {
-            scenarioContext.ObjetoAcesso(null);
+            ScenarioContext.ObjetoAcesso(null);
         }
 
         [Given(@"que tenho uma sessão de usuário ativa com alguma permissão no sistema")]
@@ -308,7 +308,7 @@ namespace Alma.ApiExtensions.Tests.SpecFlow
         [Given(@"que tenho uma sessão de usuário ativa com permissão ao objeto '(.*)'")]
         public virtual void DadoOPerfilDeAcessoEContemOObjeto(string objeto)
         {
-            scenarioContext.ObjetoAcesso(objeto);
+            ScenarioContext.ObjetoAcesso(objeto);
         }
 
         /// <summary>
@@ -318,17 +318,17 @@ namespace Alma.ApiExtensions.Tests.SpecFlow
         /// <returns> Objeto IRestResponse do Tipo Y </returns>
         private IRestResponse ExecutarRequest(String endpoint)
         {
-            var url = scenarioContext.MontaUrl(endpoint);
+            var url = ScenarioContext.MontaUrl(endpoint);
 
             var request = new RestRequest();
 
-            request.Method = scenarioContext.HttpMethod();
+            request.Method = ScenarioContext.HttpMethod();
 
             request.Parameters.Clear();
 
             if (request.Method == Method.POST)
             {
-                var json = scenarioContext.JsonArgumento();
+                var json = ScenarioContext.JsonArgumento();
                 if (!String.IsNullOrWhiteSpace(json))
                     request.AddParameter("application/json", json, ParameterType.RequestBody);
             }
@@ -340,7 +340,7 @@ namespace Alma.ApiExtensions.Tests.SpecFlow
 
             var response = restClient.Execute(request);
 
-            scenarioContext.Response(response);
+            ScenarioContext.Response(response);
 
             return response;
         }
@@ -349,13 +349,13 @@ namespace Alma.ApiExtensions.Tests.SpecFlow
         private String GetJsonArgumento<T>()
         {
             object arg = null;
-            if (scenarioContext.ListaArgumentos() != null)
+            if (ScenarioContext.ListaArgumentos() != null)
             {
-                arg = scenarioContext.ListaArgumentos().CreateSet<T>();
+                arg = ScenarioContext.ListaArgumentos().CreateSet<T>();
             }
-            else if (scenarioContext.Argumento() != null)
+            else if (ScenarioContext.Argumento() != null)
             {
-                arg = scenarioContext.Argumento().CreateInstance<T>();
+                arg = ScenarioContext.Argumento().CreateInstance<T>();
             }
 
             if (arg == null)
@@ -369,7 +369,7 @@ namespace Alma.ApiExtensions.Tests.SpecFlow
 
         public virtual void ValidarResposta<T>(Table table) where T : new()
         {
-            var response = scenarioContext.Response();
+            var response = ScenarioContext.Response();
             var content = response.Content;
 
             var model = JsonConvert.DeserializeObject<T>(content);
@@ -379,7 +379,7 @@ namespace Alma.ApiExtensions.Tests.SpecFlow
 
         public virtual void ValidarRespostaLista<T>(Table table) where T : new()
         {
-            var response = scenarioContext.Response();
+            var response = ScenarioContext.Response();
             var content = response.Content;
 
             var model = JsonConvert.DeserializeObject<List<T>>(content);
@@ -389,7 +389,7 @@ namespace Alma.ApiExtensions.Tests.SpecFlow
 
         public virtual void ValidarRespostaListaComDados<T>() where T : new()
         {
-            var response = scenarioContext.Response();
+            var response = ScenarioContext.Response();
             var content = response.Content;
 
             var model = JsonConvert.DeserializeObject<List<T>>(content);
@@ -401,7 +401,7 @@ namespace Alma.ApiExtensions.Tests.SpecFlow
 
         public virtual void ValidarRespostaListaComUmItem<T>(Table table) where T : new()
         {
-            var response = scenarioContext.Response();
+            var response = ScenarioContext.Response();
             var content = response.Content;
 
             var model = JsonConvert.DeserializeObject<List<T>>(content);
@@ -414,7 +414,7 @@ namespace Alma.ApiExtensions.Tests.SpecFlow
         }
         public virtual void ValidarRespostaListaComTodosOsItensComPropriedade<T>(string propriedade, string valor) where T : new()
         {
-            var response = scenarioContext.Response();
+            var response = ScenarioContext.Response();
             var content = response.Content;
 
             var model = JsonConvert.DeserializeObject<List<T>>(content);
@@ -443,7 +443,7 @@ namespace Alma.ApiExtensions.Tests.SpecFlow
 
         private void AdicionarAutorizacao(RestRequest request)
         {
-            var objetos = scenarioContext.ObjetoAcesso();
+            var objetos = ScenarioContext.ObjetoAcesso();
             if (!string.IsNullOrWhiteSpace(objetos))
             {
                 var token = ObterTokenAutorizacao(objetos);
