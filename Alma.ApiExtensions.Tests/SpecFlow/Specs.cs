@@ -128,14 +128,22 @@ namespace Alma.ApiExtensions.Tests.SpecFlow
                 response.Content : null);
         }
 
-        private static Type LocalizarTipo(string nomeTipo)
+        protected virtual Type LocalizarTipo(string nomeTipo)
         {
-            var assemblies = Assembly.GetExecutingAssembly().GetReferencedAssemblies()
-                .Concat(new AssemblyName[] { Assembly.GetExecutingAssembly().GetName() }).ToArray();
-            var tipos = (from assemblyName in assemblies
-                         from type in Assembly.Load(assemblyName).GetTypes()
-                         where type.Name == nomeTipo
-                         select type).ToArray();
+            var assemblies = AppDomain.CurrentDomain.GetAssemblies()
+                .Where(x =>
+                    !x.IsDynamic &&
+                    !x.GetName().FullName.Contains("Microsoft.") &&
+                    !x.GetName().FullName.Contains("System.")
+                ).ToList();
+            assemblies.AddRange(
+                assemblies.AsParallel().SelectMany(a => a.GetReferencedAssemblies()
+                    .Select(r => Assembly.Load(r)))
+                );
+            var tipos =
+                assemblies.AsParallel()
+                .SelectMany(x => x.GetTypes().Where(t => t.Name == nomeTipo).Select(t => t))
+                .Distinct().ToArray();
 
             if (tipos.Length == 0)
                 throw new ApplicationException(string.Format("Tipo {0} não encontrado.", nomeTipo));
@@ -167,7 +175,7 @@ namespace Alma.ApiExtensions.Tests.SpecFlow
                 //executar ValidarResposta generica
                 var reflValidarResposta = typeof(GenericSteps).GetMethod(nameof(ValidarResposta), System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public).GetGenericMethodDefinition();
                 var genericMethod = reflValidarResposta.MakeGenericMethod(tipoModelType);
-                genericMethod.Invoke(null, new[] { table });
+                genericMethod.Invoke(this, new[] { table });
                 //equivalenta a: GenericSteps.ValidarResposta<tipoModelType>(table);
 
             }
@@ -190,7 +198,7 @@ namespace Alma.ApiExtensions.Tests.SpecFlow
                 //executar ValidarResposta generica
                 var reflValidarResposta = typeof(GenericSteps).GetMethod(nameof(ValidarRespostaListaComUmItem), System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public).GetGenericMethodDefinition();
                 var genericMethod = reflValidarResposta.MakeGenericMethod(tipoModelType);
-                genericMethod.Invoke(null, new[] { table });
+                genericMethod.Invoke(this, new[] { table });
                 //equivalenta a: GenericSteps.ValidarRespostaListaComUmItem<tipoModelType>(table);
 
             }
@@ -217,7 +225,7 @@ namespace Alma.ApiExtensions.Tests.SpecFlow
                 //executar ValidarResposta generica
                 var reflValidarResposta = typeof(GenericSteps).GetMethod(nameof(ValidarRespostaListaComTodosOsItensComPropriedade), System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public).GetGenericMethodDefinition();
                 var genericMethod = reflValidarResposta.MakeGenericMethod(tipoModelType);
-                genericMethod.Invoke(null, new[] { propriedade, valor });
+                genericMethod.Invoke(this, new[] { propriedade, valor });
                 //equivalenta a: GenericSteps.ValidarRespostaListaComTodosOsItensComPropriedade<tipoModelType>(propriedade, valor);
 
             }
@@ -241,7 +249,7 @@ namespace Alma.ApiExtensions.Tests.SpecFlow
                 //executar ValidarResposta generica
                 var reflValidarResposta = typeof(GenericSteps).GetMethod(nameof(ValidarRespostaListaComDados), System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public).GetGenericMethodDefinition();
                 var genericMethod = reflValidarResposta.MakeGenericMethod(tipoModelType);
-                genericMethod.Invoke(null, new object[] { });
+                genericMethod.Invoke(this, new object[] { });
                 //equivalenta a: GenericSteps.ValidarRespostaListaComDados<tipoModelType>();
 
             }
@@ -281,7 +289,7 @@ namespace Alma.ApiExtensions.Tests.SpecFlow
                 //executar CompareToSet generica
                 var reflValidarResposta = typeof(SetComparisonExtensionMethods).GetMethod("CompareToSet", System.Reflection.BindingFlags.Instance | BindingFlags.Static | System.Reflection.BindingFlags.Public).GetGenericMethodDefinition();
                 var genericMethod = reflValidarResposta.MakeGenericMethod(tipoListaType);
-                genericMethod.Invoke(null, new[] { table, propriedadeObj });
+                genericMethod.Invoke(this, new[] { table, propriedadeObj });
                 //equivalenta a: table.CompareToSet<tipoListaType>(propriedadeObj);
             }
             catch (TargetInvocationException ex)
