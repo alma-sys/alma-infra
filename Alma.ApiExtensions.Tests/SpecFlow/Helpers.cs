@@ -117,22 +117,22 @@ namespace Alma.ApiExtensions.Tests.SpecFlow
         #region Response
         public static IRestResponse Response(this ScenarioContext context)
         {
-            return context.Get<IRestResponse>("response");
+            return context.Get<object>("response") as IRestResponse;
         }
 
         public static IRestResponse<T> Response<T>(this ScenarioContext context)
         {
-            return context.Get<IRestResponse<T>>("response");
+            return context.Get<object>("response") as IRestResponse<T>;
         }
 
         public static void Response(this ScenarioContext context, IRestResponse valor)
         {
-            context.Set(valor, "response");
+            context.Set((object)valor, "response");
         }
 
         public static T ResponseData<T>(this ScenarioContext context) where T : new()
         {
-            return context.Get<IRestResponse<T>>("response").Data;
+            return ((IRestResponse<T>)context.Get<object>("response")).Data;
         }
         #endregion Response
 
