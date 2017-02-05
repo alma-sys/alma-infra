@@ -17,7 +17,7 @@ namespace Alma.Core
         {
             if (!string.IsNullOrWhiteSpace(message))
                 return message;
-            else if (errors != null && errors.Count > 0)
+            else if (errors != null && errors.Count == 1)
                 return errors.Values.First();
             else
                 return null;
