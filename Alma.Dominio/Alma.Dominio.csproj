@@ -54,6 +54,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UsuarioBase.cs" />
     <Compile Include="Validadores\IValidador.cs" />
+    <Compile Include="Validadores\ValidacaoException.cs" />
     <Compile Include="Validadores\Validador.cs" />
     <Compile Include="Validadores\ValidadoresModule.cs" />
   </ItemGroup>
