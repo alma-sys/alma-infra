@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -12,19 +13,26 @@ using TechTalk.SpecFlow.Assist;
 
 namespace Alma.ApiExtensions.Testes.SpecFlow
 {
-    public abstract partial class GenericSteps
+    [Binding]
+    public sealed class Specs
     {
 
-        public virtual ScenarioContext ScenarioContext { get; private set; }
-        public GenericSteps(ScenarioContext scenarioContext)
+        private ScenarioContext ScenarioContext { get; set; }
+        public Specs(ScenarioContext scenarioContext)
         {
             if (scenarioContext == null) throw new ArgumentNullException(nameof(scenarioContext));
             this.ScenarioContext = scenarioContext;
         }
 
+        [BeforeScenario("ignore")]
+        public void TesteInconclusivo()
+        {
+            ScenarioContext.Pending();
+        }
+
 
         [Given(@"o método http é '(.*)'")]
-        public virtual void EOMetodoHttpE(string p0)
+        public void EOMetodoHttpE(string p0)
         {
             var metodo = Method.POST;
 
@@ -51,42 +59,51 @@ namespace Alma.ApiExtensions.Testes.SpecFlow
         }
 
         [Given(@"a seguinte lista de argumentos do tipo '(.*)':")]
-        public virtual void DadoASeguinteListaDeArgumentos(string nomeTipo, Table table)
+        public void DadoASeguinteListaDeArgumentos(string nomeTipo, Table table)
         {
             var tipo = LocalizarTipo(nomeTipo);
+            try
+            {
+                var reflValidarResposta = typeof(TableHelperExtensionMethods).GetMethod("CreateSet", new[] { typeof(Table) }).GetGenericMethodDefinition();
+                var genericMethod = reflValidarResposta.MakeGenericMethod(tipo);
+                var arg = genericMethod.Invoke(null, new[] { table });
 
-            var reflValidarResposta = typeof(TableHelperExtensionMethods).GetMethod("CreateSet", new[] { typeof(Table) }).GetGenericMethodDefinition();
-            var genericMethod = reflValidarResposta.MakeGenericMethod(tipo);
-            var arg = genericMethod.Invoke(null, new[] { table });
+                var jsonSerializerSettings = new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() };
+                var json = JsonConvert.SerializeObject(arg, Formatting.Indented, jsonSerializerSettings);
 
-            var jsonSerializerSettings = new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() };
-            var json = JsonConvert.SerializeObject(arg, Formatting.Indented, jsonSerializerSettings);
-
-            ScenarioContext.JsonArgumento(json);
-            ScenarioContext.ListaArgumentos(table);
+                ScenarioContext.JsonArgumento(json);
+                ScenarioContext.ListaArgumentos(table);
+            }
+            catch (TargetInvocationException ex)
+            {
+                if (ex.InnerException != null)
+                    throw ex.InnerException;
+                else
+                    throw;
+            }
         }
 
         [Given(@"que a url do endpoint é '(.*)'")]
-        public virtual void DadoQueAUrlDoEndpointE(string p0)
+        public void DadoQueAUrlDoEndpointE(string p0)
         {
             ScenarioContext.Endpoint(p0);
         }
 
         [Given(@"os seguintes parâmetros de url:")]
-        public virtual void DadoOsSeguintesParametrosDeUrl(Table table)
+        public void DadoOsSeguintesParametrosDeUrl(Table table)
         {
             ScenarioContext.ParametroUrl(table);
         }
 
         [Given(@"informei o parâmetro de url '(.*)' com o id do cenário")]
-        public virtual void DadoInformeiOParametroDeUrlComOIdDoCenario(string parametro)
+        public void DadoInformeiOParametroDeUrlComOIdDoCenario(string parametro)
         {
             Int64 id = ScenarioContext.IdEntidade();
             AdicionaParametroUrl(parametro, id.ToString());
         }
 
         [Given(@"informei o parâmetro de url '(.*)' com o valor '(.*)'")]
-        public virtual void DadoInformeiOParametroDeUrlComOValor(string parametro, string valor)
+        public void DadoInformeiOParametroDeUrlComOValor(string parametro, string valor)
         {
             AdicionaParametroUrl(parametro, valor);
         }
@@ -102,24 +119,35 @@ namespace Alma.ApiExtensions.Testes.SpecFlow
         }
 
         [Given(@"o seguinte argumento do tipo '(.*)':")]
-        public virtual void EOsSeguintesValores(string nomeTipo, Table table)
+        public void EOsSeguintesValores(string nomeTipo, Table table)
         {
             var tipo = LocalizarTipo(nomeTipo);
 
-            var reflValidarResposta = typeof(TableHelperExtensionMethods).GetMethod("CreateInstance", new[] { typeof(Table) }).GetGenericMethodDefinition();
-            var genericMethod = reflValidarResposta.MakeGenericMethod(tipo);
-            var arg = genericMethod.Invoke(null, new[] { table });
+            try
+            {
+                var reflValidarResposta = typeof(TableHelperExtensionMethods).GetMethod("CreateInstance", new[] { typeof(Table) }).GetGenericMethodDefinition();
+                var genericMethod = reflValidarResposta.MakeGenericMethod(tipo);
+                var arg = genericMethod.Invoke(null, new[] { table });
 
-            var jsonSerializerSettings = new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() };
-            var json = JsonConvert.SerializeObject(arg, Formatting.Indented, jsonSerializerSettings);
+                var jsonSerializerSettings = new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() };
+                var json = JsonConvert.SerializeObject(arg, Formatting.Indented, jsonSerializerSettings);
 
-            ScenarioContext.JsonArgumento(json);
-            ScenarioContext.TipoModel(nomeTipo);
-            ScenarioContext.Argumento(table);
+                ScenarioContext.JsonArgumento(json);
+                ScenarioContext.TipoModel(nomeTipo);
+                ScenarioContext.Argumento(table);
+
+            }
+            catch (TargetInvocationException ex)
+            {
+                if (ex.InnerException != null)
+                    throw ex.InnerException;
+                else
+                    throw;
+            }
         }
 
         [Then(@"statuscode da resposta deverá ser '(.*)'")]
-        public virtual void EntaoStatuscodeDaRespostaDeveraSer(string p0)
+        public void EntaoStatuscodeDaRespostaDeveraSer(string p0)
         {
             var response = ScenarioContext.Response();
 
@@ -128,7 +156,7 @@ namespace Alma.ApiExtensions.Testes.SpecFlow
                 response.Content : null);
         }
 
-        protected virtual Type LocalizarTipo(string nomeTipo)
+        private Type LocalizarTipo(string nomeTipo)
         {
             var assemblies = AppDomain.CurrentDomain.GetAssemblies()
                 .Where(x =>
@@ -154,7 +182,7 @@ namespace Alma.ApiExtensions.Testes.SpecFlow
         }
 
         [When(@"chamar o servico")]
-        public virtual void QuandoChamarOServico()
+        public void QuandoChamarOServico()
         {
             var url = (String)ScenarioContext.Endpoint();
             var endpoint = Config.HostBase.ToString();
@@ -166,105 +194,43 @@ namespace Alma.ApiExtensions.Testes.SpecFlow
         }
 
         [Then(@"uma resposta do tipo '(.*)' deve ser retornada com os seguintes valores:")]
-        public virtual void EntaoUmaRespostaDoTipoXSerRetornadaComOsSeguintesValores(string tipoModel, Table table)
+        public void EntaoUmaRespostaDoTipoXSerRetornadaComOsSeguintesValores(string tipoModel, Table table)
         {
             var tipoModelType = LocalizarTipo(tipoModel);
             ScenarioContext.TipoModel(tipoModel);
-            try
-            {
-                //executar ValidarResposta generica
-                var reflValidarResposta = typeof(GenericSteps).GetMethod(nameof(ValidarResposta), System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public).GetGenericMethodDefinition();
-                var genericMethod = reflValidarResposta.MakeGenericMethod(tipoModelType);
-                genericMethod.Invoke(this, new[] { table });
-                //equivalenta a: GenericSteps.ValidarResposta<tipoModelType>(table);
 
-            }
-            catch (TargetInvocationException ex)
-            {
-                if (ex.InnerException != null)
-                    throw ex.InnerException;
-                else
-                    throw;
-            }
+            ValidarResposta(table, tipoModelType);
         }
 
         [Then(@"uma lista do tipo '(.*)' deve ser retornada com um item com os seguintes valores:")]
-        public virtual void EntaoUmaRespostaDoTipoXSerRetornadaComUmItemComOsSeguintesValores(string tipoModel, Table table)
+        public void EntaoUmaRespostaDoTipoXSerRetornadaComUmItemComOsSeguintesValores(string tipoModel, Table table)
         {
             var tipoModelType = LocalizarTipo(tipoModel);
             ScenarioContext.TipoModel(tipoModel);
-            try
-            {
-                //executar ValidarResposta generica
-                var reflValidarResposta = typeof(GenericSteps).GetMethod(nameof(ValidarRespostaListaComUmItem), System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public).GetGenericMethodDefinition();
-                var genericMethod = reflValidarResposta.MakeGenericMethod(tipoModelType);
-                genericMethod.Invoke(this, new[] { table });
-                //equivalenta a: GenericSteps.ValidarRespostaListaComUmItem<tipoModelType>(table);
-
-            }
-            catch (TargetInvocationException ex)
-            {
-                if (ex.InnerException != null)
-                    throw ex.InnerException;
-                else
-                    throw;
-            }
-
+            ValidarRespostaListaComUmItem(table, tipoModelType);
         }
 
         [Then(@"a propriedade '(.*)' de todos os itens deve ser '(.*)'")]
-        public virtual void EntaoAPropriedadeDeTodosOsItensDeveSer(string propriedade, string valor)
+        public void EntaoAPropriedadeDeTodosOsItensDeveSer(string propriedade, string valor)
         {
             var tipoModel = ScenarioContext.TipoModel();
             if (string.IsNullOrWhiteSpace(tipoModel))
                 throw new InvalidOperationException("Validar se a lista foi retornada com dados antes de validar propriedades.");
             var tipoModelType = LocalizarTipo(tipoModel);
-
-            try
-            {
-                //executar ValidarResposta generica
-                var reflValidarResposta = typeof(GenericSteps).GetMethod(nameof(ValidarRespostaListaComTodosOsItensComPropriedade), System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public).GetGenericMethodDefinition();
-                var genericMethod = reflValidarResposta.MakeGenericMethod(tipoModelType);
-                genericMethod.Invoke(this, new[] { propriedade, valor });
-                //equivalenta a: GenericSteps.ValidarRespostaListaComTodosOsItensComPropriedade<tipoModelType>(propriedade, valor);
-
-            }
-            catch (TargetInvocationException ex)
-            {
-                if (ex.InnerException != null)
-                    throw ex.InnerException;
-                else
-                    throw;
-            }
+            ValidarRespostaListaComTodosOsItensComPropriedade(tipoModelType, propriedade, valor);
         }
 
 
         [Then(@"uma resposta com uma lista do tipo '(.*)' deve ser retornada com dados")]
-        public virtual void EntaoUmaRespostaComUmaListaDoTipoXSerRetornadaComItens(string tipoModel)
+        public void EntaoUmaRespostaComUmaListaDoTipoXSerRetornadaComItens(string tipoModel)
         {
             var tipoModelType = LocalizarTipo(tipoModel);
             ScenarioContext.TipoModel(tipoModel);
-            try
-            {
-                //executar ValidarResposta generica
-                var reflValidarResposta = typeof(GenericSteps).GetMethod(nameof(ValidarRespostaListaComDados), System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public).GetGenericMethodDefinition();
-                var genericMethod = reflValidarResposta.MakeGenericMethod(tipoModelType);
-                genericMethod.Invoke(this, new object[] { });
-                //equivalenta a: GenericSteps.ValidarRespostaListaComDados<tipoModelType>();
-
-            }
-            catch (TargetInvocationException ex)
-            {
-                if (ex.InnerException != null)
-                    throw ex.InnerException;
-                else
-                    throw;
-            }
-
+            ValidarRespostaListaComDados(tipoModelType);
         }
 
         [Then(@"uma propriedade '(.*)' com uma lista de '(.*)' com os seguintes valores:")]
-        public virtual void EntaoUmaPropriedadeXComUmaListaDeY(string propriedade, string tipoLista, Table table)
+        public void EntaoUmaPropriedadeXComUmaListaDeY(string propriedade, string tipoLista, Table table)
         {
             try
             {
@@ -302,19 +268,19 @@ namespace Alma.ApiExtensions.Testes.SpecFlow
         }
 
         [Given(@"que não tenho uma sessão de usuário ativa")]
-        public virtual void DadoQueNaoTenhoUmaSessaoDeUsuarioAtiva()
+        public void DadoQueNaoTenhoUmaSessaoDeUsuarioAtiva()
         {
             ScenarioContext.ObjetoAcesso(null);
         }
 
         [Given(@"que tenho uma sessão de usuário ativa com alguma permissão no sistema")]
-        public virtual void DadoQueTenhoUmaSessaoDeUsuarioAtivaNoCondominioComAlgumaPermissaoNoSistema()
+        public void DadoQueTenhoUmaSessaoDeUsuarioAtivaNoCondominioComAlgumaPermissaoNoSistema()
         {
             DadoOPerfilDeAcessoEContemOObjeto("dummy");
         }
 
         [Given(@"que tenho uma sessão de usuário ativa com permissão ao objeto '(.*)'")]
-        public virtual void DadoOPerfilDeAcessoEContemOObjeto(string objeto)
+        public void DadoOPerfilDeAcessoEContemOObjeto(string objeto)
         {
             ScenarioContext.ObjetoAcesso(objeto);
         }
@@ -375,17 +341,17 @@ namespace Alma.ApiExtensions.Testes.SpecFlow
             return json;
         }
 
-        public virtual void ValidarResposta<T>(Table table) where T : new()
+        private void ValidarResposta(Table expectedTable, Type typeOfActualModel)
         {
             var response = ScenarioContext.Response();
             var content = response.Content;
 
-            var model = JsonConvert.DeserializeObject<T>(content);
+            var actual = JsonConvert.DeserializeObject(content, typeOfActualModel);
 
-            table.CompareToInstance(model);
+            expectedTable.CompareToInstance(actual);
         }
 
-        public virtual void ValidarRespostaLista<T>(Table table) where T : new()
+        private void ValidarRespostaLista<T>(Table table) where T : new()
         {
             var response = ScenarioContext.Response();
             var content = response.Content;
@@ -395,46 +361,52 @@ namespace Alma.ApiExtensions.Testes.SpecFlow
             table.CompareToSet<T>(model);
         }
 
-        public virtual void ValidarRespostaListaComDados<T>() where T : new()
+        private void ValidarRespostaListaComDados(Type typeOfActualModel)
         {
             var response = ScenarioContext.Response();
             var content = response.Content;
 
-            var model = JsonConvert.DeserializeObject<List<T>>(content);
+            var type = typeof(List<>).MakeGenericType(typeOfActualModel);
 
+            var model = JsonConvert.DeserializeObject(content, type) as IList;
+
+            Assert.IsNotNull(model);
             CollectionAssert.AllItemsAreNotNull(model);
-            CollectionAssert.AllItemsAreInstancesOfType(model, typeof(T));
+            CollectionAssert.AllItemsAreInstancesOfType(model, typeOfActualModel);
             Assert.AreNotEqual(0, model.Count);
         }
 
-        public virtual void ValidarRespostaListaComUmItem<T>(Table table) where T : new()
+        private void ValidarRespostaListaComUmItem(Table expectedTable, Type typeOfActualModel)
         {
             var response = ScenarioContext.Response();
             var content = response.Content;
 
-            var model = JsonConvert.DeserializeObject<List<T>>(content);
+            var type = typeof(List<>).MakeGenericType(typeOfActualModel);
+            var model = JsonConvert.DeserializeObject(content, type) as IList;
 
+            Assert.IsNotNull(model);
             CollectionAssert.AllItemsAreNotNull(model);
-            CollectionAssert.AllItemsAreInstancesOfType(model, typeof(T));
+            CollectionAssert.AllItemsAreInstancesOfType(model, typeOfActualModel);
             Assert.AreEqual(1, model.Count);
 
-            table.CompareToInstance(model.First());
+            expectedTable.CompareToInstance(model[0]);
         }
-        public virtual void ValidarRespostaListaComTodosOsItensComPropriedade<T>(string propriedade, string valor) where T : new()
+        private void ValidarRespostaListaComTodosOsItensComPropriedade(Type tipoItem, string propriedade, string valor)
         {
             var response = ScenarioContext.Response();
             var content = response.Content;
 
-            var model = JsonConvert.DeserializeObject<List<T>>(content);
+            var type = typeof(List<>).MakeGenericType(tipoItem);
+            var model = JsonConvert.DeserializeObject(content, type) as IList;
 
-
+            Assert.IsNotNull(model);
             CollectionAssert.AllItemsAreNotNull(model);
-            CollectionAssert.AllItemsAreInstancesOfType(model, typeof(T));
+            CollectionAssert.AllItemsAreInstancesOfType(model, tipoItem);
             Assert.AreNotEqual(0, model.Count);
 
-            var reflPropriedade = typeof(T).GetProperty(propriedade, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
+            var reflPropriedade = type.GetProperty(propriedade, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
             if (reflPropriedade == null)
-                throw new InvalidOperationException(string.Format("Propriedade {0} não encontrada no objeto {1}", propriedade, typeof(T).Name));
+                throw new InvalidOperationException(string.Format("Propriedade {0} não encontrada no objeto {1}", propriedade, type.Name));
             foreach (var item in model)
             {
                 //executar Busca Propriedade
@@ -451,19 +423,21 @@ namespace Alma.ApiExtensions.Testes.SpecFlow
 
         private void AdicionarAutorizacao(RestRequest request)
         {
-            var objetos = ScenarioContext.ObjetoAcesso();
-            if (!string.IsNullOrWhiteSpace(objetos))
+            var objeto = ScenarioContext.ObjetoAcesso();
+            if (!string.IsNullOrWhiteSpace(objeto))
             {
-                var token = ObterTokenAutorizacao(objetos);
+                if (TokenAutorizacao == null)
+                    throw new InvalidOperationException("Defina a função de token de autorização.");
+                var token = TokenAutorizacao(ScenarioContext, new string[] { objeto });
                 if (!string.IsNullOrWhiteSpace(token))
                     request.AddHeader("Authorization", "Bearer " + token);
             }
         }
 
-        public virtual string ObterTokenAutorizacao(params string[] objetos)
-        {
-            return null;
-        }
+        /// <summary>
+        /// Defina a função para obter token de autorização
+        /// </summary>
+        public static Func<ScenarioContext, string[], string> TokenAutorizacao { get; set; }
 
     }
 }
