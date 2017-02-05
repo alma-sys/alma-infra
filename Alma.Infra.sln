@@ -31,7 +31,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alma.ApiExtensions", "Alma.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alma.Aplicativo", "Alma.Aplicativo\Alma.Aplicativo.csproj", "{5B2A3FF5-F5E2-45E1-B7C7-D3F9AED3A857}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alma.ApiExtensions.Tests", "Alma.ApiExtensions.Tests\Alma.ApiExtensions.Tests.csproj", "{1A541B05-2703-4C6B-976D-384D7F8B3334}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alma.ApiExtensions.Testes", "Alma.ApiExtensions.Tests\Alma.ApiExtensions.Testes.csproj", "{1A541B05-2703-4C6B-976D-384D7F8B3334}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alma.Dados.OrmEntityFramework", "Alma.Dados.OrmEntityFramework\Alma.Dados.OrmEntityFramework.csproj", "{8D2D432A-65BF-4FAF-9CA3-73DB16A2505B}"
 EndProject
@@ -41,7 +41,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alma.Testes", "Alma.Testes\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alma.Testes.Tests", "Alma.Testes.Tests\Alma.Testes.Tests.csproj", "{9DA67942-D6DC-43CE-A765-1B90C5123FF2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alma.ApiExtensions.Tests.Tests", "Alma.ApiExtensions.Testes.Tests\Alma.ApiExtensions.Testes.Tests.csproj", "{CC4B38F3-FBC7-4519-9F49-751E62BD4289}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alma.ApiExtensions.Testes.Tests", "Alma.ApiExtensions.Testes.Tests\Alma.ApiExtensions.Testes.Tests.csproj", "{CC4B38F3-FBC7-4519-9F49-751E62BD4289}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

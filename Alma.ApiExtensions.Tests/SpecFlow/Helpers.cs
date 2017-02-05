@@ -5,7 +5,7 @@ using System.Net;
 using RestSharp;
 using TechTalk.SpecFlow;
 
-namespace Alma.ApiExtensions.Tests.SpecFlow
+namespace Alma.ApiExtensions.Testes.SpecFlow
 {
     public static class Helpers
     {

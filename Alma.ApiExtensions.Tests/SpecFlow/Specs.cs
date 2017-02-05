@@ -10,7 +10,7 @@ using RestSharp;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 
-namespace Alma.ApiExtensions.Tests.SpecFlow
+namespace Alma.ApiExtensions.Testes.SpecFlow
 {
     public abstract partial class GenericSteps
     {
