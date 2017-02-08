@@ -370,7 +370,7 @@ namespace Alma.ApiExtensions.Testes.SpecFlow
                 var actual = JsonConvert.DeserializeObject(content, type) as IList;
 
                 var reflValidarResposta = typeof(SetComparisonExtensionMethods).GetMethod(nameof(SetComparisonExtensionMethods.CompareToSet), System.Reflection.BindingFlags.Instance | BindingFlags.Static | System.Reflection.BindingFlags.Public).GetGenericMethodDefinition();
-                var genericMethod = reflValidarResposta.MakeGenericMethod(type);
+                var genericMethod = reflValidarResposta.MakeGenericMethod(typeOfActualModel);
                 genericMethod.Invoke(this, new object[] { expectedTable, actual });
             }
             catch (TargetInvocationException ex)
