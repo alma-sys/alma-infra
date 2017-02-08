@@ -210,6 +210,14 @@ namespace Alma.ApiExtensions.Testes.SpecFlow
             ValidarRespostaListaComUmItem(table, tipoModelType);
         }
 
+        [Then(@"uma lista do tipo '(.*)' deve ser retornada com os seguintes valores:")]
+        public void EntaoUmaListaDoTipoXSerRetornadaComOsSeguintesValores(string tipoModel, Table table)
+        {
+            var tipoModelType = LocalizarTipo(tipoModel);
+            ScenarioContext.TipoModel(tipoModel);
+            ValidarRespostaLista(table, tipoModelType);
+        }
+
         [Then(@"a propriedade '(.*)' de todos os itens deve ser '(.*)'")]
         public void EntaoAPropriedadeDeTodosOsItensDeveSer(string propriedade, string valor)
         {
@@ -253,7 +261,7 @@ namespace Alma.ApiExtensions.Testes.SpecFlow
 
 
                 //executar CompareToSet generica
-                var reflValidarResposta = typeof(SetComparisonExtensionMethods).GetMethod("CompareToSet", System.Reflection.BindingFlags.Instance | BindingFlags.Static | System.Reflection.BindingFlags.Public).GetGenericMethodDefinition();
+                var reflValidarResposta = typeof(SetComparisonExtensionMethods).GetMethod(nameof(SetComparisonExtensionMethods.CompareToSet), System.Reflection.BindingFlags.Instance | BindingFlags.Static | System.Reflection.BindingFlags.Public).GetGenericMethodDefinition();
                 var genericMethod = reflValidarResposta.MakeGenericMethod(tipoListaType);
                 genericMethod.Invoke(this, new[] { table, propriedadeObj });
                 //equivalenta a: table.CompareToSet<tipoListaType>(propriedadeObj);
@@ -351,17 +359,31 @@ namespace Alma.ApiExtensions.Testes.SpecFlow
             expectedTable.CompareToInstance(actual);
         }
 
-        private void ValidarRespostaLista<T>(Table table) where T : new()
+        private void ValidarRespostaLista(Table expectedTable, Type typeOfActualModel)
         {
-            var response = ScenarioContext.Response();
-            var content = response.Content;
+            try
+            {
+                var response = ScenarioContext.Response();
+                var content = response.Content;
 
-            var model = JsonConvert.DeserializeObject<List<T>>(content);
+                var type = typeof(List<>).MakeGenericType(typeOfActualModel);
+                var actual = JsonConvert.DeserializeObject(content, type) as IList;
 
-            table.CompareToSet<T>(model);
+                var reflValidarResposta = typeof(SetComparisonExtensionMethods).GetMethod(nameof(SetComparisonExtensionMethods.CompareToSet), System.Reflection.BindingFlags.Instance | BindingFlags.Static | System.Reflection.BindingFlags.Public).GetGenericMethodDefinition();
+                var genericMethod = reflValidarResposta.MakeGenericMethod(type);
+                genericMethod.Invoke(this, new object[] { expectedTable, actual });
+            }
+            catch (TargetInvocationException ex)
+            {
+                if (ex.InnerException != null)
+                    throw ex.InnerException;
+                else
+                    throw;
+            }
+
         }
 
-        private void ValidarRespostaListaComDados(Type typeOfActualModel)
+private void ValidarRespostaListaComDados(Type typeOfActualModel)
         {
             var response = ScenarioContext.Response();
             var content = response.Content;
