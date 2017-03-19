@@ -92,7 +92,7 @@ namespace Alma.Dados.OrmNHibernate
 
         public TEntity Get(object primaryKey)
         {
-            return Session.Load<TEntity>(primaryKey);
+            return Session.Get<TEntity>(primaryKey);
         }
 
         public TEntity GetSessionless(object primaryKey)
