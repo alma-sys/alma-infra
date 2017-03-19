@@ -5,7 +5,7 @@ using System.Net;
 using RestSharp;
 using TechTalk.SpecFlow;
 
-namespace Alma.ApiExtensions.Tests.SpecFlow
+namespace Alma.ApiExtensions.Testes.SpecFlow
 {
     public static class Helpers
     {
@@ -117,22 +117,22 @@ namespace Alma.ApiExtensions.Tests.SpecFlow
         #region Response
         public static IRestResponse Response(this ScenarioContext context)
         {
-            return context.Get<IRestResponse>("response");
+            return context.Get<object>("response") as IRestResponse;
         }
 
         public static IRestResponse<T> Response<T>(this ScenarioContext context)
         {
-            return context.Get<IRestResponse<T>>("response");
+            return context.Get<object>("response") as IRestResponse<T>;
         }
 
         public static void Response(this ScenarioContext context, IRestResponse valor)
         {
-            context.Set(valor, "response");
+            context.Set((object)valor, "response");
         }
 
         public static T ResponseData<T>(this ScenarioContext context) where T : new()
         {
-            return context.Get<IRestResponse<T>>("response").Data;
+            return ((IRestResponse<T>)context.Get<object>("response")).Data;
         }
         #endregion Response
 
@@ -157,7 +157,7 @@ namespace Alma.ApiExtensions.Tests.SpecFlow
         public static string MontaUrl(this ScenarioContext context, string url)
         {
             List<String> queryString = new List<String>();
-            var parametros = ScenarioContext.Current.ParametroUrl();
+            var parametros = context.ParametroUrl();
             if (parametros == null || parametros.RowCount == 0)
                 return url;
 
@@ -180,17 +180,6 @@ namespace Alma.ApiExtensions.Tests.SpecFlow
 
         #region Perfil Acesso
 
-        public static string Condominio(this ScenarioContext context)
-        {
-            if (!context.Keys.Contains("condominio"))
-                return null;
-            return context.Get<string>("condominio");
-        }
-
-        public static void Condominio(this ScenarioContext context, string valor)
-        {
-            context.Set(valor, "condominio");
-        }
         public static string ObjetoAcesso(this ScenarioContext context)
         {
             if (!context.Keys.Contains("objetoAcesso"))

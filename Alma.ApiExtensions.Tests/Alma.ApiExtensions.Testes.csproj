@@ -7,8 +7,8 @@
     <ProjectGuid>{1A541B05-2703-4C6B-976D-384D7F8B3334}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Alma.ApiExtensions.Tests</RootNamespace>
-    <AssemblyName>Alma.ApiExtensions.Tests</AssemblyName>
+    <RootNamespace>Alma.ApiExtensions.Testes</RootNamespace>
+    <AssemblyName>Alma.ApiExtensions.Testes</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -28,6 +28,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\Alma.ApiExtensions.Testes.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Build" />

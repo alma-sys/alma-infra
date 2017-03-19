@@ -9,21 +9,31 @@ namespace Alma.Core
 {
     public static class EnumExtensions
     {
-        public static IEnumerable<dynamic> ToCodigoNomeFlags(this Enum enumeration)
+        public static IEnumerable<IIdNome> ToCodigoNomeFlags(this Enum enumeration)
         {
             var valores = enumeration.GetFlags();
             foreach (var item in valores)
             {
-                yield return item.ToCodigoNome();
+                yield return item.ToIdNome();
             }
         }
-        public static dynamic ToCodigoNome(this Enum enumeration)
+
+        [Obsolete("Usar ToIdNome")]
+        public static CodigoNome ToCodigoNome(this Enum enumeration)
         {
-            return new
-            {
-                Codigo = enumeration.ToInt(),
-                Nome = enumeration.ToDescription()
-            };
+            return new CodigoNome(
+
+                codigo: enumeration.ToInt(),
+                nome: enumeration.ToDescription()
+            );
+        }
+
+        public static IIdNome ToIdNome(this Enum enumeration)
+        {
+            return new IdNome(
+                id: enumeration.ToInt(),
+                nome: enumeration.ToDescription()
+            );
         }
 
         public static CodigoDescricao ToCodigoDescricao(this Enum enumeration)
@@ -31,6 +41,7 @@ namespace Alma.Core
             return new CodigoDescricao(enumeration.ToString(), enumeration.ToDescription());
         }
 
+        [Obsolete("Usar ToCodigoDescricao")]
         public static dynamic ToCodigoCharNome(this Enum enumeration)
         {
             return new

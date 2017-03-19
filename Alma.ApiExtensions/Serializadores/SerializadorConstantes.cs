@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using Alma.Core;
+using Alma.Core.Dto;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
@@ -39,8 +40,11 @@ namespace Alma.ApiExtensions.Serializadores
 
             return sb.ToString();
         }
-
-        public static string SerializarEnum(Type enumerador, bool formatado, bool orderByCodigo = false)
+        public static string SerializarEnum<T>(bool formatado, bool orderById = false) where T : struct
+        {
+            return SerializarEnum(typeof(T), formatado, orderById);
+        }
+        public static string SerializarEnum(Type enumerador, bool formatado, bool orderById = false)
         {
             var serializer = new JsonSerializer();
             serializer.ContractResolver = new StaticPropertyContractResolver();
@@ -48,22 +52,27 @@ namespace Alma.ApiExtensions.Serializadores
             var writer = new StringWriter(sb);
             serializer.Formatting = formatado ? Formatting.Indented : Formatting.None;
 
-            var lista = new List<dynamic>();
+            var lista = new List<IIdNome>();
 
             foreach (var item in Enum.GetValues(enumerador))
             {
-                lista.Add(((Enum)item).ToCodigoNome());
+                lista.Add(((Enum)item).ToIdNome());
             }
 
-            if (orderByCodigo)
-                lista = lista.OrderBy(t => t.Nome).ToList();
+            if (orderById)
+                lista = lista.OrderBy(t => t.Id).ToList();
             else
-                lista = lista.OrderBy(t => t.Codigo).ToList();
+                lista = lista.OrderBy(t => t.Nome).ToList();
 
             serializer.Serialize(writer, lista);
 
             return sb.ToString();
         }
+        public static string SerializarEnumChar<T>(bool formatado, bool orderByCodigo = false) where T : struct
+        {
+            return SerializarEnumChar(typeof(T), formatado, orderByCodigo);
+        }
+
 
         public static string SerializarEnumChar(Type enumerador, bool formatado, bool orderByCodigo = false)
         {
@@ -73,17 +82,17 @@ namespace Alma.ApiExtensions.Serializadores
             var writer = new StringWriter(sb);
             serializer.Formatting = formatado ? Formatting.Indented : Formatting.None;
 
-            var lista = new List<dynamic>();
+            var lista = new List<CodigoDescricao>();
 
             foreach (var item in Enum.GetValues(enumerador))
             {
-                lista.Add(((Enum)item).ToCodigoCharNome());
+                lista.Add(((Enum)item).ToCodigoDescricao());
             }
 
             if (orderByCodigo)
-                lista = lista.OrderBy(t => t.Nome).ToList();
-            else
                 lista = lista.OrderBy(t => t.Codigo).ToList();
+            else
+                lista = lista.OrderBy(t => t.Descricao).ToList();
 
             serializer.Serialize(writer, lista);
 
