@@ -13,5 +13,5 @@ using System.Runtime.InteropServices;
 
 static class AssemblyValues
 {
-    public const string Version = "2.17.0319.1914";
+    public const string Version = "2.17.0320.1356";
 }
