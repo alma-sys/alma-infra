@@ -10,10 +10,10 @@
 
     public interface IIdNome<T> : IId<T> where T : struct
     {
-        string Nome { get; set; }
+        string Nome { get; }
     }
     public interface IId<T> where T : struct
     {
-        T Id { get; set; }
+        T Id { get; }
     }
 }
