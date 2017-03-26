@@ -1,4 +1,5 @@
 ﻿using Alma.Core;
+using System;
 
 namespace Alma.Dominio
 {
@@ -18,7 +19,28 @@ namespace Alma.Dominio
         public virtual string Descricao { get; protected set; }
         public virtual string Chave { get; protected set; }
         public virtual bool Privado { get; protected set; }
+        public virtual void DefinirNome(string nome)
+        {
+            if (string.IsNullOrWhiteSpace(nome))
+                throw new ArgumentException(nameof(nome));
 
+            int tamanho = 50;
+            if (nome.Length > tamanho)
+                throw new ArgumentException($"Nome deve ter no máximo {tamanho} caracteres.");
+
+            this.Nome = nome;
+        }
+        public virtual void DefinirDescricao(string descricao)
+        {
+            if (string.IsNullOrWhiteSpace(descricao))
+                throw new ArgumentException(nameof(descricao));
+
+            int tamanho = 500;
+            if (descricao.Length > tamanho)
+                throw new ArgumentException($"Descrição deve ter no máximo {tamanho} caracteres.");
+
+            this.Descricao = descricao;
+        }
 
         public override bool Equals(object obj)
         {
