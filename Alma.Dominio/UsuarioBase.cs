@@ -49,5 +49,25 @@ namespace Alma.Dominio
 
         }
 
+        public void Desbloquear()
+        {
+            this.Bloqueado = false;
+        }
+
+        public void Bloquear()
+        {
+            this.Bloqueado = true;
+        }
+
+        public void DefinirExpirado()
+        {
+            this.Expirado = true;
+        }
+
+        public void RemoverExpirado()
+        {
+            this.Expirado = false;
+        }
+
     }
 }
