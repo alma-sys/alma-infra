@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 
-namespace Alma.Core.Dto
+namespace Alma.Core
 {
     public interface IListaPaginada<T> : IListaPaginada where T : class
     {
-        IList<T> Lista { get; }
+        IReadOnlyList<T> Lista { get; }
     }
 
     public interface IListaPaginada
