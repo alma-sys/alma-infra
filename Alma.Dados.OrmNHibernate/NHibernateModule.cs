@@ -75,26 +75,23 @@ namespace Alma.Dados.OrmNHibernate
 
         private static void SetupLog()
         {
-#if DEBUG
-            var logger = (log4net.Repository.Hierarchy.Hierarchy)log4net.LogManager.GetRepository();
-            logger.Name = "NHibernate.SQL";
+            if (Alma.Dados.Config.AtivarLog)
+            {
+                var logger = (log4net.Repository.Hierarchy.Hierarchy)log4net.LogManager.GetRepository();
+                logger.Name = "NHibernate.SQL";
 
-            var pattern = new log4net.Layout.PatternLayout("%message%newline");
-            pattern.Header = "";
-            var appender = new log4net.Appender.TraceAppender();
-            appender.Layout = pattern;
+                var pattern = new log4net.Layout.PatternLayout("%message%newline");
+                pattern.Header = "";
+                var appender = new log4net.Appender.TraceAppender();
+                appender.Layout = pattern;
 
-            logger.Root.Level = log4net.Core.Level.Info;
-            logger.Root.RemoveAllAppenders();
-            logger.Root.AddAppender(appender);
+                logger.Root.Level = log4net.Core.Level.Info;
+                logger.Root.RemoveAllAppenders();
+                logger.Root.AddAppender(appender);
 
-            log4net.Config.BasicConfigurator.Configure(logger);
-#endif
+                log4net.Config.BasicConfigurator.Configure(logger);
+            }
         }
-
-
-
-
 
         private static ISessionFactory GetFactory(string connectionKey, System.Reflection.Assembly[] assemblies)
         {
