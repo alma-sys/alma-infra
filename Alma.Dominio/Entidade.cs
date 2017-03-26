@@ -1,4 +1,5 @@
 ﻿using Alma.Core;
+using System;
 
 namespace Alma.Dominio
 {
@@ -8,7 +9,8 @@ namespace Alma.Dominio
     }
     public abstract class Entidade<T> : EntidadeBase, IId<T> where T : struct
     {
-        public virtual T Id { get; protected set; }
+        [Obsolete("Set de ID tem que ser protected")]
+        public virtual T Id { get; /*protected*/ set; }
 
         public override bool Equals(object obj)
         {
