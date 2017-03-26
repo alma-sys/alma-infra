@@ -92,6 +92,25 @@ namespace Alma.Dados
 
         public static IDictionary<string, Assembly[]> AssembliesMapeadas => Core.Config.AssembliesMapeadas;
 
+        public static bool AtivarLazy
+        {
+            get
+            {
+                try
+                {
+                    var opt = ConfigurationManager.AppSettings["alma:orm:lazy"];
+                    if (string.IsNullOrWhiteSpace(opt))
+                        return true;
+                    else
+                        return Convert.ToBoolean(opt);
+                }
+                catch (Exception)
+                {
+                    return true;
+                }
+            }
+        }
+
         public static string ResolveConnectionName(Type type)
         {
             var assemblies = Alma.Dados.Config.AssembliesMapeadas;
