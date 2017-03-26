@@ -111,6 +111,25 @@ namespace Alma.Dados
             }
         }
 
+        public static bool AtivarLog
+        {
+            get
+            {
+                try
+                {
+                    var opt = ConfigurationManager.AppSettings["alma:orm:log"];
+                    if (string.IsNullOrWhiteSpace(opt))
+                        return false;
+                    else
+                        return Convert.ToBoolean(opt);
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+            }
+        }
+
         public static string ResolveConnectionName(Type type)
         {
             var assemblies = Alma.Dados.Config.AssembliesMapeadas;
