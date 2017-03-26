@@ -10,6 +10,7 @@ using Newtonsoft.Json.Serialization;
 using RestSharp;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
+using System.Diagnostics;
 
 namespace Alma.ApiExtensions.Testes.SpecFlow
 {
@@ -29,7 +30,6 @@ namespace Alma.ApiExtensions.Testes.SpecFlow
         {
             ScenarioContext.Pending();
         }
-
 
         [Given(@"o método http é '(.*)'")]
         public void EOMetodoHttpE(string p0)
@@ -300,19 +300,27 @@ namespace Alma.ApiExtensions.Testes.SpecFlow
         /// <returns> Objeto IRestResponse do Tipo Y </returns>
         private IRestResponse ExecutarRequest(String endpoint)
         {
+            Trace.WriteLine("BDD: Iniciando request");
             var url = ScenarioContext.MontaUrl(endpoint);
+
+            Trace.WriteLine($"BDD: Url => {url}");
 
             var request = new RestRequest();
 
             request.Method = ScenarioContext.HttpMethod();
+            Trace.WriteLine($"BDD: Method => {request.Method}");
 
             request.Parameters.Clear();
 
             if (request.Method == Method.POST)
             {
+                var contentType = "application/json";
                 var json = ScenarioContext.JsonArgumento();
                 if (!String.IsNullOrWhiteSpace(json))
-                    request.AddParameter("application/json", json, ParameterType.RequestBody);
+                    request.AddParameter(contentType, json, ParameterType.RequestBody);
+
+                Trace.WriteLine($"BDD: Content =>  {contentType}");
+                Trace.WriteLine($"BDD: Body =>  {json}");
             }
 
             request.AddHeader("Accept", "application/json");
@@ -320,10 +328,12 @@ namespace Alma.ApiExtensions.Testes.SpecFlow
 
             var restClient = new RestClient(url);
 
+            Trace.WriteLine("BDD: Executando request");
             var response = restClient.Execute(request);
 
             ScenarioContext.Response(response);
-
+            Trace.WriteLine($"BDD: Response Status => {response.StatusCode}");
+            Trace.WriteLine($"BDD: Response Content => {response.Content}");
             return response;
         }
 
