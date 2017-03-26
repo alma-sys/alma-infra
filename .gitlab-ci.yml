@@ -53,6 +53,9 @@ ProGet:
   stage: deploy
   environment: Producao
   script:
+    - YEAR=`date +%Y`
+    - VERSION=`date +%y.%m%d.%H%M`
+    - gitlab-transform.sh GlobalAssemblyInfo.release GlobalAssemblyInfo.cs
     - gitlab-msbuild.sh "$SOLUTION" -t:$BUILDACTION -tv:$MSBUILD -verbosity:$VERBOSITY -p:Configuration=$CONFIGURATION\;VisualStudioVersion=$VISUALSTUDIO
     - shopt -s globstar
     - for i in **/bin/$CONFIGURATION/*.nupkg; do # Whitespace-safe and recursive
