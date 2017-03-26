@@ -11,6 +11,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		.gitlab-ci.yml = .gitlab-ci.yml
 		GlobalAssemblyInfo.cs = GlobalAssemblyInfo.cs
+		GlobalAssemblyInfo.release = GlobalAssemblyInfo.release
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alma.Dados", "Alma.Dados\Alma.Dados.csproj", "{36722228-B90A-4FA5-BD18-30BA8D700A45}"
