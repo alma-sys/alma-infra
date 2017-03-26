@@ -1,6 +1,6 @@
 ﻿namespace Alma.Core.Dto
 {
-    public class CodigoNome
+    public class CodigoNome : ICodigo<int>, INome
     {
         public CodigoNome(int codigo, string nome)
         {

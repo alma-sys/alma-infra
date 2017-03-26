@@ -58,7 +58,7 @@
     <Compile Include="Dto\CodigoNome.cs" />
     <Compile Include="Dto\CodigoDescricao.cs" />
     <Compile Include="Dto\IdNome.cs" />
-    <Compile Include="Dto\IListaPaginada.cs" />
+    <Compile Include="IListaPaginada.cs" />
     <Compile Include="Extensions\ImageExtensions.cs" />
     <Compile Include="IIdNome.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />

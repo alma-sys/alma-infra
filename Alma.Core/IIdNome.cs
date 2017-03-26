@@ -1,6 +1,6 @@
 ﻿namespace Alma.Core
 {
-    public interface IIdNome : IIdNome<int>
+    public interface IIdNome : IId, INome
     {
     }
 
@@ -8,12 +8,28 @@
     {
     }
 
-    public interface IIdNome<T> : IId<T> where T : struct
+    public interface IIdNome<T> : IId<T>, INome where T : struct
     {
-        string Nome { get; set; }
     }
     public interface IId<T> where T : struct
     {
-        T Id { get; set; }
+        T Id { get; }
+    }
+
+
+    public interface INome
+    {
+        string Nome { get; }
+    }
+    public interface ICodigo : ICodigo<string>
+    {
+    }
+    public interface ICodigo<T>
+    {
+        T Codigo { get; }
+    }
+    public interface IDescricao
+    {
+        string Descricao { get; }
     }
 }

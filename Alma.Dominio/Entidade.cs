@@ -8,12 +8,14 @@ namespace Alma.Dominio
     }
     public abstract class Entidade<T> : EntidadeBase, IId<T> where T : struct
     {
-        public virtual T Id { get; set; }
+        public virtual T Id { get; protected set; }
 
         public override bool Equals(object obj)
         {
+            if (object.ReferenceEquals(this, obj))
+                return true;
             var other = obj as Entidade<T>;
-            return other != null && other.Id.Equals(this.Id);
+            return other != null && !this.Id.Equals(default(T)) && other.Id.Equals(this.Id);
         }
 
         public override int GetHashCode()
@@ -23,10 +25,12 @@ namespace Alma.Dominio
 
         public override string ToString()
         {
-            if (typeof(IIdNome<T>).IsAssignableFrom(this.GetType()))
-                return ((IIdNome<T>)this).Nome;
+            if (typeof(INome).IsAssignableFrom(this.GetType()))
+                return ((INome)this).Nome;
+            else if (typeof(IDescricao).IsAssignableFrom(this.GetType()))
+                return ((IDescricao)this).Descricao;
             else
-                return base.ToString() + "_" + GetHashCode().ToString();
+                return $"{base.ToString()}_{GetHashCode()}";
         }
     }
 
