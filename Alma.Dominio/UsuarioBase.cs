@@ -49,22 +49,22 @@ namespace Alma.Dominio
 
         }
 
-        public void Desbloquear()
+        public virtual void Desbloquear()
         {
             this.Bloqueado = false;
         }
 
-        public void Bloquear()
+        public virtual void Bloquear()
         {
             this.Bloqueado = true;
         }
 
-        public void DefinirExpirado()
+        public virtual void DefinirExpirado()
         {
             this.Expirado = true;
         }
 
-        public void RemoverExpirado()
+        public virtual void RemoverExpirado()
         {
             this.Expirado = false;
         }
