@@ -275,6 +275,41 @@ namespace Alma.ApiExtensions.Testes.SpecFlow
             }
         }
 
+        [Then(@"uma propriedade '(.*)' do tipo '(.*)' com os seguintes valores:")]
+        public void EntaoUmaPropriedadeDoTipoComOsSeguintesValores(string propriedade, string tipo, Table valores)
+        {
+            try
+            {
+                var tipoModel = ScenarioContext.TipoModel();
+                var tipoModelType = LocalizarTipo(tipoModel);
+
+                var response = ScenarioContext.Response();
+                var content = response.Content;
+                var objetoRetorno = JsonConvert.DeserializeObject(content, tipoModelType);
+
+                //executar Busca Propriedade
+                var reflPropriedade = objetoRetorno.GetType().GetProperty(propriedade, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
+                var propriedadeObj = reflPropriedade.GetValue(objetoRetorno);
+                //equivalenta a: table.CompareToSet<tipoListaType>(propriedadeObj);
+
+                var tipoPropriedade = LocalizarTipo(tipo);
+
+                //executar CompareToSet generica
+                var reflValidarResposta = typeof(InstanceComparisonExtensionMethods).GetMethod(nameof(InstanceComparisonExtensionMethods.CompareToInstance), System.Reflection.BindingFlags.Instance | BindingFlags.Static | System.Reflection.BindingFlags.Public).GetGenericMethodDefinition();
+                var genericMethod = reflValidarResposta.MakeGenericMethod(tipoPropriedade);
+                genericMethod.Invoke(this, new[] { valores, propriedadeObj });
+                //equivalenta a: table.CompareToSet<tipoListaType>(propriedadeObj);
+            }
+            catch (TargetInvocationException ex)
+            {
+                if (ex.InnerException != null)
+                    throw ex.InnerException;
+                else
+                    throw;
+            }
+        }
+
+
         [Given(@"que não tenho uma sessão de usuário ativa")]
         public void DadoQueNaoTenhoUmaSessaoDeUsuarioAtiva()
         {
@@ -393,7 +428,7 @@ namespace Alma.ApiExtensions.Testes.SpecFlow
 
         }
 
-private void ValidarRespostaListaComDados(Type typeOfActualModel)
+        private void ValidarRespostaListaComDados(Type typeOfActualModel)
         {
             var response = ScenarioContext.Response();
             var content = response.Content;
