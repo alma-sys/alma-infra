@@ -8,15 +8,13 @@ namespace Alma.Dominio
     public class Perfil : Entidade<int>, IIdNome
     {
         protected Perfil() { }
-
-        public Perfil(string nome, string descricao, bool ativo, bool privado)
+        public Perfil(string nome, string descricao, bool ativo = true)
         {
-            this.Nome = nome;
-            this.Descricao = descricao;
             this.Ativo = ativo;
-            this.Privado = privado;
-        }
 
+            this.DefinirNome(nome);
+            this.DefinirDescricao(descricao);
+        }
 
         public virtual string Nome { get; protected set; }
         public virtual string Descricao { get; protected set; }
@@ -57,5 +55,38 @@ namespace Alma.Dominio
 
         }
 
+        public virtual void Ativar()
+        {
+            this.Ativo = true;
+        }
+
+        public virtual void Desativar()
+        {
+            this.Ativo = false;
+        }
+
+        public virtual void DefinirNome(string nome)
+        {
+            if (string.IsNullOrWhiteSpace(nome))
+                throw new ArgumentException(nameof(nome));
+
+            int tamanho = 50;
+            if (nome.Length > tamanho)
+                throw new ArgumentException($"Nome deve ter no máximo {tamanho} caracteres.");
+
+            this.Nome = nome;
+        }
+
+        public virtual void DefinirDescricao(string descricao)
+        {
+            if (string.IsNullOrWhiteSpace(descricao))
+                throw new ArgumentException(nameof(descricao));
+
+            int tamanho = 500;
+            if (descricao.Length > tamanho)
+                throw new ArgumentException($"Descrição deve ter no máximo {tamanho} caracteres.");
+
+            this.Descricao = descricao;
+        }
     }
 }
