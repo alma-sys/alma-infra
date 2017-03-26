@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
-using Alma.Core.Dto;
+using System.Collections.ObjectModel;
+using Alma.Core;
 
 namespace Alma.Dados
 {
@@ -12,12 +13,12 @@ namespace Alma.Dados
             this.Pagina = pagina;
             this.TamanhoPagina = tamanhoPagina;
             this.TotalItens = totalItens;
-            this.Lista = lista;
+            this.Lista = new ReadOnlyCollection<T>(lista);
         }
 
         public virtual int Pagina { get; private set; }
         public virtual int TamanhoPagina { get; private set; }
         public virtual int TotalItens { get; private set; }
-        public virtual IList<T> Lista { get; private set; }
+        public virtual IReadOnlyList<T> Lista { get; private set; }
     }
 }

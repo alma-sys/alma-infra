@@ -1,6 +1,6 @@
 ﻿namespace Alma.Core.Dto
 {
-    public class CodigoDescricao
+    public class CodigoDescricao : ICodigo, IDescricao
     {
         public CodigoDescricao(string codigo, string descricao)
         {
