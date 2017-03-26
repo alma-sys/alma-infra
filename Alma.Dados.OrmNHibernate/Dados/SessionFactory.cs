@@ -117,6 +117,7 @@ namespace Alma.Dados.OrmNHibernate
 
             var hbm = mapper.CompileMappingForAllExplicitlyAddedEntities();
             hbm.autoimport = true;
+            hbm.defaultlazy = Alma.Dados.Config.AtivarLazy;
 
             cfg.AddMapping(hbm);
             if (Alma.Dados.Config.ExecutarMigracoes)
