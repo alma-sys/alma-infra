@@ -44,7 +44,7 @@ namespace Alma.ApiExtensions.Seguranca
 
         protected override void HandleUnauthorizedRequest(HttpActionContext ctx)
         {
-            if (!ctx.RequestContext.Principal.Identity.IsAuthenticated)
+            if (ctx.RequestContext.Principal.Identity == null || !ctx.RequestContext.Principal.Identity.IsAuthenticated)
                 base.HandleUnauthorizedRequest(ctx);
             else
             {
