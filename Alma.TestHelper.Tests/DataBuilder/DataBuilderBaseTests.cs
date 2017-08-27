@@ -1,13 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Alma.Testes.DataBuilder;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Alma.TestHelper.DataBuilder;
 
-namespace Alma.Testes.DataBuilder.Tests
+namespace Alma.TestHelper.DataBuilder.Tests
 {
     [TestClass()]
     public class DataBuilderBaseTests
