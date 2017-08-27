@@ -1,6 +1,7 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Alma.ApiExtensions.Serializadores;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Alma.ApiExtensions.Serializadores.Tests
+namespace Alma.ApiExtensions.TestHelper.Serializadores.Tests
 {
     [TestClass()]
     public class SerializadorConstantesTests

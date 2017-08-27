@@ -10,7 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace Alma.ApiExtensions.Testes
+namespace Alma.ApiExtensions.TestHelper
 {
     static class ConfigDatabase
     {

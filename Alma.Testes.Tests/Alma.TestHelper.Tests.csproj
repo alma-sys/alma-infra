@@ -51,13 +51,16 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="..\GlobalAssemblyInfo.cs">
+      <Link>Properties\GlobalAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="DataBuilder\DataBuilderBaseTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Alma.Testes\Alma.Testes.csproj">
+    <ProjectReference Include="..\Alma.Testes\Alma.TestHelper.csproj">
       <Project>{4C624147-E802-4B00-8AD5-CD615F140326}</Project>
-      <Name>Alma.Testes</Name>
+      <Name>Alma.TestHelper</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

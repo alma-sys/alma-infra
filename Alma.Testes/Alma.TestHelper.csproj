@@ -7,8 +7,8 @@
     <ProjectGuid>{4C624147-E802-4B00-8AD5-CD615F140326}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Alma.Testes</RootNamespace>
-    <AssemblyName>Alma.Testes</AssemblyName>
+    <RootNamespace>Alma.TestHelper</RootNamespace>
+    <AssemblyName>Alma.TestHelper</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -29,7 +29,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\Alma.Testes.XML</DocumentationFile>
+    <DocumentationFile>bin\Release\Alma.TestHelper.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />

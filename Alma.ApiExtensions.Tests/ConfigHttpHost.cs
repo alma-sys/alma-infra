@@ -7,7 +7,7 @@ using System.Web.Http;
 using Microsoft.Owin.Hosting;
 using Owin;
 
-namespace Alma.ApiExtensions.Testes
+namespace Alma.ApiExtensions.TestHelper
 {
     static class ConfigHttpHost
     {
