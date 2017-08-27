@@ -3,14 +3,23 @@ using System;
 
 namespace Alma.Dominio
 {
-    public abstract class Entidade : Entidade<int>
+    /// <summary>
+    /// Classe base de entidades com ID
+    /// </summary>
+    public abstract class Entidade : Entidade<long>
     {
 
     }
+
+    /// <summary>
+    /// Classe base de entidades com ID
+    /// </summary>
     public abstract class Entidade<T> : EntidadeBase, IId<T> where T : struct
     {
-        [Obsolete("Set de ID tem que ser protected")]
-        public virtual T Id { get; /*protected*/ set; }
+        /// <summary>
+        /// Id de referencia da entidade. 
+        /// </summary>
+        public virtual T Id { get; protected set; }
 
         public override bool Equals(object obj)
         {
@@ -36,6 +45,7 @@ namespace Alma.Dominio
         }
     }
 
+    //Classe base de entidades sem ID.
     public abstract class EntidadeBase
     {
 

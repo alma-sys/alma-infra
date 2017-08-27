@@ -54,18 +54,27 @@ namespace Alma.Dados
         {
             var recordCount = query.Count();
             IList<T> pageRecords;
-            //currentPage começa de 1
-            do
+
+            if (tamanhoPagina != 0)
             {
-                pageRecords = query
-                    .Skip((paginaAtual - 1) * tamanhoPagina)
-                    .Take(tamanhoPagina)
-                    .ToList();
+                //currentPage começa de 1
+                do
+                {
+                    pageRecords = query
+                        .Skip((paginaAtual - 1) * tamanhoPagina)
+                        .Take(tamanhoPagina)
+                        .ToList();
 
-                if (pageRecords.Count == 0)
-                    paginaAtual--;
+                    if (pageRecords.Count == 0)
+                        paginaAtual--;
 
-            } while (pageRecords.Count == 0 && paginaAtual != 0);
+                } while (pageRecords.Count == 0 && paginaAtual != 0);
+            }
+            else
+            {
+                pageRecords = new List<T>();
+            }
+
 
             return new ListaPaginada<T>(paginaAtual, recordCount, pageRecords, tamanhoPagina);
         }

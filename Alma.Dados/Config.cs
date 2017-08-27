@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data;
 using System.Linq;
 using System.Reflection;
 
@@ -107,6 +108,28 @@ namespace Alma.Dados
                 catch (Exception)
                 {
                     return true;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Retorna o tipo de isolamento de transação
+        /// </summary>
+        public static IsolationLevel? IsolationLevel
+        {
+            get
+            {
+                try
+                {
+                    var opt = ConfigurationManager.AppSettings["alma:orm:isolation-level"];
+                    if (string.IsNullOrWhiteSpace(opt))
+                        return null;
+                    else
+                        return (IsolationLevel)Enum.Parse(typeof(IsolationLevel), opt);
+                }
+                catch (Exception)
+                {
+                    throw new ConfigurationErrorsException("Valor inválido para tvglobo:orm:isolation-level");
                 }
             }
         }

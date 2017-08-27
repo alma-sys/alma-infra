@@ -32,6 +32,8 @@ namespace Alma.Dados.OrmNHibernate
                         db.ConnectionProvider<ConnectionProvider>();
                         db.LogFormattedSql = true;
                         db.LogSqlInConsole = true;
+                        if (Config.IsolationLevel != null)
+                            db.IsolationLevel = Config.IsolationLevel.Value;
                         //UseReflectionOptimizer
                     });
 
@@ -46,6 +48,8 @@ namespace Alma.Dados.OrmNHibernate
                         db.ConnectionProvider<ConnectionProvider>();
                         db.LogFormattedSql = true;
                         db.LogSqlInConsole = true;
+                        if (Config.IsolationLevel != null)
+                            db.IsolationLevel = Config.IsolationLevel.Value;
                         //UseReflectionOptimizer
                     });
                     break;
@@ -62,6 +66,8 @@ namespace Alma.Dados.OrmNHibernate
                             db.ConnectionProvider<ConnectionProvider>();
                             db.LogFormattedSql = true;
                             db.LogSqlInConsole = true;
+                            if (Config.IsolationLevel != null)
+                                db.IsolationLevel = Config.IsolationLevel.Value;
                             //UseReflectionOptimizer
                         });
                     }
@@ -76,6 +82,8 @@ namespace Alma.Dados.OrmNHibernate
                             db.ConnectionProvider<ConnectionProvider>();
                             db.LogFormattedSql = true;
                             db.LogSqlInConsole = true;
+                            if (Config.IsolationLevel != null)
+                                db.IsolationLevel = Config.IsolationLevel.Value;
                             //UseReflectionOptimizer
                         });
                     }
@@ -92,6 +100,8 @@ namespace Alma.Dados.OrmNHibernate
                         db.ConnectionProvider<ConnectionProvider>();
                         db.LogFormattedSql = true;
                         db.LogSqlInConsole = true;
+                        if (Config.IsolationLevel != null)
+                            db.IsolationLevel = Config.IsolationLevel.Value;
                         //UseReflectionOptimizer
                     });
 
