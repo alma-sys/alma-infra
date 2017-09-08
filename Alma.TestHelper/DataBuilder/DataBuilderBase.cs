@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
-namespace Alma.Testes.DataBuilder
+namespace Alma.TestHelper.DataBuilder
 {
     public class DataBuilderBase
     {

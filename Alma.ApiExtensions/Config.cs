@@ -8,13 +8,17 @@ namespace Alma.ApiExtensions
 {
     public static class Config
     {
+        public const string cfgLogErros = Core.Config.cfgRoot + "logerros";
+        public const string cfgSistemaRemetente = Core.Config.cfgRoot + "sistema-remetente";
+        public static string cfgUploads => Core.Config.cfgRoot.Replace(":", "-") + "uploads";
+
         public static IList<MailAddress> DestinosEmailErro
         {
             get
             {
                 try
                 {
-                    var emails = ConfigurationManager.AppSettings["alma:logerros"];
+                    var emails = ConfigurationManager.AppSettings[cfgLogErros];
                     var enderecos = emails.Split(';').Select(x => new MailAddress(x)).ToArray();
 
                     return enderecos;
@@ -22,7 +26,7 @@ namespace Alma.ApiExtensions
                 catch (Exception ex)
                 {
                     throw new ConfigurationErrorsException(
-                        "Configuração faltando ou inválida em alma:logerros na App.Config ou Web.Config.", ex);
+                        $"Configuração faltando ou inválida em {cfgLogErros} na App.Config ou Web.Config.", ex);
                 }
             }
         }
@@ -33,7 +37,7 @@ namespace Alma.ApiExtensions
             {
                 try
                 {
-                    var emails = ConfigurationManager.AppSettings["alma:sistema-remetente"];
+                    var emails = ConfigurationManager.AppSettings[cfgSistemaRemetente];
                     var enderecos = emails.Split(';').Select(x => new MailAddress(x)).ToArray();
 
                     return enderecos.FirstOrDefault();

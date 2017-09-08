@@ -3,11 +3,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{CC4B38F3-FBC7-4519-9F49-751E62BD4289}</ProjectGuid>
+    <ProjectGuid>{9DA67942-D6DC-43CE-A765-1B90C5123FF2}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Alma.ApiExtensions.Tests.Tests</RootNamespace>
-    <AssemblyName>Alma.ApiExtensions.Tests.Tests</AssemblyName>
+    <RootNamespace>Alma.Testes.Tests</RootNamespace>
+    <AssemblyName>Alma.Testes.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -51,13 +51,16 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="..\GlobalAssemblyInfo.cs">
+      <Link>Properties\GlobalAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="DataBuilder\DataBuilderBaseTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Serializadores\SerializadorConstantesTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Alma.ApiExtensions\Alma.ApiExtensions.csproj">
-      <Project>{1D44995C-D2A1-4587-84C5-1A036661A5D5}</Project>
-      <Name>Alma.ApiExtensions</Name>
+    <ProjectReference Include="..\Alma.TestHelper\Alma.TestHelper.csproj">
+      <Project>{4C624147-E802-4B00-8AD5-CD615F140326}</Project>
+      <Name>Alma.TestHelper</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

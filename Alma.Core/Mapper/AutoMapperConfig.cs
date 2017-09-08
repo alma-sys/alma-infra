@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using AutoMapper;
+using System.Diagnostics;
 
 namespace Alma.Core.Mapper
 {
@@ -13,13 +14,20 @@ namespace Alma.Core.Mapper
 
         private static void RunConfig(IMapperConfigurationExpression cfg)
         {
-            //var nomeProjeto = "Vesta";
+            Trace.WriteLine("[automapper] Iniciando configuração do automapper");
             var assemblies = AppDomain.CurrentDomain
                 .GetAssemblies()
                 .Where(x => !x.IsDynamic //caído.
                     && !x.FullName.Contains("Microsoft.")
                     && !x.FullName.Contains("System.")
                     ).ToArray();
+
+            assemblies.AsParallel().ForAll(x =>
+            {
+                Trace.WriteLine($"[automapper] Assembly {x.FullName} selecionado");
+            });
+
+
             //.Where(a => a.FullName.StartsWith(nomeProjeto))
             //.ToArray();
             var target = typeof(IMapperHelper);
@@ -35,6 +43,7 @@ namespace Alma.Core.Mapper
                 foreach (var map in maps)
                 {
                     IMapperHelper instancia = Activator.CreateInstance(map) as IMapperHelper;
+                    Trace.WriteLine($"[automapper] Map {map.Name } sendo carregado");
                     instancia.Config(cfg);
                 }
             }

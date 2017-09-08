@@ -4,7 +4,7 @@ using System.Web.Http;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Owin;
 
-namespace Alma.ApiExtensions.Testes
+namespace Alma.ApiExtensions.TestHelper
 {
     public static class Config
     {

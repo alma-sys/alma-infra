@@ -8,7 +8,7 @@ namespace Alma.Dominio.Validadores
     {
         protected override void Load(ContainerBuilder builder)
         {
-            var assemblies = Alma.Core.Config.AssembliesMapeadas.Values.SelectMany(x => x).ToArray();
+            var assemblies = Core.Config.AssembliesMapeadas.Values.SelectMany(x => x).ToArray();
             foreach (var ass in assemblies)
             {
                 var findValidatorsInAssembly = AssemblyScanner.FindValidatorsInAssembly(ass);

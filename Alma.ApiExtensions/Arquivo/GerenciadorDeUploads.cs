@@ -9,9 +9,9 @@ namespace Alma.ApiExtensions.Arquivo
     {
         static GerenciadorDeUploads()
         {
+            PathUploads = Path.Combine(System.IO.Path.GetTempPath(), Config.cfgUploads);
             try
             {
-                PathUploads = System.IO.Path.Combine(System.IO.Path.GetTempPath(), "alma-infra-uploads");
                 if (!Directory.Exists(PathUploads))
                 {
                     Directory.CreateDirectory(PathUploads);
@@ -29,7 +29,7 @@ namespace Alma.ApiExtensions.Arquivo
             }
             catch (Exception e)
             {
-                throw new ApplicationException("Erro ao inicializar o gerenciador de uploads, verifique permissões de pasta", e);
+                throw new ApplicationException($"Erro ao inicializar o gerenciador de uploads, verifique permissões da pasta {PathUploads}", e);
             }
         }
 

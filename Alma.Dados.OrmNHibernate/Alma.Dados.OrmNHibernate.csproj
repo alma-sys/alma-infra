@@ -34,21 +34,17 @@
     <DocumentationFile>bin\Release\Alma.Dados.OrmNHibernate.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Autofac, Version=4.3.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
-      <HintPath>..\packages\Autofac.4.3.0\lib\net45\Autofac.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Autofac, Version=4.6.1.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\packages\Autofac.4.6.1\lib\net45\Autofac.dll</HintPath>
     </Reference>
-    <Reference Include="Iesi.Collections, Version=4.0.0.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
-      <HintPath>..\packages\Iesi.Collections.4.0.1.4000\lib\net40\Iesi.Collections.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Iesi.Collections, Version=4.0.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Iesi.Collections.4.0.2\lib\net40\Iesi.Collections.dll</HintPath>
     </Reference>
-    <Reference Include="log4net, Version=2.0.7.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
-      <HintPath>..\packages\log4net.2.0.7\lib\net45-full\log4net.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
     </Reference>
     <Reference Include="NHibernate, Version=4.1.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
-      <HintPath>..\packages\NHibernate.4.1.0.4000\lib\net40\NHibernate.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\packages\NHibernate.4.1.1.4000\lib\net40\NHibernate.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -69,6 +65,7 @@
     <Compile Include="Dados\NhLinqExtensions.cs" />
     <Compile Include="Dados\Repositorio.cs" />
     <Compile Include="Dados\SessionFactory.cs" />
+    <Compile Include="Events\SavedDataEventHandler.cs" />
     <Compile Include="Mapper\GlobalFilterMapping.cs" />
     <Compile Include="NHibernateModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -79,6 +76,7 @@
     <Compile Include="Types\TimeSpanFormattedType.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="Package.nuspec" />
     <None Include="packages.config" />
   </ItemGroup>
@@ -86,6 +84,10 @@
     <ProjectReference Include="..\Alma.Dados\Alma.Dados.csproj">
       <Project>{36722228-b90a-4fa5-bd18-30ba8d700a45}</Project>
       <Name>Alma.Dados</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Alma.Dominio\Alma.Dominio.csproj">
+      <Project>{02c52ef0-2524-41bd-b2b4-cbf81109c45d}</Project>
+      <Name>Alma.Dominio</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

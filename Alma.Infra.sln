@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26730.10
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alma.Core", "Alma.Core\Alma.Core.csproj", "{1F3D8A36-9402-46B6-80E1-F356F402206C}"
 EndProject
@@ -32,17 +32,17 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alma.ApiExtensions", "Alma.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alma.Aplicativo", "Alma.Aplicativo\Alma.Aplicativo.csproj", "{5B2A3FF5-F5E2-45E1-B7C7-D3F9AED3A857}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alma.ApiExtensions.Testes", "Alma.ApiExtensions.Tests\Alma.ApiExtensions.Testes.csproj", "{1A541B05-2703-4C6B-976D-384D7F8B3334}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alma.ApiExtensions.TestHelper", "Alma.ApiExtensions.TestHelper\Alma.ApiExtensions.TestHelper.csproj", "{1A541B05-2703-4C6B-976D-384D7F8B3334}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alma.Dados.OrmEntityFramework", "Alma.Dados.OrmEntityFramework\Alma.Dados.OrmEntityFramework.csproj", "{8D2D432A-65BF-4FAF-9CA3-73DB16A2505B}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "6 - Testes", "6 - Testes", "{3FB36C13-6EB6-402E-9FB2-CC51927ED1F9}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "6-Testes", "6-Testes", "{3FB36C13-6EB6-402E-9FB2-CC51927ED1F9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alma.Testes", "Alma.Testes\Alma.Testes.csproj", "{4C624147-E802-4B00-8AD5-CD615F140326}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alma.TestHelper", "Alma.TestHelper\Alma.TestHelper.csproj", "{4C624147-E802-4B00-8AD5-CD615F140326}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alma.Testes.Tests", "Alma.Testes.Tests\Alma.Testes.Tests.csproj", "{9DA67942-D6DC-43CE-A765-1B90C5123FF2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alma.TestHelper.Tests", "Alma.TestHelper.Tests\Alma.TestHelper.Tests.csproj", "{9DA67942-D6DC-43CE-A765-1B90C5123FF2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alma.ApiExtensions.Testes.Tests", "Alma.ApiExtensions.Testes.Tests\Alma.ApiExtensions.Testes.Tests.csproj", "{CC4B38F3-FBC7-4519-9F49-751E62BD4289}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alma.ApiExtensions.TestHelper.Tests", "Alma.ApiExtensions.TestHelper.Tests\Alma.ApiExtensions.TestHelper.Tests.csproj", "{CC4B38F3-FBC7-4519-9F49-751E62BD4289}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -110,6 +110,9 @@ Global
 		{4C624147-E802-4B00-8AD5-CD615F140326} = {3FB36C13-6EB6-402E-9FB2-CC51927ED1F9}
 		{9DA67942-D6DC-43CE-A765-1B90C5123FF2} = {3FB36C13-6EB6-402E-9FB2-CC51927ED1F9}
 		{CC4B38F3-FBC7-4519-9F49-751E62BD4289} = {1D93CB06-AFB7-4640-AE10-5EAB216FF286}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {82D93C88-2AE6-4B7C-994E-089B74302560}
 	EndGlobalSection
 	GlobalSection(CodealikeProperties) = postSolution
 		SolutionGuid = 0179f8c4-8e16-4ad2-bf90-da747ec2c051

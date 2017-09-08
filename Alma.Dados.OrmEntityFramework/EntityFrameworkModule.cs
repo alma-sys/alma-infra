@@ -12,7 +12,7 @@ namespace Alma.Dados.OrmEntityFramework
             SetupLog();
 
 
-            var assemblies = Alma.Dados.Config.AssembliesMapeadas;
+            var assemblies = Config.AssembliesMapeadas;
             if (assemblies.Keys.Count > 1)
             {
                 foreach (var key in assemblies.Keys)
@@ -25,7 +25,7 @@ namespace Alma.Dados.OrmEntityFramework
                     //.InstancePerLifetimeScope();
                     builder.RegisterGeneric(typeof(Repositorio<>))
                          .As(typeof(IRepositorio<>))
-                         .WithParameter(new Autofac.Core.ResolvedParameter(
+                         .WithParameter(parameter: new Autofac.Core.ResolvedParameter(
                              (pi, c) => pi.ParameterType == typeof(IContexto),
                              (pi, c) => c.ResolveNamed<IContexto>(
                                  Config.ResolveConnectionName(pi.Member.DeclaringType.GetGenericArguments()[0]))))
@@ -47,7 +47,7 @@ namespace Alma.Dados.OrmEntityFramework
 
         private static void SetupLinq()
         {
-            if (Alma.Dados.Config.ORM == Alma.Dados.ORM.EntityFramework)
+            if (Config.ORM == ORM.EntityFramework)
             {
                 LinqExtensions.Current = new EfLinqExtensions();
             }

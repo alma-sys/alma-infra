@@ -12,7 +12,7 @@ using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using System.Diagnostics;
 
-namespace Alma.ApiExtensions.Testes.SpecFlow
+namespace Alma.ApiExtensions.TestHelper.SpecFlow
 {
     [Binding]
     public sealed class Specs
