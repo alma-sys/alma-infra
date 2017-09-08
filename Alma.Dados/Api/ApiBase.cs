@@ -156,7 +156,9 @@ namespace Alma.Dados.Api
             catch (WebException ex)
             {
                 if (request.Proxy is WebProxy proxy)
+                {
                     ex.Data.Add("ext-api_proxy", proxy.Address);
+                }
 
                 ex.Data.Add("ext-api_rota", rota);
                 ex.Data.Add("ext-api_url", request.RequestUri.ToString());
