@@ -18,7 +18,7 @@ namespace Alma.ApiExtensions
             {
                 try
                 {
-                    var emails = ConfigurationManager.AppSettings["alma:logerros"];
+                    var emails = ConfigurationManager.AppSettings[cfgLogErros];
                     var enderecos = emails.Split(';').Select(x => new MailAddress(x)).ToArray();
 
                     return enderecos;
