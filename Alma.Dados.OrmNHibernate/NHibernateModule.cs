@@ -14,7 +14,7 @@ namespace Alma.Dados.OrmNHibernate
             SetupLog();
 
 
-            var assemblies = Alma.Dados.Config.AssembliesMapeadas;
+            var assemblies = Config.AssembliesMapeadas;
             if (assemblies.Keys.Count > 1)
             {
                 foreach (var key in assemblies.Keys)
@@ -66,7 +66,7 @@ namespace Alma.Dados.OrmNHibernate
 
         private static void SetupLinq()
         {
-            if (Alma.Dados.Config.ORM == Alma.Dados.ORM.NHibernate)
+            if (Config.ORM == ORM.NHibernate)
             {
                 LinqExtensions.Current = new NhLinqExtensions();
 
@@ -75,7 +75,7 @@ namespace Alma.Dados.OrmNHibernate
 
         private static void SetupLog()
         {
-            if (Alma.Dados.Config.AtivarLog)
+            if (Config.AtivarLog)
             {
                 var logger = (log4net.Repository.Hierarchy.Hierarchy)log4net.LogManager.GetRepository();
                 logger.Name = "NHibernate.SQL";

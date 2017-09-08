@@ -9,22 +9,27 @@ namespace Alma.Core
 {
     public static class Config
     {
+        public const string cfgRoot = "alma:";
+        public const string cfgMapeamentoEntidades = cfgRoot + "mapeamentoentidades";
+        public const string cfgConexao = cfgRoot + "conexao";
+
+
         private static Dictionary<string, Assembly[]> ListarAssembliesDeMapeamento()
         {
             var maps = new List<string>();
             var cons = new List<string>();
             for (int i = 0; i <= 5; i++)
             {
-                var ass = ConfigurationManager.AppSettings["alma:mapeamentoentidades" + (i == 0 ? "" : i.ToString())];
-                var cnn = ConfigurationManager.AppSettings["alma:conexao" + (i == 0 ? "" : i.ToString())];
+                var ass = ConfigurationManager.AppSettings[cfgMapeamentoEntidades + (i == 0 ? "" : i.ToString())];
+                var cnn = ConfigurationManager.AppSettings[cfgConexao + (i == 0 ? "" : i.ToString())];
                 if (string.IsNullOrWhiteSpace(ass) || string.IsNullOrWhiteSpace(cnn))
                     continue;
                 maps.Add(ass);
                 cons.Add(cnn);
             }
 
-            var exMessage = "Missing or invalid alma:mapeamentoentidades App Setting. Check your .config file. Valid values: semi-colon (;) separated assembly names that contains entities and mapping.";
-            exMessage += "Each alma:mapeamentoentidades must have a corresponding alma:orm:conexao. Eg.: <add name=\"alma:mapeamentoentidades2\">, <add name=\"alma:conexao2\">";
+            var exMessage = $"Missing or invalid {cfgMapeamentoEntidades} App Setting. Check your .config file. Valid values: semi-colon (;) separated assembly names that contains entities and mapping.";
+            exMessage += $"Each {cfgMapeamentoEntidades} must have a corresponding {cfgConexao}. Eg.: <add name=\"{cfgMapeamentoEntidades}2\">, <add name=\"{cfgConexao}2\">";
             if (maps.Count == 0)
                 throw new ConfigurationErrorsException(exMessage);
 

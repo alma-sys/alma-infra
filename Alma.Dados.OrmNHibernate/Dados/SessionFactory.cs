@@ -1,11 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Reflection;
 using NHibernate;
 using NHibernate.Cfg;
+using NHibernate.Event;
+using NHibernate.Event.Default;
 using NHibernate.Mapping.ByCode;
 using NHibernate.Tool.hbm2ddl;
+using Alma.Dados.Hooks;
+using Alma.Dados.OrmNHibernate.Events;
 
 namespace Alma.Dados.OrmNHibernate
 {
@@ -19,7 +24,7 @@ namespace Alma.Dados.OrmNHibernate
         public static ISessionFactory GetSessionFactory(string connectionKey, params Assembly[] assemblies)
         {
             var cfg = new NHibernate.Cfg.Configuration();
-            switch (Alma.Dados.Config.DeterminarDBMS(connectionKey))
+            switch (Config.DeterminarDBMS(connectionKey))
             {
                 case DBMS.MsSql:
 
@@ -54,7 +59,7 @@ namespace Alma.Dados.OrmNHibernate
                     });
                     break;
                 case DBMS.Oracle:
-                    if (Alma.Dados.Config.IsManagedOracle(connectionKey))
+                    if (Config.IsManagedOracle(connectionKey))
                     {
 
                         cfg.DataBaseIntegration(db =>
@@ -107,31 +112,17 @@ namespace Alma.Dados.OrmNHibernate
 
                     break;
                 default:
-                    throw new NotImplementedException("Not implemented provider: " + Alma.Dados.Config.DeterminarDBMS(connectionKey));
+                    throw new NotImplementedException("Not implemented provider: " + Config.DeterminarDBMS(connectionKey));
             }
 
             var types =
                 assemblies.SelectMany(a => a.GetTypes());
 
-            var filters = types.Where(x => typeof(Mapper.GlobalFilterMapping).IsAssignableFrom(x)).ToArray();
-            foreach (var fmapType in filters)
-            {
-                var map = (Mapper.GlobalFilterMapping)Activator.CreateInstance(fmapType);
-                foreach (var fd in map.filters)
-                    cfg.FilterDefinitions.Add(fd);
-            }
+            AddFilters(cfg, types);
 
-            var mapper = new ModelMapper();
-            mapper.AddConventions();
-            mapper.AddMappings(types);
+            AddEvents(cfg, types);
 
-            var hbm = mapper.CompileMappingForAllExplicitlyAddedEntities();
-            hbm.autoimport = true;
-            hbm.defaultlazy = Alma.Dados.Config.AtivarLazy;
-
-            cfg.AddMapping(hbm);
-            if (Alma.Dados.Config.ExecutarMigracoes)
-                cfg.AddSchemaValidationAndMigration();
+            AddMappings(cfg, types);
 
             try
             {
@@ -141,7 +132,7 @@ namespace Alma.Dados.OrmNHibernate
             }
             catch (HibernateException ex)
             {
-                if (ex.Message.Contains("NHibernate.Driver") && (Alma.Dados.Config.DeterminarDBMS(connectionKey) == DBMS.Oracle))
+                if (ex.Message.Contains("NHibernate.Driver") && (Config.DeterminarDBMS(connectionKey) == DBMS.Oracle))
                 {
                     throw new System.Configuration.ConfigurationErrorsException(
 @"Não foi possível localizar o binário no gac do Oracle.DataAccess ou Oracle.ManagedDataAccess. 
@@ -185,17 +176,17 @@ O GAC do framework 4.0/4.5 fica em C:\Windows\Microsoft.NET\assembly
             //        .RegisterSearch();
 
             //    DatabaseType db = 0;
-            //    if (Alma.Core.Config.ConnectionString.ProviderName.Contains("SqlClient"))
+            //    if (Core.Config.ConnectionString.ProviderName.Contains("SqlClient"))
             //        db = DatabaseType.MsSqlServer2008;
-            //    if (Alma.Core.Config.ConnectionString.ProviderName.Contains("Oracle"))
+            //    if (Core.Config.ConnectionString.ProviderName.Contains("Oracle"))
             //        db = DatabaseType.Oracle10g;
 
 
             //    if (db == 0)
-            //        throw new NotImplementedException("Not implemented provider: " + Alma.Core.Config.ConnectionString.ProviderName);
+            //        throw new NotImplementedException("Not implemented provider: " + Core.Config.ConnectionString.ProviderName);
 
             //    Configure.Storage
-            //        .ConnectionStringName(Alma.Core.Config.ConnectionString.Name)
+            //        .ConnectionStringName(Core.Config.ConnectionString.Name)
             //        .ConnectionProvider<NHibernate.Connection.DriverConnectionProvider>()
             //        .ShowSql();
 
@@ -268,7 +259,7 @@ O GAC do framework 4.0/4.5 fica em C:\Windows\Microsoft.NET\assembly
         private static ModelMapper AddConventions(this ModelMapper mapper)
         {
             //TODO: Fazer isto automático.
-            mapper.BeforeMapProperty += Alma.Dados.OrmNHibernate.Conventions.TimeSpanConvention.BeforeMapProperty;
+            mapper.BeforeMapProperty += Conventions.TimeSpanConvention.BeforeMapProperty;
 
 
             return mapper;
@@ -297,6 +288,43 @@ O GAC do framework 4.0/4.5 fica em C:\Windows\Microsoft.NET\assembly
             }
 
             return config;
+        }
+
+        private static void AddFilters(Configuration cfg, IEnumerable<Type> types)
+        {
+            var filters = types.Where(x => typeof(Mapper.GlobalFilterMapping).IsAssignableFrom(x)).ToArray();
+            foreach (var fmapType in filters)
+            {
+                var map = (Mapper.GlobalFilterMapping)Activator.CreateInstance(fmapType);
+                foreach (var fd in map.filters)
+                    cfg.FilterDefinitions.Add(fd);
+            }
+        }
+
+        private static void AddEvents(Configuration cfg, IEnumerable<Type> types)
+        {
+            var savedHooks = types.Where(x => typeof(ISavedDataHook).IsAssignableFrom(x)).ToArray();
+            if (savedHooks.Any())
+            {
+                var list = savedHooks.Select(t => Activator.CreateInstance(t) as ISavedDataHook).ToArray();
+                var savedHandler = new SavedDataEventHandler(list);
+                cfg.EventListeners.SaveEventListeners = new ISaveOrUpdateEventListener[] { new DefaultSaveEventListener(), savedHandler };
+            }
+        }
+
+        private static void AddMappings(Configuration cfg, IEnumerable<Type> types)
+        {
+            var mapper = new ModelMapper();
+            mapper.AddConventions();
+            mapper.AddMappings(types);
+
+            var hbm = mapper.CompileMappingForAllExplicitlyAddedEntities();
+            hbm.autoimport = true;
+            hbm.defaultlazy = Config.AtivarLazy;
+
+            cfg.AddMapping(hbm);
+            if (Config.ExecutarMigracoes)
+                cfg.AddSchemaValidationAndMigration();
         }
     }
 }

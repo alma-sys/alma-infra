@@ -27,13 +27,19 @@ namespace Alma.Dados
 
     public static class Config
     {
+        public const string cfgOrm = Core.Config.cfgRoot + "orm";
+        public const string cfgExecutarMigracoes = Core.Config.cfgRoot + cfgOrm + ":executar-migracoes";
+        public const string cfgLazy = Core.Config.cfgRoot + cfgOrm + ":lazy";
+        public const string cfgIsolationLevel = Core.Config.cfgRoot + cfgOrm + ":isolation-level";
+        public const string cfgLog = Core.Config.cfgRoot + cfgOrm + ":log";
+
         public static ORM ORM
         {
             get
             {
                 try
                 {
-                    var orm = (ORM)Enum.Parse(typeof(ORM), ConfigurationManager.AppSettings["alma:orm"]);
+                    var orm = (ORM)Enum.Parse(typeof(ORM), ConfigurationManager.AppSettings[cfgOrm]);
                     return orm;
                 }
                 catch (Exception ex)
@@ -43,7 +49,7 @@ namespace Alma.Dados
                                            select e.ToString()));
 
                     throw new ConfigurationErrorsException(
-                        "Missing or invalid alma:orm App Setting. Check your .config file. Valid values: " +
+                        $"Missing or invalid {cfgOrm} App Setting. Check your .config file. Valid values: " +
                         possibleValues, ex);
                 }
             }
@@ -71,7 +77,7 @@ namespace Alma.Dados
             {
                 try
                 {
-                    var opt = ConfigurationManager.AppSettings["alma:orm:executar-migracoes"];
+                    var opt = ConfigurationManager.AppSettings[cfgExecutarMigracoes];
                     if (string.IsNullOrWhiteSpace(opt))
                         return true;
                     else
@@ -99,7 +105,7 @@ namespace Alma.Dados
             {
                 try
                 {
-                    var opt = ConfigurationManager.AppSettings["alma:orm:lazy"];
+                    var opt = ConfigurationManager.AppSettings[cfgLazy];
                     if (string.IsNullOrWhiteSpace(opt))
                         return true;
                     else
@@ -121,7 +127,7 @@ namespace Alma.Dados
             {
                 try
                 {
-                    var opt = ConfigurationManager.AppSettings["alma:orm:isolation-level"];
+                    var opt = ConfigurationManager.AppSettings[cfgIsolationLevel];
                     if (string.IsNullOrWhiteSpace(opt))
                         return null;
                     else
@@ -129,7 +135,7 @@ namespace Alma.Dados
                 }
                 catch (Exception)
                 {
-                    throw new ConfigurationErrorsException("Valor inválido para tvglobo:orm:isolation-level");
+                    throw new ConfigurationErrorsException($"Valor inválido para {cfgIsolationLevel}");
                 }
             }
         }
@@ -140,7 +146,7 @@ namespace Alma.Dados
             {
                 try
                 {
-                    var opt = ConfigurationManager.AppSettings["alma:orm:log"];
+                    var opt = ConfigurationManager.AppSettings[cfgLog];
                     if (string.IsNullOrWhiteSpace(opt))
                         return false;
                     else
@@ -155,7 +161,7 @@ namespace Alma.Dados
 
         public static string ResolveConnectionName(Type type)
         {
-            var assemblies = Alma.Dados.Config.AssembliesMapeadas;
+            var assemblies = AssembliesMapeadas;
             var assembly = type.Assembly;
             foreach (var key in assemblies.Keys)
             {

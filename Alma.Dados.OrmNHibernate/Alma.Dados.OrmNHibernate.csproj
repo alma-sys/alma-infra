@@ -65,6 +65,7 @@
     <Compile Include="Dados\NhLinqExtensions.cs" />
     <Compile Include="Dados\Repositorio.cs" />
     <Compile Include="Dados\SessionFactory.cs" />
+    <Compile Include="Events\SavedDataEventHandler.cs" />
     <Compile Include="Mapper\GlobalFilterMapping.cs" />
     <Compile Include="NHibernateModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -83,6 +84,10 @@
     <ProjectReference Include="..\Alma.Dados\Alma.Dados.csproj">
       <Project>{36722228-b90a-4fa5-bd18-30ba8d700a45}</Project>
       <Name>Alma.Dados</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Alma.Dominio\Alma.Dominio.csproj">
+      <Project>{02c52ef0-2524-41bd-b2b4-cbf81109c45d}</Project>
+      <Name>Alma.Dominio</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

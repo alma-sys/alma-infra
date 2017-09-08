@@ -51,6 +51,10 @@
     <Compile Include="Api\ApiBase.cs" />
     <Compile Include="Api\DalApiClientExtensions.cs" />
     <Compile Include="Config.cs" />
+    <Compile Include="Hooks\IDataHook.cs" />
+    <Compile Include="Hooks\ILoadDataHook.cs" />
+    <Compile Include="Hooks\IPreLoadDataHook.cs" />
+    <Compile Include="Hooks\ISavedDataHook.cs" />
     <Compile Include="Repositorio\IRepositorio.cs" />
     <Compile Include="Repositorio\LinqExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -66,6 +70,10 @@
     <ProjectReference Include="..\Alma.Core\Alma.Core.csproj">
       <Project>{1f3d8a36-9402-46b6-80e1-f356f402206c}</Project>
       <Name>Alma.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Alma.Dominio\Alma.Dominio.csproj">
+      <Project>{02c52ef0-2524-41bd-b2b4-cbf81109c45d}</Project>
+      <Name>Alma.Dominio</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

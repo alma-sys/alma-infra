@@ -1,14 +1,14 @@
-﻿using Microsoft.Build.Evaluation;
-using Microsoft.Build.Framework;
-using Microsoft.SqlServer.Dac;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
+﻿using System;
 using System.Configuration;
 using System.Data.Common;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Microsoft.Build.Evaluation;
+using Microsoft.Build.Framework;
+using Microsoft.SqlServer.Dac;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Alma.ApiExtensions.TestHelper
 {
@@ -20,10 +20,10 @@ namespace Alma.ApiExtensions.TestHelper
         {
             get
             {
-                var config = ConfigurationManager.AppSettings["alma:conexao"];
-                Assert.IsNotNull(config, "Conexão alma:conexao não encontrada.");
+                var config = ConfigurationManager.AppSettings[Core.Config.cfgConexao];
+                Assert.IsNotNull(config, $"Conexão {Core.Config.cfgConexao} não encontrada.");
                 var cn = ConfigurationManager.ConnectionStrings[config];
-                Assert.IsNotNull(cn, "Conexão alma:conexao não encontrada.");
+                Assert.IsNotNull(cn, $"Conexão {Core.Config.cfgConexao} não encontrada.");
                 return cn;
             }
         }

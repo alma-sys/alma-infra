@@ -1,7 +1,7 @@
-﻿using AutoMapper;
-using System;
-using System.Diagnostics;
+﻿using System;
 using System.Linq;
+using AutoMapper;
+using System.Diagnostics;
 
 namespace Alma.Core.Mapper
 {

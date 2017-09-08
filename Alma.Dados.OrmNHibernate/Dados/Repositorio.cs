@@ -344,7 +344,7 @@ namespace Alma.Dados.OrmNHibernate
             var session = GetSession();
             if (session.Connection != null && session.Connection.State == ConnectionState.Open)
             {
-                var dmbs = Alma.Dados.Config.DeterminarDBMS(Alma.Dados.Config.ResolveConnectionName(typeof(TEntity)));
+                var dmbs = Config.DeterminarDBMS(Config.ResolveConnectionName(typeof(TEntity)));
 
                 var pmark = ":";
                 var queryFormat = "";

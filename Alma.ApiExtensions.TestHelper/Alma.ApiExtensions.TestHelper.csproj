@@ -105,6 +105,12 @@
     <None Include="Package.nuspec" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Alma.Core\Alma.Core.csproj">
+      <Project>{1f3d8a36-9402-46b6-80e1-f356f402206c}</Project>
+      <Name>Alma.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>if $(ConfigurationName) == Release "$(SolutionDir)packages\NuGet.CommandLine.3.5.0\tools\NuGet.exe" pack "$(ProjectPath)" -Prop Configuration=Release</PostBuildEvent>
