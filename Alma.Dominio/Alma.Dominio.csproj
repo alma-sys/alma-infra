@@ -48,6 +48,10 @@
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Entidade.cs" />
+    <Compile Include="Events\EventAggregator.cs" />
+    <Compile Include="Events\EventModule.cs" />
+    <Compile Include="Events\IDomainEvent.cs" />
+    <Compile Include="Events\IEventSubscriber.cs" />
     <Compile Include="Perfil.cs" />
     <Compile Include="Permissao.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

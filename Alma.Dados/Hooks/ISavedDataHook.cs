@@ -3,9 +3,19 @@ using Alma.Dominio;
 
 namespace Alma.Dados.Hooks
 {
-    public interface ISavedDataHook : IDataHook
+    /// <summary>
+    /// Cria eventos de domínio para salvar entidades
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    public interface ISavedDataHook<T> : IDataHook<T> where T : Entidade
     {
-        Type targetType { get; }
-        void Handle(object entitySaved);
+    }
+
+    /// <summary>
+    /// Cria eventos de domínio para excluír entidades
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    public interface IDeletedDataHook<T> : IDataHook<T> where T : Entidade
+    {
     }
 }

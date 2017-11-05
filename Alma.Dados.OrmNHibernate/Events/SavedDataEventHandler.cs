@@ -1,31 +1,65 @@
 ﻿using NHibernate.Event;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Alma.Dados.Hooks;
 using Alma.Dominio;
 
 namespace Alma.Dados.OrmNHibernate.Events
 {
-    public class SavedDataEventHandler : ISaveOrUpdateEventListener
+    internal class SavedDataEventHandler : ISaveOrUpdateEventListener, IPostUpdateEventListener, IPostInsertEventListener, IPostDeleteEventListener
     {
-        private readonly IEnumerable<ISavedDataHook> hooks;
+#pragma warning disable 0618
+        private readonly IEnumerable<IDataHook> hooks;
 
-        public SavedDataEventHandler(IEnumerable<ISavedDataHook> hooks)
+        public SavedDataEventHandler(IEnumerable<IDataHook> hooks)
         {
             this.hooks = hooks;
+        }
+#pragma warning restore 0618
+
+        public void OnPostDelete(PostDeleteEvent @event)
+        {
+            var tipo = @event.Entity.GetType();
+            var entity = @event.Entity;
+            FireEvents(tipo, entity);
+        }
+
+        public void OnPostInsert(PostInsertEvent @event)
+        {
+            var tipo = @event.Entity.GetType();
+            var entity = @event.Entity;
+            FireEvents(tipo, entity);
+        }
+
+        public void OnPostUpdate(PostUpdateEvent @event)
+        {
+            var tipo = @event.Entity.GetType();
+            var entity = @event.Entity;
+            FireEvents(tipo, entity);
         }
 
         public void OnSaveOrUpdate(SaveOrUpdateEvent @event)
         {
             var tipo = @event.Entity.GetType();
+            var entity = @event.Entity;
+            FireEvents(tipo, entity);
+        }
+
+        private void FireEvents(Type tipo, object entity)
+        {
+            if (!typeof(Entidade).IsAssignableFrom(tipo))
+                return;
+
             foreach (var item in hooks)
             {
-                if (item.targetType.IsAssignableFrom(tipo))
+                var ifaceType = typeof(IDataHook<>).MakeGenericType(tipo);
+                var ifaces = item.GetType().GetGenericInterfaces(ifaceType);
+
+                foreach (var i in ifaces)
+                    if (i.GetGenericArguments()[0].IsAssignableFrom(tipo))
                 {
-                    item.Handle(@event.Entity);
+                        var handle = item.GetType().GetMethod(nameof(IDataHook<Dominio.Entidade>.OnHandle), System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
+                        handle.Invoke(item, new object[] { entity }); //devo tratar exceptions?
                 } 
             }
         }

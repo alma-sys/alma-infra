@@ -63,6 +63,7 @@
     <Compile Include="Conventions\TimeSpanConvention.cs" />
     <Compile Include="Conventions\TableNameConvention.cs" />
     <Compile Include="Dados\NhLinqExtensions.cs" />
+    <Compile Include="Dados\ReflectionExtensions.cs" />
     <Compile Include="Dados\Repositorio.cs" />
     <Compile Include="Dados\SessionFactory.cs" />
     <Compile Include="Events\SavedDataEventHandler.cs" />
