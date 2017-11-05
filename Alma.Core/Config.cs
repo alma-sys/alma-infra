@@ -9,9 +9,11 @@ namespace Alma.Core
 {
     public static class Config
     {
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
         public const string cfgRoot = "alma:";
         public const string cfgMapeamentoEntidades = cfgRoot + "mapeamentoentidades";
         public const string cfgConexao = cfgRoot + "conexao";
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
 
 
         private static Dictionary<string, Assembly[]> ListarAssembliesDeMapeamento()
@@ -63,6 +65,9 @@ namespace Alma.Core
 
 
         private static IDictionary<string, Assembly[]> _AssembliesCached = null;
+        /// <summary>
+        /// Lista de assemblies que foram mapeadas para a plataforma.
+        /// </summary>
         public static IDictionary<string, Assembly[]> AssembliesMapeadas
         {
             get

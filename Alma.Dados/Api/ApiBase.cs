@@ -203,7 +203,13 @@ namespace Alma.Dados.Api
             }
         }
 
-        private static void FixCookies(HttpWebRequest request, HttpWebResponse response)
+
+        /// <summary>
+        /// Redirect cookies from Set-Cookie header to cookies array.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="response"></param>
+        protected virtual void FixCookies(HttpWebRequest request, HttpWebResponse response)
         {
             for (int i = 0; i < response.Headers.Count; i++)
             {
@@ -211,6 +217,7 @@ namespace Alma.Dados.Api
                 if (name != "Set-Cookie")
                     continue;
                 string value = response.Headers.Get(i);
+                value = Regex.Replace(value, "(e|E)xpires=(.+?)(;|$)|(P|p)ath=(.+?);", "");
                 foreach (var singleCookie in value.Split(','))
                 {
                     Match match = Regex.Match(singleCookie, "(.+?)=(.+?);");
@@ -229,7 +236,10 @@ namespace Alma.Dados.Api
         protected virtual Dictionary<string, object> GetUrlJson(string rota, object post = null)
         {
             var json = GetUrlRaw(rota, post);
-            var serializer = new JavaScriptSerializer();
+            var serializer = new JavaScriptSerializer
+            {
+                MaxJsonLength = int.MaxValue
+            };
             if (json.StartsWith("["))
             {
                 var obj = serializer.Deserialize<Dictionary<string, object>[]>(json);

@@ -1,7 +1,7 @@
-﻿using System.Data;
-using System.Linq;
-using Autofac;
+﻿using Autofac;
 using NHibernate;
+using System.Data;
+using System.Linq;
 
 namespace Alma.Dados.OrmNHibernate
 {
@@ -77,19 +77,30 @@ namespace Alma.Dados.OrmNHibernate
         {
             if (Config.AtivarLog)
             {
-                var logger = (log4net.Repository.Hierarchy.Hierarchy)log4net.LogManager.GetRepository();
-                logger.Name = "NHibernate.SQL";
+                var hierarchy = (log4net.Repository.Hierarchy.Hierarchy)log4net.LogManager.GetRepository();
+                // Remove any other appenders
+                hierarchy.Root.RemoveAllAppenders();
+                // define some basic settings for the root
+                var rootLogger = hierarchy.Root;
+                rootLogger.Level = log4net.Core.Level.Error;
 
+                // declare a TraceAppender with 5MB per file and max. 10 files
                 var pattern = new log4net.Layout.PatternLayout("%message%newline");
                 pattern.Header = "";
                 var appender = new log4net.Appender.TraceAppender();
                 appender.Layout = pattern;
+                rootLogger.AddAppender(appender);
 
-                logger.Root.Level = log4net.Core.Level.Info;
-                logger.Root.RemoveAllAppenders();
-                logger.Root.AddAppender(appender);
+                // This is required, so that we can access the Logger by using 
+                // LogManager.GetLogger("NHibernate.SQL") and it can used by NHibernate
+                var loggerNH = hierarchy.GetLogger("NHibernate.SQL") as log4net.Repository.Hierarchy.Logger;
+                loggerNH.Level = log4net.Core.Level.Debug;
 
-                log4net.Config.BasicConfigurator.Configure(logger);
+
+                // this is required to tell log4net that we're done 
+                // with the configuration, so the logging can start
+                hierarchy.Configured = true;
+                log4net.Config.BasicConfigurator.Configure(hierarchy);
             }
         }
 

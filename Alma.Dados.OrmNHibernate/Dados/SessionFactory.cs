@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Reflection;
-using NHibernate;
+﻿using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Event;
-using NHibernate.Event.Default;
 using NHibernate.Mapping.ByCode;
 using NHibernate.Tool.hbm2ddl;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Diagnostics;
+using System.Linq;
+using System.Reflection;
 using Alma.Dados.Hooks;
 using Alma.Dados.OrmNHibernate.Events;
 
@@ -236,7 +236,7 @@ O GAC do framework 4.0/4.5 fica em C:\Windows\Microsoft.NET\assembly
             private static readonly IInternalLogger log = LoggerProvider.LoggerFor(typeof(ConnectionProvider));
             public override IDbConnection GetConnection()
             {
-                log.Debug("Obtaining IDbConnection from Driver");
+                log?.Debug("Obtaining IDbConnection from Driver");
                 IDbConnection conn = Driver.CreateConnection();
                 try
                 {
@@ -292,7 +292,10 @@ O GAC do framework 4.0/4.5 fica em C:\Windows\Microsoft.NET\assembly
 
         private static void AddFilters(Configuration cfg, IEnumerable<Type> types)
         {
+            var logger = Config.AtivarLog ? (Action<string>)((string text) => Trace.WriteLine(text, nameof(AddFilters))) : null;
+
             var filters = types.Where(x => typeof(Mapper.GlobalFilterMapping).IsAssignableFrom(x)).ToArray();
+            logger?.Invoke($"Registrando {filters.Length} filtros globais de repositório.");
             foreach (var fmapType in filters)
             {
                 var map = (Mapper.GlobalFilterMapping)Activator.CreateInstance(fmapType);
@@ -300,17 +303,34 @@ O GAC do framework 4.0/4.5 fica em C:\Windows\Microsoft.NET\assembly
                     cfg.FilterDefinitions.Add(fd);
             }
         }
-
+#pragma warning disable 0618 //para evitar que o usuário use o IDataHook sem tipo.
         private static void AddEvents(Configuration cfg, IEnumerable<Type> types)
         {
-            var savedHooks = types.Where(x => typeof(ISavedDataHook).IsAssignableFrom(x)).ToArray();
+            var logger = Config.AtivarLog ? (Action<string>)((string text) => Trace.WriteLine(text, nameof(AddEvents))) : null;
+
+            var savedIface = typeof(ISavedDataHook<>);
+            var deletedIface = typeof(IDeletedDataHook<>);
+            var savedHooks = types.Where(x => x.IsClass && x.IsGenericTypeOf(savedIface)).ToArray();
+            logger?.Invoke($"Registrando {savedHooks.Length} hooks para salvar entidades.");
             if (savedHooks.Any())
             {
-                var list = savedHooks.Select(t => Activator.CreateInstance(t) as ISavedDataHook).ToArray();
+                var list = savedHooks.Select(t => Activator.CreateInstance(t) as IDataHook).ToArray();
                 var savedHandler = new SavedDataEventHandler(list);
-                cfg.EventListeners.SaveEventListeners = new ISaveOrUpdateEventListener[] { new DefaultSaveEventListener(), savedHandler };
+                //cfg.EventListeners.SaveEventListeners = new ISaveOrUpdateEventListener[] { new DefaultSaveEventListener(), savedHandler };
+                cfg.EventListeners.PostCommitUpdateEventListeners = new IPostUpdateEventListener[] { savedHandler };
+                cfg.EventListeners.PostCommitInsertEventListeners = new IPostInsertEventListener[] { savedHandler };
+            }
+
+            var deletedHooks = types.Where(x => x.IsClass && x.IsGenericTypeOf(deletedIface)).ToArray();
+            logger?.Invoke($"Registrando {deletedHooks.Length} hooks para excluir entidades.");
+            if (deletedHooks.Any())
+            {
+                var list = deletedHooks.Select(t => Activator.CreateInstance(t) as IDataHook).ToArray();
+                var deletedHandler = new SavedDataEventHandler(list);
+                cfg.EventListeners.PostCommitDeleteEventListeners = new IPostDeleteEventListener[] { deletedHandler };
             }
         }
+#pragma warning restore 0618
 
         private static void AddMappings(Configuration cfg, IEnumerable<Type> types)
         {

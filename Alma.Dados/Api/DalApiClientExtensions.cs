@@ -121,6 +121,15 @@ namespace Alma.Dados.Api
                 return default(T);
         }
 
+        /// <summary>
+        /// Returns null if string is empty. 
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
+        public static string NullIfEmpty(this string text)
+        {
+            return string.IsNullOrWhiteSpace(text) ? null : text;
+        }
 
     }
 }

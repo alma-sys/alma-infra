@@ -2,11 +2,16 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 
 namespace Alma.Dados
 {
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+    /// <summary>
+    /// Lista de ORM's suportados.
+    /// </summary>
     public enum ORM
     {
         NaoDefinido,
@@ -14,7 +19,9 @@ namespace Alma.Dados
         EntityFramework
     }
 
-
+    /// <summary>
+    /// Lista de tipos de banco de dados
+    /// </summary>
     public enum DBMS
     {
         NaoDefinido,
@@ -24,15 +31,24 @@ namespace Alma.Dados
         PostgreSql,
         SqLite
     }
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
 
+    /// <summary>
+    /// Configurações da plataforma.
+    /// </summary>
     public static class Config
     {
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
         public const string cfgOrm = Core.Config.cfgRoot + "orm";
-        public const string cfgExecutarMigracoes = Core.Config.cfgRoot + cfgOrm + ":executar-migracoes";
-        public const string cfgLazy = Core.Config.cfgRoot + cfgOrm + ":lazy";
-        public const string cfgIsolationLevel = Core.Config.cfgRoot + cfgOrm + ":isolation-level";
-        public const string cfgLog = Core.Config.cfgRoot + cfgOrm + ":log";
+        public const string cfgExecutarMigracoes = cfgOrm + ":executar-migracoes";
+        public const string cfgLazy = cfgOrm + ":lazy";
+        public const string cfgIsolationLevel = cfgOrm + ":isolation-level";
+        public const string cfgLog = cfgOrm + ":log";
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
 
+        /// <summary>
+        /// Determina qual o ORM a ser usado.
+        /// </summary>
         public static ORM ORM
         {
             get
@@ -55,6 +71,11 @@ namespace Alma.Dados
             }
         }
 
+        /// <summary>
+        /// Determina qual DBMS será usado para a conexão
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         public static DBMS DeterminarDBMS(string key)
         {
             var cn = ConfigurationManager.ConnectionStrings[key];
@@ -71,25 +92,31 @@ namespace Alma.Dados
 
         }
 
+        /// <summary>
+        /// Retorna se o lazy load está ativo.
+        /// </summary>
         public static bool ExecutarMigracoes
         {
             get
             {
+                bool valor = true;
                 try
                 {
                     var opt = ConfigurationManager.AppSettings[cfgExecutarMigracoes];
-                    if (string.IsNullOrWhiteSpace(opt))
-                        return true;
-                    else
-                        return Convert.ToBoolean(opt);
+                    if (!string.IsNullOrWhiteSpace(opt))
+                        valor = Convert.ToBoolean(opt);
                 }
-                catch (Exception)
-                {
-                    return true;
+                catch { }
+                Trace.WriteLine(valor, nameof(ExecutarMigracoes));
+                return valor;
                 }
             }
-        }
 
+        /// <summary>
+        /// Retorna se a configuração do oracle é Managed
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         public static bool IsManagedOracle(string key)
         {
             return DeterminarDBMS(key) == DBMS.Oracle &&
@@ -97,24 +124,29 @@ namespace Alma.Dados
 
         }
 
+        /// <summary>
+        /// Lista de assemblies que foram mapeadas para a plataforma.
+        /// </summary>
         public static IDictionary<string, Assembly[]> AssembliesMapeadas => Core.Config.AssembliesMapeadas;
 
+        /// <summary>
+        /// Retorna se o lazy load está ativo.
+        /// </summary>
         public static bool AtivarLazy
         {
             get
             {
+                bool valor = true;
                 try
                 {
                     var opt = ConfigurationManager.AppSettings[cfgLazy];
-                    if (string.IsNullOrWhiteSpace(opt))
-                        return true;
-                    else
-                        return Convert.ToBoolean(opt);
+                    if (!string.IsNullOrWhiteSpace(opt))
+                        valor = Convert.ToBoolean(opt);
                 }
-                catch (Exception)
-                {
-                    return true;
-                }
+                catch { }
+                Trace.WriteLine(valor, nameof(AtivarLazy));
+                return valor;
+
             }
         }
 
@@ -125,40 +157,44 @@ namespace Alma.Dados
         {
             get
             {
+                IsolationLevel? valor = null;
                 try
                 {
                     var opt = ConfigurationManager.AppSettings[cfgIsolationLevel];
-                    if (string.IsNullOrWhiteSpace(opt))
-                        return null;
-                    else
-                        return (IsolationLevel)Enum.Parse(typeof(IsolationLevel), opt);
+                    if (!string.IsNullOrWhiteSpace(opt))
+                        valor = (IsolationLevel)Enum.Parse(typeof(IsolationLevel), opt);
                 }
-                catch (Exception)
-                {
-                    throw new ConfigurationErrorsException($"Valor inválido para {cfgIsolationLevel}");
-                }
+                catch { throw new ConfigurationErrorsException($"Valor inválido para {cfgIsolationLevel}"); }
+                Trace.WriteLine(valor, nameof(IsolationLevel));
+                return valor;
             }
         }
 
+        /// <summary>
+        /// Retorna se deve ativar os logs de configuração
+        /// </summary>
         public static bool AtivarLog
         {
             get
             {
+                bool valor = false;
                 try
                 {
                     var opt = ConfigurationManager.AppSettings[cfgLog];
-                    if (string.IsNullOrWhiteSpace(opt))
-                        return false;
-                    else
-                        return Convert.ToBoolean(opt);
+                    if (!string.IsNullOrWhiteSpace(opt))
+                        valor = Convert.ToBoolean(opt);
                 }
-                catch (Exception)
-                {
-                    return false;
+                catch { }
+                Trace.WriteLine(valor, nameof(AtivarLog));
+                return valor;
                 }
             }
-        }
 
+        /// <summary>
+        /// Resolver nome da conexão pelo tipo.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
         public static string ResolveConnectionName(Type type)
         {
             var assemblies = AssembliesMapeadas;
