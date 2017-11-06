@@ -1,8 +1,9 @@
-﻿using NHibernate.Event;
-using System;
-using System.Collections.Generic;
+﻿using Alma.Core;
 using Alma.Dados.Hooks;
 using Alma.Dominio;
+using NHibernate.Event;
+using System;
+using System.Collections.Generic;
 
 namespace Alma.Dados.OrmNHibernate.Events
 {
@@ -57,10 +58,10 @@ namespace Alma.Dados.OrmNHibernate.Events
 
                 foreach (var i in ifaces)
                     if (i.GetGenericArguments()[0].IsAssignableFrom(tipo))
-                {
+                    {
                         var handle = item.GetType().GetMethod(nameof(IDataHook<Dominio.Entidade>.OnHandle), System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
                         handle.Invoke(item, new object[] { entity }); //devo tratar exceptions?
-                } 
+                    }
             }
         }
     }

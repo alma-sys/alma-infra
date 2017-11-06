@@ -52,6 +52,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\Alma.Core\Extensions\ReflectionExtensions.cs">
+      <Link>Extensions\ReflectionExtensions.cs</Link>
+    </Compile>
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
@@ -63,7 +66,6 @@
     <Compile Include="Conventions\TimeSpanConvention.cs" />
     <Compile Include="Conventions\TableNameConvention.cs" />
     <Compile Include="Dados\NhLinqExtensions.cs" />
-    <Compile Include="Dados\ReflectionExtensions.cs" />
     <Compile Include="Dados\Repositorio.cs" />
     <Compile Include="Dados\SessionFactory.cs" />
     <Compile Include="Events\SavedDataEventHandler.cs" />

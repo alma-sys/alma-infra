@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Autofac.Core;
 using System.Linq;
+using Alma.Core;
 
 namespace Alma.Dominio.Events
 {
@@ -12,7 +13,7 @@ namespace Alma.Dominio.Events
 
             builder
              .RegisterAssemblyTypes(assemblies)
-             .Where(p => typeof(IEventSubscriber).IsAssignableFrom(p)) //por convenção ao invés de por interfaces.
+             .Where(p => p.IsGenericTypeOf(typeof(IEventSubscriber<>))) //por convenção ao invés de por interfaces.
              .AsImplementedInterfaces()
              .SingleInstance()
 
@@ -22,8 +23,10 @@ namespace Alma.Dominio.Events
 
         private void Subscribe(IActivatedEventArgs<object> obj)
         {
-            var sub = (IEventSubscriber)obj.Instance;
-            EventAggregator.Current.Subscribe(sub.SubscriptionSubject, sub);
+            var sub = obj.Instance;
+            var ifaces = sub.GetType().GetGenericInterfaces(typeof(IEventSubscriber<>));
+            foreach (var iface in ifaces)
+                EventAggregator.Current.Subscribe(iface.GetGenericArguments()[0], sub);
         }
 
         /// <summary>
