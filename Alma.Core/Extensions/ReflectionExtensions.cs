@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Alma.Dados.OrmNHibernate
+namespace Alma.Core
 {
     static class ReflectionExtensions
     {

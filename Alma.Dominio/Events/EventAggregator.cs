@@ -9,8 +9,8 @@ namespace Alma.Dominio.Events
     {
         void Publish<TMessageType>(TMessageType message) where TMessageType : IDomainEvent;
         //ISubscription<TMessageType> Subscribe<TMessageType>(Action<TMessageType> action);
-        void Subscribe(Type subject, IEventSubscriber subscriber);
-        void UnSubscribe(Type subject, IEventSubscriber subscriber);
+        void Subscribe(Type subject, object subscriber);
+        void UnSubscribe(Type subject, object subscriber);
     }
 
     internal class EventAggregator : IEventAggregator
@@ -38,17 +38,17 @@ namespace Alma.Dominio.Events
                 lock (lockObj)
                 {
                     var lista = subscribers[t];
-                    sublst = new List<IEventSubscriber>(lista.Cast<IEventSubscriber>());
+                    sublst = new List<IEventSubscriber<TMessageType>>(lista.Cast<IEventSubscriber<TMessageType>>());
                 }
 
-                foreach (IEventSubscriber sub in sublst)
+                foreach (IEventSubscriber<TMessageType> sub in sublst)
                 {
-                    sub.Handle(message);
+                    sub.OnHandle(message);
                 }
             }
         }
 
-        public void Subscribe(Type subject, IEventSubscriber subscriber)
+        public void Subscribe(Type subject, object subscriber)
         {
             IList actionlst;
 
@@ -56,7 +56,7 @@ namespace Alma.Dominio.Events
             {
                 if (!subscribers.TryGetValue(subject, out actionlst))
                 {
-                    actionlst = new List<IEventSubscriber>();
+                    actionlst = new ArrayList();
                     subscribers.Add(subject, actionlst);
                 }
 
@@ -65,7 +65,7 @@ namespace Alma.Dominio.Events
         }
 
 
-        public void UnSubscribe(Type subject, IEventSubscriber subscriber)
+        public void UnSubscribe(Type subject, object subscriber)
         {
             IList actionlst;
 

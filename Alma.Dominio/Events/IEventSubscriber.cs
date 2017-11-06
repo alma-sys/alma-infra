@@ -5,9 +5,12 @@ namespace Alma.Dominio.Events
     /// <summary>
     /// Representa um subscriber de evento
     /// </summary>
-    public interface IEventSubscriber
+    public interface IEventSubscriber<T> where T : IDomainEvent
     {
-        Type SubscriptionSubject { get; }
-        void Handle(IDomainEvent arg);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="arg"></param>
+        void OnHandle(T arg);
     }
 }
