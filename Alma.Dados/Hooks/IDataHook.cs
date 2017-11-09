@@ -3,14 +3,12 @@ using Alma.Dominio;
 
 namespace Alma.Dados.Hooks
 {
-    [Obsolete("Use o IDataHook<T>")]
-    public interface IDataHook
-    { }
-#pragma warning disable 0618
-
-    public interface IDataHook<T> : IDataHook where T : Entidade
+    /// <summary>
+    /// Representa um evento de dados.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    public interface IDataHook<T> where T : Entidade
     {
-        void OnHandle(T entity);
+        void Handle(T entity);
     }
-#pragma warning restore 0618
 }

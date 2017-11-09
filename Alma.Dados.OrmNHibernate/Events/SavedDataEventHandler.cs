@@ -3,65 +3,65 @@ using Alma.Dados.Hooks;
 using Alma.Dominio;
 using NHibernate.Event;
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using Autofac;
+using System.Diagnostics;
 
 namespace Alma.Dados.OrmNHibernate.Events
 {
-    internal class SavedDataEventHandler : ISaveOrUpdateEventListener, IPostUpdateEventListener, IPostInsertEventListener, IPostDeleteEventListener
+    internal class SavedDataEventHandler : IPostUpdateEventListener, IPostInsertEventListener, IPostDeleteEventListener, IPostLoadEventListener
     {
-#pragma warning disable 0618
-        private readonly IEnumerable<IDataHook> hooks;
+        //TODO: Tentar fazer com que isso seja via SCOPE.
 
-        public SavedDataEventHandler(IEnumerable<IDataHook> hooks)
-        {
-            this.hooks = hooks;
-        }
-#pragma warning restore 0618
+        public static IContainer Container { get; internal set; }
 
         public void OnPostDelete(PostDeleteEvent @event)
         {
             var tipo = @event.Entity.GetType();
             var entity = @event.Entity;
-            FireEvents(tipo, entity);
+            Dispatch(tipo, typeof(IDeletedDataHook<>), entity);
         }
 
         public void OnPostInsert(PostInsertEvent @event)
         {
             var tipo = @event.Entity.GetType();
             var entity = @event.Entity;
-            FireEvents(tipo, entity);
+            Dispatch(tipo, typeof(ICreatedDataHook<>), entity);
+        }
+
+        public void OnPostLoad(PostLoadEvent @event)
+        {
+            var tipo = @event.Entity.GetType();
+            var entity = @event.Entity;
+            Dispatch(tipo, typeof(ILoadDataHook<>), entity);
         }
 
         public void OnPostUpdate(PostUpdateEvent @event)
         {
             var tipo = @event.Entity.GetType();
             var entity = @event.Entity;
-            FireEvents(tipo, entity);
+            Dispatch(tipo, typeof(IUpdatedDataHook<>), entity);
         }
 
-        public void OnSaveOrUpdate(SaveOrUpdateEvent @event)
-        {
-            var tipo = @event.Entity.GetType();
-            var entity = @event.Entity;
-            FireEvents(tipo, entity);
-        }
 
-        private void FireEvents(Type tipo, object entity)
+
+        private void Dispatch(Type tipo, Type interfaceType, object entity)
         {
             if (!typeof(Entidade).IsAssignableFrom(tipo))
                 return;
 
-            foreach (var item in hooks)
-            {
-                var ifaceType = typeof(IDataHook<>).MakeGenericType(tipo);
-                var ifaces = item.GetType().GetGenericInterfaces(ifaceType);
+            var handle = typeof(IDataHook<>).MakeGenericType(tipo)
+                .GetMethod(nameof(IDataHook<Entidade>.Handle));
 
-                foreach (var i in ifaces)
-                    if (i.GetGenericArguments()[0].IsAssignableFrom(tipo))
-                    {
-                        var handle = item.GetType().GetMethod(nameof(IDataHook<Dominio.Entidade>.OnHandle), System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
-                        handle.Invoke(item, new object[] { entity }); //devo tratar exceptions?
-                    }
+            var concreteIFaceType = interfaceType.MakeGenericType(tipo);
+            var inumerable = typeof(IEnumerable<>).MakeGenericType(concreteIFaceType);
+            var handlers = Container.Resolve(inumerable) as IEnumerable;
+            foreach (var item in handlers)
+            {
+                if (Config.AtivarLog)
+                    Trace.WriteLine($"Executado handler {item} para {interfaceType.Name}...", nameof(SavedDataEventHandler));
+                handle.Invoke(item, new object[] { entity }); //devo tratar exceptions?
             }
         }
     }

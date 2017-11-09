@@ -1,7 +1,4 @@
-﻿using Alma.Core;
-using Alma.Dados.Hooks;
-using Alma.Dados.OrmNHibernate.Events;
-using NHibernate;
+﻿using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Event;
 using NHibernate.Mapping.ByCode;
@@ -12,10 +9,11 @@ using System.Data;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
+using Alma.Dados.OrmNHibernate.Events;
 
 namespace Alma.Dados.OrmNHibernate
 {
-    static class Repositorio
+    static class SessionFactory
     {
         internal static void SetConnectionStringResolver(Func<string, string> connectionResolver)
         {
@@ -227,7 +225,7 @@ O GAC do framework 4.0/4.5 fica em C:\Windows\Microsoft.NET\assembly
 
         public static ISessionFactory GetSessionFactory(string connectionKey, params Type[] type)
         {
-            return Repositorio.GetSessionFactory(connectionKey, type.Select(t => t.Assembly).ToArray());
+            return SessionFactory.GetSessionFactory(connectionKey, type.Select(t => t.Assembly).ToArray());
         }
 
         private class ConnectionProvider : NHibernate.Connection.ConnectionProvider
@@ -268,7 +266,7 @@ O GAC do framework 4.0/4.5 fica em C:\Windows\Microsoft.NET\assembly
 
         private static Configuration AddSchemaValidationAndMigration(this Configuration config)
         {
-            var logger = LoggerProvider.LoggerFor(typeof(Repositorio));
+            var logger = LoggerProvider.LoggerFor(typeof(SessionFactory));
             System.Action<string> updateExport = x =>
             {
                 if (logger != null)
@@ -304,34 +302,17 @@ O GAC do framework 4.0/4.5 fica em C:\Windows\Microsoft.NET\assembly
                     cfg.FilterDefinitions.Add(fd);
             }
         }
-#pragma warning disable 0618 //para evitar que o usuário use o IDataHook sem tipo.
         private static void AddEvents(Configuration cfg, IEnumerable<Type> types)
         {
             var logger = Config.AtivarLog ? (Action<string>)((string text) => Trace.WriteLine(text, nameof(AddEvents))) : null;
 
-            var savedIface = typeof(ISavedDataHook<>);
-            var deletedIface = typeof(IDeletedDataHook<>);
-            var savedHooks = types.Where(x => x.IsClass && x.IsGenericTypeOf(savedIface)).ToArray();
-            logger?.Invoke($"Registrando {savedHooks.Length} hooks para salvar entidades.");
-            if (savedHooks.Any())
-            {
-                var list = savedHooks.Select(t => Activator.CreateInstance(t) as IDataHook).ToArray();
-                var savedHandler = new SavedDataEventHandler(list);
-                //cfg.EventListeners.SaveEventListeners = new ISaveOrUpdateEventListener[] { new DefaultSaveEventListener(), savedHandler };
-                cfg.EventListeners.PostCommitUpdateEventListeners = new IPostUpdateEventListener[] { savedHandler };
-                cfg.EventListeners.PostCommitInsertEventListeners = new IPostInsertEventListener[] { savedHandler };
-            }
+            logger?.Invoke($"Registrando SavedDataEventHandler para listeners.");
 
-            var deletedHooks = types.Where(x => x.IsClass && x.IsGenericTypeOf(deletedIface)).ToArray();
-            logger?.Invoke($"Registrando {deletedHooks.Length} hooks para excluir entidades.");
-            if (deletedHooks.Any())
-            {
-                var list = deletedHooks.Select(t => Activator.CreateInstance(t) as IDataHook).ToArray();
-                var deletedHandler = new SavedDataEventHandler(list);
-                cfg.EventListeners.PostCommitDeleteEventListeners = new IPostDeleteEventListener[] { deletedHandler };
-            }
+            cfg.SetListeners(ListenerType.PostCommitInsert, new[] { typeof(SavedDataEventHandler).AssemblyQualifiedName });
+            cfg.SetListeners(ListenerType.PostCommitUpdate, new[] { typeof(SavedDataEventHandler).AssemblyQualifiedName });
+            cfg.SetListeners(ListenerType.PostCommitDelete, new[] { typeof(SavedDataEventHandler).AssemblyQualifiedName });
+            cfg.SetListeners(ListenerType.PostLoad, new[] { typeof(SavedDataEventHandler).AssemblyQualifiedName });
         }
-#pragma warning restore 0618
 
         private static void AddMappings(Configuration cfg, IEnumerable<Type> types)
         {
