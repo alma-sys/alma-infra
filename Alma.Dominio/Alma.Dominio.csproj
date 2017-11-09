@@ -51,7 +51,7 @@
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Entidade.cs" />
-    <Compile Include="Events\EventAggregator.cs" />
+    <Compile Include="Events\Dispatcher.cs" />
     <Compile Include="Events\EventModule.cs" />
     <Compile Include="Events\IDomainEvent.cs" />
     <Compile Include="Events\IEventSubscriber.cs" />
@@ -76,7 +76,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>if $(ConfigurationName) == Release "$(SolutionDir)packages\NuGet.CommandLine.3.5.0\tools\NuGet.exe" pack "$(ProjectPath)" -Prop Configuration=Release</PostBuildEvent>
+    <PostBuildEvent>if $(ConfigurationName) == Release "$(SolutionDir)packages\NuGet.CommandLine.4.3.0\tools\NuGet.exe" pack "$(ProjectPath)" -Prop Configuration=Release</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

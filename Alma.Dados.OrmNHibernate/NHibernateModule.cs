@@ -1,4 +1,5 @@
-﻿using Autofac;
+﻿using Alma.Dados.Hooks;
+using Autofac;
 using NHibernate;
 using System.Data;
 using System.Linq;
@@ -60,6 +61,37 @@ namespace Alma.Dados.OrmNHibernate
             }
 
 
+            //builder.RegisterAssemblyTypes(typeof(NHibernateModule).Assembly)
+            //   .AssignableTo<IPostDeleteEventListener>()
+            //   .AssignableTo<IPostInsertEventListener>()
+            //   .AssignableTo<IPostUpdateEventListener>()
+            //   .AssignableTo<IPostLoadEventListener>()
+            //   .AsSelf()
+            //   .InstancePerLifetimeScope();
+
+
+            var handlerType = typeof(IDataHook<>);
+            foreach (var k in assemblies.Keys)
+            {
+                var assembly = assemblies[k];
+
+                builder.RegisterAssemblyTypes(assembly)
+                    .AsClosedTypesOf(handlerType)
+                    .AsImplementedInterfaces()
+                    .SingleInstance();
+            }
+
+            builder.RegisterBuildCallback(container =>
+            {
+                Events.SavedDataEventHandler.Container = container;
+            });
+
+            //builder.RegisterBuildCallback(container =>
+            //{
+            //    NHibernate.Cfg.Environment.BytecodeProvider =
+            //        new AutofacBytecodeProvider(container, new DefaultProxyFactoryFactory(), new DefaultCollectionTypeFactory());
+            //});
+
 
         }
 
@@ -106,7 +138,7 @@ namespace Alma.Dados.OrmNHibernate
 
         private static ISessionFactory GetFactory(string connectionKey, System.Reflection.Assembly[] assemblies)
         {
-            return Repositorio.GetSessionFactory(connectionKey, assemblies);
+            return SessionFactory.GetSessionFactory(connectionKey, assemblies);
         }
 
         private static IDbCommand GetCommand(ISession session)
