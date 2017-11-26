@@ -14,15 +14,15 @@
     <summary>$description$</summary>
     <dependencies>
       <group>
-        <dependency id="Autofac" version="4.3.0" />
-        <dependency id="AutoMapper" version="5.2.0" />
+        <dependency id="Autofac" version="4.6.2" />
+        <dependency id="AutoMapper" version="6.2.1" />
       </group>
     </dependencies>
     <frameworkAssemblies>
-      <frameworkAssembly assemblyName="System" />
-      <frameworkAssembly assemblyName="System.Configuration" />
-      <frameworkAssembly assemblyName="System.Drawing" />
-      <frameworkAssembly assemblyName="System.Xml" />
+      <frameworkAssembly assemblyName="System" targetFramework="net462" />
+      <frameworkAssembly assemblyName="System.Configuration" targetFramework="net462" />
+      <frameworkAssembly assemblyName="System.Drawing" targetFramework="net462" />
+      <frameworkAssembly assemblyName="System.Xml" targetFramework="net462" />
     </frameworkAssemblies>
     <references>
       <group>
@@ -31,6 +31,6 @@
     </references>
   </metadata>
   <files>
-    <file src="bin\$configuration$\$id$.xml" target="lib\net452\" />
+    <file src="bin\$configuration$\$id$.xml" target="lib\net462\" />
   </files>
 </package>

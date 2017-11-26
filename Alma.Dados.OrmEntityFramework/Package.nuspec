@@ -15,17 +15,17 @@
     <dependencies>
       <group>
         <dependency id="Alma.Dados" version="$version$" />
-        <dependency id="Autofac" version="4.3.0" />
-        <dependency id="EntityFramework" version="6.1.3" />
+        <dependency id="Autofac" version="4.6.2" />
+        <dependency id="EntityFramework" version="6.2.0" />
       </group>
     </dependencies>
     <frameworkAssemblies>
-      <frameworkAssembly assemblyName="Microsoft.CSharp" />
-      <frameworkAssembly assemblyName="System" />
-      <frameworkAssembly assemblyName="System.Configuration" />
-      <frameworkAssembly assemblyName="System.Core" />
-      <frameworkAssembly assemblyName="System.Data" />
-      <frameworkAssembly assemblyName="System.Xml" />
+      <frameworkAssembly assemblyName="Microsoft.CSharp" targetFramework="net462" />
+      <frameworkAssembly assemblyName="System" targetFramework="net462" />
+      <frameworkAssembly assemblyName="System.Configuration" targetFramework="net462" />
+      <frameworkAssembly assemblyName="System.Core" targetFramework="net462" />
+      <frameworkAssembly assemblyName="System.Data" targetFramework="net462" />
+      <frameworkAssembly assemblyName="System.Xml" targetFramework="net462" />
     </frameworkAssemblies>
     <references>
       <group>
@@ -34,6 +34,6 @@
     </references>
   </metadata>
   <files>
-    <file src="bin\$configuration$\$id$.xml" target="lib\net452\" />
+    <file src="bin\$configuration$\$id$.xml" target="lib\net462\" />
   </files>
 </package>

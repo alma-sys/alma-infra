@@ -15,15 +15,15 @@
     <dependencies>
       <group>
         <dependency id="Alma.Core" version="$version$" />
-        <dependency id="Autofac" version="4.3.0" />
+        <dependency id="Autofac" version="4.6.2" />
       </group>
     </dependencies>
     <frameworkAssemblies>
-      <frameworkAssembly assemblyName="Microsoft.CSharp" />
-      <frameworkAssembly assemblyName="System" />
-      <frameworkAssembly assemblyName="System.Core" />
-      <frameworkAssembly assemblyName="System.Data" />
-      <frameworkAssembly assemblyName="System.Xml" />
+      <frameworkAssembly assemblyName="Microsoft.CSharp" targetFramework="net462" />
+      <frameworkAssembly assemblyName="System" targetFramework="net462" />
+      <frameworkAssembly assemblyName="System.Core" targetFramework="net462" />
+      <frameworkAssembly assemblyName="System.Data" targetFramework="net462" />
+      <frameworkAssembly assemblyName="System.Xml" targetFramework="net462" />
     </frameworkAssemblies>
     <references>
       <group>
@@ -32,6 +32,6 @@
     </references>
   </metadata>
   <files>
-    <file src="bin\$configuration$\$id$.xml" target="lib\net452\" />
+    <file src="bin\$configuration$\$id$.xml" target="lib\net462\" />
   </files>
 </package>

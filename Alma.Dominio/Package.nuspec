@@ -15,14 +15,14 @@
     <dependencies>
       <group>
         <dependency id="Alma.Core" version="$version$" />
-        <dependency id="Autofac" version="4.3.0" />
-        <dependency id="FluentValidation" version="7.1.0.0" />
+        <dependency id="Autofac" version="4.6.2" />
+        <dependency id="FluentValidation" version="7.2.1" />
       </group>
     </dependencies>
     <frameworkAssemblies>
-      <frameworkAssembly assemblyName="Microsoft.CSharp" />
-      <frameworkAssembly assemblyName="System" />
-      <frameworkAssembly assemblyName="System.Core" />
+      <frameworkAssembly assemblyName="Microsoft.CSharp" targetFramework="net462" />
+      <frameworkAssembly assemblyName="System" targetFramework="net462" />
+      <frameworkAssembly assemblyName="System.Core" targetFramework="net462" />
     </frameworkAssemblies>
     <references>
       <group>
@@ -31,6 +31,6 @@
     </references>
   </metadata>
   <files>
-    <file src="bin\$configuration$\$id$.xml" target="lib\net452\" />
+    <file src="bin\$configuration$\$id$.xml" target="lib\net462\" />
   </files>
 </package>
