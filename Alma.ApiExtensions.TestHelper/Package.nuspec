@@ -22,23 +22,23 @@
         <dependency id="Microsoft.Owin.Host.HttpListener" version="3.0.1" />
         <dependency id="Microsoft.Owin.Hosting" version="3.0.1" />
         <dependency id="Microsoft.SqlServer.Dac" version="1.0.1" />
-        <dependency id="Newtonsoft.Json" version="9.0.1" />
+        <dependency id="Newtonsoft.Json" version="10.0.3" />
         <dependency id="Owin" version="1.0" />
-        <dependency id="RestSharp" version="105.2.3" />
-        <dependency id="SpecFlow" version="2.1.0" />
+        <dependency id="RestSharp" version="106.1.0" />
+        <dependency id="SpecFlow" version="2.2.1" />
       </group>
     </dependencies>
     <frameworkAssemblies>
-      <frameworkAssembly assemblyName="Microsoft.CSharp" />
-      <frameworkAssembly assemblyName="Microsoft.Build" />
-      <frameworkAssembly assemblyName="Microsoft.Build.Framework" />
-      <frameworkAssembly assemblyName="Microsoft.VisualStudio.QualityTools.UnitTestFramework" />
-      <frameworkAssembly assemblyName="System" />
-      <frameworkAssembly assemblyName="System.Configuration" />
-      <frameworkAssembly assemblyName="System.Data" />
-      <frameworkAssembly assemblyName="System.Core" />
-      <frameworkAssembly assemblyName="System.Xml" />
-      <frameworkAssembly assemblyName="System.Net.Http" />
+      <frameworkAssembly assemblyName="Microsoft.CSharp" targetFramework="net462" />
+      <frameworkAssembly assemblyName="Microsoft.Build" targetFramework="net462" />
+      <frameworkAssembly assemblyName="Microsoft.Build.Framework" targetFramework="net462" />
+      <frameworkAssembly assemblyName="Microsoft.VisualStudio.QualityTools.UnitTestFramework" targetFramework="net462" />
+      <frameworkAssembly assemblyName="System" targetFramework="net462" />
+      <frameworkAssembly assemblyName="System.Configuration" targetFramework="net462" />
+      <frameworkAssembly assemblyName="System.Data" targetFramework="net462" />
+      <frameworkAssembly assemblyName="System.Core" targetFramework="net462" />
+      <frameworkAssembly assemblyName="System.Xml" targetFramework="net462" />
+      <frameworkAssembly assemblyName="System.Net.Http" targetFramework="net462" />
     </frameworkAssemblies>
     <references>
       <group>
@@ -47,6 +47,6 @@
     </references>
   </metadata>
   <files>
-    <file src="bin\$configuration$\$id$.xml" target="lib\net452\" />
+    <file src="bin\$configuration$\$id$.xml" target="lib\net462\" />
   </files>
 </package>

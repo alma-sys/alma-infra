@@ -1,8 +1,10 @@
-﻿using System;
-using System.Data;
-using NHibernate;
+﻿using NHibernate;
+using NHibernate.Engine;
 using NHibernate.SqlTypes;
 using NHibernate.UserTypes;
+using System;
+using System.Data;
+using System.Data.Common;
 
 namespace Alma.Dados.OrmNHibernate.Types
 {
@@ -26,9 +28,9 @@ namespace Alma.Dados.OrmNHibernate.Types
             return x.GetHashCode();
         }
 
-        public object NullSafeGet(IDataReader rs, string[] names, object owner)
+        public object NullSafeGet(DbDataReader rs, string[] names, ISessionImplementor session, object owner)
         {
-            var valueToGet = NHibernateUtil.String.NullSafeGet(rs, names[0]) as string;
+            var valueToGet = NHibernateUtil.String.NullSafeGet(rs, names[0], session) as string;
             int returnValue = 0;
             if (int.TryParse(valueToGet, out returnValue))
                 return returnValue;
@@ -36,13 +38,13 @@ namespace Alma.Dados.OrmNHibernate.Types
                 return (int?)null;
         }
 
-        public void NullSafeSet(IDbCommand cmd, object value, int index)
+        public void NullSafeSet(DbCommand cmd, object value, int index, ISessionImplementor session)
         {
             var typedValue = value as int?;
             if (typedValue == null)
-                NHibernateUtil.String.NullSafeSet(cmd, (string)null, index);
+                NHibernateUtil.String.NullSafeSet(cmd, (string)null, index, session);
             else
-                NHibernateUtil.String.NullSafeSet(cmd, typedValue.Value.ToString(), index);
+                NHibernateUtil.String.NullSafeSet(cmd, typedValue.Value.ToString(), index, session);
         }
 
         public object DeepCopy(object value)

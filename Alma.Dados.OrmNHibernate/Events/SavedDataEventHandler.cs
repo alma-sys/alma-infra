@@ -1,12 +1,13 @@
-﻿using Alma.Core;
-using Alma.Dados.Hooks;
+﻿using Alma.Dados.Hooks;
 using Alma.Dominio;
+using Autofac;
 using NHibernate.Event;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Autofac;
 using System.Diagnostics;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Alma.Dados.OrmNHibernate.Events
 {
@@ -23,11 +24,21 @@ namespace Alma.Dados.OrmNHibernate.Events
             Dispatch(tipo, typeof(IDeletedDataHook<>), entity);
         }
 
+        public async Task OnPostDeleteAsync(PostDeleteEvent @event, CancellationToken cancellationToken)
+        {
+            await Task.Run(() => OnPostDelete(@event), cancellationToken);
+        }
+
         public void OnPostInsert(PostInsertEvent @event)
         {
             var tipo = @event.Entity.GetType();
             var entity = @event.Entity;
             Dispatch(tipo, typeof(ICreatedDataHook<>), entity);
+        }
+
+        public async Task OnPostInsertAsync(PostInsertEvent @event, CancellationToken cancellationToken)
+        {
+            await Task.Run(() => OnPostInsert(@event), cancellationToken);
         }
 
         public void OnPostLoad(PostLoadEvent @event)
@@ -44,7 +55,10 @@ namespace Alma.Dados.OrmNHibernate.Events
             Dispatch(tipo, typeof(IUpdatedDataHook<>), entity);
         }
 
-
+        public async Task OnPostUpdateAsync(PostUpdateEvent @event, CancellationToken cancellationToken)
+        {
+            await Task.Run(() => OnPostUpdate(@event), cancellationToken);
+        }
 
         private void Dispatch(Type tipo, Type interfaceType, object entity)
         {

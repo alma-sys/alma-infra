@@ -6,10 +6,12 @@ using NHibernate.Mapping.ByCode;
 using NHibernate.Tool.hbm2ddl;
 using System;
 using System.Collections.Generic;
-using System.Data;
+using System.Data.Common;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Alma.Dados.OrmNHibernate
 {
@@ -233,10 +235,10 @@ O GAC do framework 4.0/4.5 fica em C:\Windows\Microsoft.NET\assembly
             public static Func<string, string> connectionResolver;
 
             private static readonly IInternalLogger log = LoggerProvider.LoggerFor(typeof(ConnectionProvider));
-            public override IDbConnection GetConnection()
+            public override DbConnection GetConnection()
             {
                 log?.Debug("Obtaining IDbConnection from Driver");
-                IDbConnection conn = Driver.CreateConnection();
+                DbConnection conn = Driver.CreateConnection();
                 try
                 {
                     conn.ConnectionString = ConnectionString;
@@ -251,6 +253,14 @@ O GAC do framework 4.0/4.5 fica em C:\Windows\Microsoft.NET\assembly
                 }
 
                 return conn;
+            }
+
+            public override async Task<DbConnection> GetConnectionAsync(CancellationToken cancellationToken)
+            {
+                return await Task.Run(() =>
+                {
+                    return GetConnection();
+                }, cancellationToken);
             }
         }
 
