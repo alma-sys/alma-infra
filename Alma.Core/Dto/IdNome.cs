@@ -2,17 +2,17 @@
 {
     public class IdNome : IIdNome
     {
-        public IdNome() {}
+        public IdNome() { }
 
-        public IdNome(int id, string nome) : this()
+        public IdNome(long id, string nome) : this()
         {
             this.Id = id;
             this.Nome = nome;
         }
 
-        public IdNome(IIdNome src) : this( src.Id, src.Nome) {}
+        public IdNome(IIdNome src) : this(src.Id, src.Nome) { }
 
-        public int Id { get; set; }
+        public long Id { get; set; }
 
         public string Nome { get; set; }
 

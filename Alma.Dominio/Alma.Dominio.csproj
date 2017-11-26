@@ -58,6 +58,7 @@
     <Compile Include="Perfil.cs" />
     <Compile Include="Permissao.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositorios\IRepositorioCrud.cs" />
     <Compile Include="UsuarioBase.cs" />
     <Compile Include="Validadores\IValidador.cs" />
     <Compile Include="Validadores\ValidacaoException.cs" />

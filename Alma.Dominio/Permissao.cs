@@ -3,7 +3,7 @@ using System;
 
 namespace Alma.Dominio
 {
-    public class Permissao : Entidade<int>, IIdNome
+    public class Permissao : Entidade, IIdNome
     {
         protected Permissao() { }
 

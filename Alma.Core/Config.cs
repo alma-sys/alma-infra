@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Reflection;
-//using FluentValidation;
-//[assembly: PreApplicationStartMethod(typeof(Alma.Infra.Config), "Iniciar")]
 
 namespace Alma.Core
 {

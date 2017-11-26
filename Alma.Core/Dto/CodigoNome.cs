@@ -1,14 +1,14 @@
 ﻿namespace Alma.Core.Dto
 {
-    public class CodigoNome : ICodigo<int>, INome
+    public class CodigoNome : ICodigo, INome
     {
-        public CodigoNome(int codigo, string nome)
+        public CodigoNome(string codigo, string nome)
         {
             this.Codigo = codigo;
             this.Nome = nome;
         }
-        public int Codigo { get; private set; }
-        public string Nome { get; private set; }
+        public string Codigo { get; set; }
+        public string Nome { get; set; }
         public override string ToString()
         {
             return Nome;
@@ -25,7 +25,7 @@
         }
         public override int GetHashCode()
         {
-            return Codigo != 0 ? Codigo.GetHashCode() : base.GetHashCode();
+            return !string.IsNullOrWhiteSpace(Codigo) ? Codigo.GetHashCode() : base.GetHashCode();
         }
     }
 }

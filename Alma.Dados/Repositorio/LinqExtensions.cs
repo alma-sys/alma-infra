@@ -80,14 +80,6 @@ namespace Alma.Dados
         }
 
 
-        public static IListaPaginada<TResult> Select<T, TResult>(this IListaPaginada<T> query, Func<T, TResult> select)
-            where T : class
-            where TResult : class
-        {
-            var paged = new ListaPaginada<TResult>(query.Pagina, query.TotalItens, query.Lista.Select(select).ToList(), query.TamanhoPagina);
-            return paged;
-        }
-
         //para implementacao e teste futuro.
         //public static IQueryable<TOriginating> FetchMany<TOriginating, TRelated>(this IQueryable<TOriginating> query, Expression<Func<TOriginating, IEnumerable<TRelated>>> relatedObjectSelector)
         //{
