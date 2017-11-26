@@ -4,7 +4,7 @@
     {
     }
 
-    public interface IId : IId<int>
+    public interface IId : IId<long>
     {
     }
 

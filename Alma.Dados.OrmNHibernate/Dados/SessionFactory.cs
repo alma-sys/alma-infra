@@ -1,4 +1,5 @@
-﻿using NHibernate;
+﻿using Alma.Dados.OrmNHibernate.Events;
+using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Event;
 using NHibernate.Mapping.ByCode;
@@ -9,7 +10,6 @@ using System.Data;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
-using Alma.Dados.OrmNHibernate.Events;
 
 namespace Alma.Dados.OrmNHibernate
 {

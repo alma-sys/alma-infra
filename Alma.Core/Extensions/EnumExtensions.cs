@@ -18,12 +18,11 @@ namespace Alma.Core
             }
         }
 
-        [Obsolete("Usar ToIdNome")]
         public static CodigoNome ToCodigoNome(this Enum enumeration)
         {
             return new CodigoNome(
 
-                codigo: enumeration.ToInt(),
+                codigo: enumeration.ToString(),
                 nome: enumeration.ToDescription()
             );
         }
@@ -42,13 +41,12 @@ namespace Alma.Core
         }
 
         [Obsolete("Usar ToCodigoDescricao")]
-        public static dynamic ToCodigoCharNome(this Enum enumeration)
+        public static CodigoNome ToCodigoCharNome(this Enum enumeration)
         {
-            return new
-            {
-                Codigo = enumeration.ToString(),
-                Nome = enumeration.ToDescription()
-            };
+            return new CodigoNome(
+                codigo: enumeration.ToString(),
+                nome: enumeration.ToDescription()
+            );
         }
         public static string ToDescription(this Enum enumeration, string valueWhenEmpty)
         {

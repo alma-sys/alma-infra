@@ -11,6 +11,6 @@ namespace Alma.Core
     {
         int Pagina { get; }
         int TamanhoPagina { get; }
-        int TotalItens { get; }
+        long TotalItens { get; }
     }
 }

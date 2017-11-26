@@ -5,7 +5,7 @@ using Alma.Core;
 
 namespace Alma.Dominio
 {
-    public class Perfil : Entidade<int>, IIdNome
+    public class Perfil : Entidade, IIdNome
     {
         protected Perfil() { }
         public Perfil(string nome, string descricao, bool ativo = true)

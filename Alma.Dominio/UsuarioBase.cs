@@ -5,7 +5,7 @@ using Alma.Core;
 
 namespace Alma.Dominio
 {
-    public abstract class UsuarioBase : Entidade<int>, IId
+    public abstract class UsuarioBase : Entidade, IId
     {
         public UsuarioBase() { }
 

@@ -56,6 +56,8 @@
     <Compile Include="Dto\CodigoNome.cs" />
     <Compile Include="Dto\CodigoDescricao.cs" />
     <Compile Include="Dto\IdNome.cs" />
+    <Compile Include="Dto\ListaPaginadaDto.cs" />
+    <Compile Include="Extensions\LinqExtensions.cs" />
     <Compile Include="Extensions\ReflectionExtensions.cs" />
     <Compile Include="IListaPaginada.cs" />
     <Compile Include="Extensions\ImageExtensions.cs" />
