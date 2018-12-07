@@ -22,7 +22,7 @@ namespace Alma.Core.Security.Tests
 
         }
 
-        [Fact]
+        [Fact(Skip = "Change this test to use a valid password to do a sucessfull auth test")]
         public async void TestarLoginAdfsSaml()
         {
 
@@ -30,21 +30,19 @@ namespace Alma.Core.Security.Tests
 
             //await Assert.ThrowsAsync<UnauthorizedAccessException>(async () =>
             //{
-            //Change this test to use a valid password to do a sucessfull auth test
             var token = await provider.GetSamlToken(authority, audience, username, password) as SamlSecurityToken;
             // });
             Assert.NotNull(token);
             Assert.NotNull(token.Assertion);
         }
 
-        [Fact]
+        [Fact(Skip = "Change this test to use a valid password to do a sucessfull auth test")]
         public async void TestarRenewAdfsSaml()
         {
             var provider = new AdfsProvider();
 
             //await Assert.ThrowsAsync<UnauthorizedAccessException>(async () =>
             //{
-            //Change this test to use a valid password to do a sucessfull auth test
             var token = await provider.GetSamlToken(authority, audience, username, password) as SamlSecurityToken;
             Thread.Sleep(10000);
             var renewed = await provider.RenewSamlToken(authority, audience, token.Assertion.AssertionId);

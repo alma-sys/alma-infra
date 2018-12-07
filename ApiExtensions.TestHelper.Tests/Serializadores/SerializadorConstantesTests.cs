@@ -2,56 +2,56 @@
 
 namespace Alma.ApiExtensions.Serializadores.Tests
 {
-    public class SerializadorConstantesTests
+    public class ConstantsSerializer
     {
-        enum ParaTestar
+        enum ValuesToTest
         {
-            Valor1 = 1,
-            Valor2 = 2,
-            [Alma.Core.Description("Valor 3")]
-            Valor3 = 3
+            Value1 = 1,
+            Value2 = 2,
+            [Alma.Core.Description("The Value Is Three")]
+            Value3 = 3
         }
 
 
         [Fact]
-        public void DeveSerializarEnumsEmCodigoNome()
+        public void ShouldSerializeEnumValuesIntoIdName()
         {
 
-            var resultado = SerializadorConstantes.SerializarEnum(typeof(ParaTestar), true, true);
+            var resultado = SerializadorConstantes.SerializarEnum(typeof(ValuesToTest), true, true);
             Assert.Equal(@"[
   {
     ""id"": 1,
-    ""nome"": ""Valor1""
+    ""name"": ""Value1""
   },
   {
     ""id"": 2,
-    ""nome"": ""Valor2""
+    ""name"": ""Value2""
   },
   {
     ""id"": 3,
-    ""nome"": ""Valor 3""
+    ""name"": ""The Value Is Three""
   }
 ]", resultado);
         }
 
 
         [Fact()]
-        public void DeveSerializarEnumsComTextoEmCodigoDescricao()
+        public void ShouldSerializeEnumValuesIntoCodeDescription()
         {
 
-            var resultado = SerializadorConstantes.SerializarEnumChar(typeof(ParaTestar), true, true);
+            var resultado = SerializadorConstantes.SerializarEnumChar(typeof(ValuesToTest), true, true);
             Assert.Equal(@"[
   {
-    ""codigo"": ""Valor1"",
-    ""descricao"": ""Valor1""
+    ""code"": ""Value1"",
+    ""description"": ""Value1""
   },
   {
-    ""codigo"": ""Valor2"",
-    ""descricao"": ""Valor2""
+    ""code"": ""Value2"",
+    ""description"": ""Value2""
   },
   {
-    ""codigo"": ""Valor3"",
-    ""descricao"": ""Valor 3""
+    ""code"": ""Value3"",
+    ""description"": ""The Value Is Three""
   }
 ]", resultado);
         }
