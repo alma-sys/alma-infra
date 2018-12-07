@@ -1,4 +1,5 @@
 using Xunit;
+using Alma.Common;
 
 namespace Alma.Common.Tests.Extensions
 {

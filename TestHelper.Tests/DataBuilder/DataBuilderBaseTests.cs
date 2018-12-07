@@ -5,17 +5,17 @@ namespace Alma.TestHelper.DataBuilder.Tests
     public class DataBuilderBaseTests
     {
         [Fact()]
-        public void DeveGerarTag()
+        public void ShouldGenerateTag()
         {
-            var tag = DataBuilderBase.GerarTag();
+            var tag = DataBuilderBase.GenerateTag();
             Assert.NotNull(tag);
         }
 
         [Fact()]
-        public void DeveGerarTagsDiferentes()
+        public void ShouldGenerateDifferentTags()
         {
-            var tag = DataBuilderBase.GerarTag();
-            var tag2 = DataBuilderBase.GerarTag();
+            var tag = DataBuilderBase.GenerateTag();
+            var tag2 = DataBuilderBase.GenerateTag();
 
             Assert.NotNull(tag);
             Assert.NotNull(tag2);

@@ -6,7 +6,7 @@ namespace Alma.TestHelper.DataBuilder
     public class DataBuilderBase
     {
         private static object lockGerarTag = new object();
-        public static string GerarTag()
+        public static string GenerateTag()
         {
             lock (lockGerarTag)
             {

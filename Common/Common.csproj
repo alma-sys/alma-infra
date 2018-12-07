@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>Alma.Common</AssemblyName>
-    <RootNamespace>Alma.Core</RootNamespace>
+    <RootNamespace>Alma.Common</RootNamespace>
     <PackageId>Alma.Core</PackageId>
     
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
