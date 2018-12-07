@@ -227,10 +227,10 @@ namespace Alma.ApiExtensions.Log
             //throw new NotImplementedException();
         }
 
-        private static string SmtpHost => System.Configuration.ConfigurationManager.AppSettings[Core.Config.cfgRoot + "smtp"];
-        private static int SmtpPort => Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings[Core.Config.cfgRoot + "smtp:port"]);
-        private static bool SmtpSsl => Convert.ToBoolean(System.Configuration.ConfigurationManager.AppSettings[Core.Config.cfgRoot + "smtp:ssl"]);
-        private static string SmtpUserName => System.Configuration.ConfigurationManager.AppSettings[Core.Config.cfgRoot + "smtp:userName"];
-        private static string SmtpPassword => System.Configuration.ConfigurationManager.AppSettings[Core.Config.cfgRoot + "smtp:password"];
+        private static string SmtpHost => System.Configuration.ConfigurationManager.AppSettings[Common.Config.cfgRoot + "smtp"];
+        private static int SmtpPort => Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings[Common.Config.cfgRoot + "smtp:port"]);
+        private static bool SmtpSsl => Convert.ToBoolean(System.Configuration.ConfigurationManager.AppSettings[Common.Config.cfgRoot + "smtp:ssl"]);
+        private static string SmtpUserName => System.Configuration.ConfigurationManager.AppSettings[Common.Config.cfgRoot + "smtp:userName"];
+        private static string SmtpPassword => System.Configuration.ConfigurationManager.AppSettings[Common.Config.cfgRoot + "smtp:password"];
     }
 }

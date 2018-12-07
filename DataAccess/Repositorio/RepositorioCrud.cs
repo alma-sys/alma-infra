@@ -1,4 +1,4 @@
-﻿using Alma.Core;
+﻿using Alma.Common;
 using Alma.Dominio.Repositorios;
 using System.Collections.Generic;
 using System.Linq;

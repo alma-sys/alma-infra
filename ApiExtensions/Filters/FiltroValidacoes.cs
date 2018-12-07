@@ -1,4 +1,4 @@
-﻿using Alma.Core;
+﻿using Alma.Common;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -14,7 +14,7 @@ namespace Alma.ApiExtensions.Filters
         public override void OnException(ExceptionContext context)
         {
             if (context.ExceptionHandled) return;
-            if (context.Exception is ValidacaoException validacoes)
+            if (context.Exception is ValidationException validacoes)
             {
                 var erros = validacoes.Errors.Select(t => new { Campo = t.Key, Mensagem = t.Value }).ToArray();
                 object retorno;

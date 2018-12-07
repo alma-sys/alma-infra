@@ -1,14 +1,15 @@
 ﻿using Xunit;
 
-namespace Alma.ApiExtensions.Serializadores.Tests
+namespace Alma.ApiExtensions.Serializers.Tests
 {
     public class ConstantsSerializer
     {
         enum ValuesToTest
         {
             Value1 = 1,
+            [System.ComponentModel.AmbientValue("VALUE-2")]
             Value2 = 2,
-            [Alma.Core.Description("The Value Is Three")]
+            [System.ComponentModel.Description("The Value Is Three")]
             Value3 = 3
         }
 
@@ -46,7 +47,7 @@ namespace Alma.ApiExtensions.Serializadores.Tests
     ""description"": ""Value1""
   },
   {
-    ""code"": ""Value2"",
+    ""code"": ""VALUE-2"",
     ""description"": ""Value2""
   },
   {

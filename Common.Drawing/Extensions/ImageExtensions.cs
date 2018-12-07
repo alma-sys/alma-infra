@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Drawing;
 
-namespace Alma.Core.Drawing
+namespace Alma.Common.Drawing
 {
     public static class ImageHelper
     {

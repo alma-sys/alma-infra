@@ -1,4 +1,4 @@
-﻿namespace Alma.Core.Dto
+﻿namespace Alma.Common.Dto
 {
     public class CodeDescription : ICode, IDescription
     {

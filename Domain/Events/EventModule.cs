@@ -1,6 +1,6 @@
 ﻿using Autofac;
 using System.Linq;
-using Alma.Core;
+using Alma.Common;
 
 namespace Alma.Dominio.Events
 {
@@ -8,7 +8,7 @@ namespace Alma.Dominio.Events
     {
         protected override void Load(ContainerBuilder builder)
         {
-            var assemblies = Core.Config.AssembliesMapeadas.Values.SelectMany(x => x).ToArray();
+            var assemblies = Common.Config.AssembliesMapeadas.Values.SelectMany(x => x).ToArray();
 
             var handlerType = typeof(IEventSubscriber<>);
 

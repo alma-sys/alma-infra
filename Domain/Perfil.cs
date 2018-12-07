@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using Alma.Core;
+using Alma.Common;
 
 namespace Alma.Dominio
 {

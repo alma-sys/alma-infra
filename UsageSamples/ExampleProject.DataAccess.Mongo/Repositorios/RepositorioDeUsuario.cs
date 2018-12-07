@@ -1,4 +1,4 @@
-﻿using Alma.Core;
+﻿using Alma.Common;
 using Alma.Dados;
 using Alma.Exemplo.Dominio.Entidades;
 using Alma.Exemplo.Dominio.Repositorios;

@@ -4,12 +4,12 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using Alma.Core;
-using Alma.Core.Dto;
+using Alma.Common;
+using Alma.Common.Dto;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
-namespace Alma.ApiExtensions.Serializadores
+namespace Alma.ApiExtensions.Serializers
 {
     public static class SerializadorConstantes
     {

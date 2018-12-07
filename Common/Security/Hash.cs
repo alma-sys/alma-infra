@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Security.Cryptography;
 
-namespace Alma.Core.Security
+namespace Alma.Common.Security
 {
     public static class Hash
     {
-        public static String Gerar(String input)
+        public static string Create(string input)
         {
             var inputBytes = System.Text.Encoding.UTF8.GetBytes(input);
             using (var hash = SHA512.Create())

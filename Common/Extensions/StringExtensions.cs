@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Text;
 
-namespace Alma.Core
+namespace Alma.Common
 {
     public static class StringExtensions
     {

@@ -13,9 +13,9 @@ namespace Alma.ApiExtensions
 {
     public static class Config
     {
-        public const string cfgLogErros = Core.Config.cfgRoot + "logerros";
-        public const string cfgSistemaRemetente = Core.Config.cfgRoot + "sistema-remetente";
-        public static string cfgUploads => Core.Config.cfgRoot.Replace(":", "-") + "uploads";
+        public const string cfgLogErros = Common.Config.cfgRoot + "logerros";
+        public const string cfgSistemaRemetente = Common.Config.cfgRoot + "sistema-remetente";
+        public static string cfgUploads => Common.Config.cfgRoot.Replace(":", "-") + "uploads";
 
         public static IList<MailAddress> DestinosEmailErro
         {
@@ -67,14 +67,14 @@ namespace Alma.ApiExtensions
         {
             get
             {
-                var str = ConfigurationManager.AppSettings[Core.Config.cfgRoot + "jwtkey"];
+                var str = ConfigurationManager.AppSettings[Common.Config.cfgRoot + "jwtkey"];
                 try
                 {
                     return Base64UrlEncoder.DecodeBytes(str);
                 }
                 catch (Exception ex)
                 {
-                    throw new ConfigurationErrorsException("Invalid configuration at " + Core.Config.cfgRoot + "jwtkey", ex);
+                    throw new ConfigurationErrorsException("Invalid configuration at " + Common.Config.cfgRoot + "jwtkey", ex);
                 }
             }
         }
@@ -83,16 +83,16 @@ namespace Alma.ApiExtensions
         {
             get
             {
-                var str = ConfigurationManager.AppSettings[Core.Config.cfgRoot + "jwtissuer"];
+                var str = ConfigurationManager.AppSettings[Common.Config.cfgRoot + "jwtissuer"];
                 if (string.IsNullOrWhiteSpace(str))
-                    throw new ConfigurationErrorsException("Invalid configuration at " + Core.Config.cfgRoot + "jwtissuer");
+                    throw new ConfigurationErrorsException("Invalid configuration at " + Common.Config.cfgRoot + "jwtissuer");
                 return str;
             }
         }
-        internal static int JwtExpiryInMintures => Convert.ToInt32(ConfigurationManager.AppSettings[Core.Config.cfgRoot + "jwtexpiry"] ?? "5");
+        internal static int JwtExpiryInMintures => Convert.ToInt32(ConfigurationManager.AppSettings[Common.Config.cfgRoot + "jwtexpiry"] ?? "5");
         //internal static int JwtRefreshTokenExpiryInMintures => Convert.ToInt32(ConfigurationManager.AppSettings[Core.Config.cfgRoot + "jwtrefreshtokenexpiry"]);
-        internal static string[] JwtAudiences => ConfigurationManager.AppSettings[Core.Config.cfgRoot + "jwtaudiences"]?.Split(";".ToCharArray(), StringSplitOptions.RemoveEmptyEntries).Select(t => t.Trim()).ToArray();
-        internal static bool Https => Convert.ToBoolean(ConfigurationManager.AppSettings[Core.Config.cfgRoot + "https"] ?? "true");
+        internal static string[] JwtAudiences => ConfigurationManager.AppSettings[Common.Config.cfgRoot + "jwtaudiences"]?.Split(";".ToCharArray(), StringSplitOptions.RemoveEmptyEntries).Select(t => t.Trim()).ToArray();
+        internal static bool Https => Convert.ToBoolean(ConfigurationManager.AppSettings[Common.Config.cfgRoot + "https"] ?? "true");
     }
 
     internal static class Extensions

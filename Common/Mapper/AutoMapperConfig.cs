@@ -2,7 +2,7 @@
 using System;
 using System.Linq;
 
-namespace Alma.Core.Mapper
+namespace Alma.Common.Mapper
 {
     static class AutoMapperConfig
     {

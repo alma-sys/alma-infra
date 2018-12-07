@@ -1,23 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 
-namespace Alma.Core
+namespace Alma.Common
 {
     /// <summary>
-    /// Classe de exceção de validação de domínio. 
-    /// A validação deve ser lançada pelo contexto de domínio.
+    /// Validation exception class to be thrown from the domain context.
     /// </summary>
-    public abstract class ValidacaoException : ApplicationException
+    public abstract class ValidationException : ApplicationException
     {
-        public ValidacaoException(string message)
+        public ValidationException(string message)
             : this(message, null)
         { }
-        public ValidacaoException(IDictionary<string, string> errors)
+        public ValidationException(IDictionary<string, string> errors)
             : this(null, errors)
         { }
 
-        public ValidacaoException(string message, IDictionary<string, string> errors)
+        public ValidationException(string message, IDictionary<string, string> errors)
             : base(GetDefaultMessage(message, errors))
         {
             this.Errors = new ReadOnlyDictionary<string, string>(errors ?? new Dictionary<string, string>());
@@ -27,8 +27,8 @@ namespace Alma.Core
         {
             if (!string.IsNullOrWhiteSpace(message))
                 return message;
-            //else if (errors != null && errors.Count == 1)
-            //    return errors.Values.First();
+            else if (errors != null && errors.Count == 1)
+                return errors.Values.First();
             else
                 return null;
         }

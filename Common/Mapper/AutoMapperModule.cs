@@ -1,7 +1,7 @@
 ﻿using Autofac;
 using AutoMapper;
 
-namespace Alma.Core.Mapper
+namespace Alma.Common.Mapper
 {
     public class AutoMapperModule : Module
     {

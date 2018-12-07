@@ -1,4 +1,4 @@
-﻿using Alma.Core;
+﻿using Alma.Common;
 using Alma.Exemplo.Dominio.Entidades;
 using System.Collections.Generic;
 

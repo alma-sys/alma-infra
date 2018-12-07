@@ -1,4 +1,4 @@
-﻿using Alma.Core.Mapper;
+﻿using Alma.Common.Mapper;
 using Alma.Exemplo.Aplicativo.UsuarioModule.Dto;
 using Alma.Exemplo.Dominio.Entidades;
 using AutoMapper;

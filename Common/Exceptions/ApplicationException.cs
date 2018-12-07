@@ -1,4 +1,4 @@
-﻿namespace Alma.Core
+﻿namespace Alma.Common
 {
 #if NETSTANDARD1_6
     public class ApplicationException : System.Exception

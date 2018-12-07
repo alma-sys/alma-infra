@@ -1,4 +1,4 @@
-﻿using Alma.Core;
+﻿using Alma.Common;
 using Alma.Dominio;
 using Alma.Exemplo.Dominio.Entidades.ValueObjects;
 using System;

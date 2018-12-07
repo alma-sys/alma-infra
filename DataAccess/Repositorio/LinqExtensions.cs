@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using Alma.Core;
-using Alma.Core.Dto;
+using Alma.Common;
+using Alma.Common.Dto;
 
 namespace Alma.Dados
 {

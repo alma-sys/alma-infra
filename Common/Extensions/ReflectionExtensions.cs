@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Alma.Core
+namespace Alma.Common
 {
     static class ReflectionExtensions
     {

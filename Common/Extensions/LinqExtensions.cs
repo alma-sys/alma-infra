@@ -1,8 +1,8 @@
-﻿using Alma.Core.Dto;
+﻿using Alma.Common.Dto;
 using System;
 using System.Linq;
 
-namespace Alma.Core
+namespace Alma.Common
 {
     public static class LinqExtensions
     {

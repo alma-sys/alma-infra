@@ -1,10 +1,11 @@
-﻿using Alma.Core.Dto;
+﻿using Alma.Common.Dto;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 
-namespace Alma.Core
+namespace Alma.Common
 {
     public static class EnumExtensions
     {
@@ -20,9 +21,14 @@ namespace Alma.Core
         public static CodeName ToCodeName(this Enum enumeration)
         {
             return new CodeName(
-                code: enumeration.ToString(),
+                code: enumeration.ToCode(),
                 name: enumeration.ToDescription()
             );
+        }
+
+        public static CodeDescription ToCodeDescription(this Enum enumeration)
+        {
+            return new CodeDescription(enumeration.ToCode(), enumeration.ToDescription());
         }
 
         public static IIdName ToIdName(this Enum enumeration)
@@ -33,10 +39,20 @@ namespace Alma.Core
             );
         }
 
-        public static CodeDescription ToCodeDescription(this Enum enumeration)
+        public static string ToCode(this Enum enumeration)
         {
-            return new CodeDescription(enumeration.ToString(), enumeration.ToDescription());
+            var attributes = (AmbientValueAttribute[])enumeration
+                .GetType().GetTypeInfo()
+                .GetField(enumeration.ToString())
+                .GetCustomAttributes(typeof(AmbientValueAttribute), false);
+
+            return (attributes.Length > 0)
+                ? attributes[0].Value?.ToString()
+                : enumeration.ToString();
         }
+
+
+
 
         public static string ToDescription(this Enum enumeration, string valueWhenEmpty)
         {
@@ -95,7 +111,7 @@ namespace Alma.Core
                 if (null != attrs && attrs.Count() > 0) return attrs.ToString();
             }
 
-            return string.Empty;
+            return null;
         }
 
         public static IList<Enum> GetValues(Type enumType)

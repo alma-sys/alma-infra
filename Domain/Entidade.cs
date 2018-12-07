@@ -1,4 +1,4 @@
-﻿using Alma.Core;
+﻿using Alma.Common;
 
 namespace Alma.Dominio
 {

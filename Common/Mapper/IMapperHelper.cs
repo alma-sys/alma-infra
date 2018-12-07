@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 
-namespace Alma.Core.Mapper
+namespace Alma.Common.Mapper
 {
     public interface IMapperHelper
     {

@@ -1,4 +1,4 @@
-﻿namespace Alma.Core
+﻿namespace Alma.Common
 {
     public interface IIdName : IId, IName
     {

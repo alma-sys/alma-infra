@@ -41,7 +41,7 @@ namespace Alma.Dados
     public static class Config
     {
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
-        public const string cfgOrm = Core.Config.cfgRoot + "orm";
+        public const string cfgOrm = Common.Config.cfgRoot + "orm";
         public const string cfgExecutarMigracoes = cfgOrm + ":executar-migracoes";
         public const string cfgPrepareCommands = cfgOrm + ":prepare-commands";
         public const string cfgLazy = cfgOrm + ":lazy";
@@ -154,7 +154,7 @@ namespace Alma.Dados
         /// <summary>
         /// Lista de assemblies que foram mapeadas para a plataforma.
         /// </summary>
-        public static IDictionary<string, Assembly[]> AssembliesMapeadas => Core.Config.AssembliesMapeadas;
+        public static IDictionary<string, Assembly[]> AssembliesMapeadas => Common.Config.AssembliesMapeadas;
 
         /// <summary>
         /// Retorna se o lazy load está ativo.

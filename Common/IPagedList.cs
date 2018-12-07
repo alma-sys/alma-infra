@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Alma.Core
+namespace Alma.Common
 {
     public interface IPagedList<T> : IPagedList where T : class
     {

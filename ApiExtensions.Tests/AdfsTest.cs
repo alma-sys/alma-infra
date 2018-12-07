@@ -4,7 +4,7 @@ using System;
 using System.Threading;
 using Xunit;
 
-namespace Alma.Core.Security.Tests
+namespace Alma.Common.Security.Tests
 {
     public class AdfsTest
     {

@@ -5,7 +5,7 @@ using System.Configuration;
 using System.Linq;
 using System.Reflection;
 
-namespace Alma.Core
+namespace Alma.Common
 {
     public static class Config
     {
