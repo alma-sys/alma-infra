@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Alma.Common.Extensions
+namespace Alma.Common
 {
     public static class DictionaryExtensions
     {
