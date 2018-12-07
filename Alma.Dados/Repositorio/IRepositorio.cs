@@ -17,8 +17,13 @@ namespace Alma.Dados
     {
         TEntity Get(object primaryKey);
         TEntity GetSessionless(object primaryKey);
-        IList<T> ExecuteNamedQuery<T>(string queryName, IDictionary<string, object> parameters = null);
+        IList<TEntity> ExecuteNamedQuery(string queryName, IDictionary<string, object> parameters = null);
+        Task<IList<TEntity>> ExecuteNamedQueryAsync(string queryName, IDictionary<string, object> parameters = null);
         T ExecuteNamedQueryScalar<T>(string queryName, IDictionary<string, object> parameters = null);
+        IList<TEntity> ExecuteCustomSql(string sql, IDictionary<string, object> parameters = null);
+        T ExecuteCustomSqlScalar<T>(string sql, IDictionary<string, object> parameters = null);
+        Task<IList<TEntity>> ExecuteCustomSqlAsync(string sql, IDictionary<string, object> parameters = null);
+        Task<T> ExecuteCustomSqlScalarAsync<T>(string sql, IDictionary<string, object> parameters = null);
         IList<TEntity> List<TProperty>(Expression<Func<TEntity, TProperty>> orderProperty, bool orderAsc = true);
         //ISession GetSession();
         void Evict(TEntity entidade);
@@ -48,6 +53,7 @@ namespace Alma.Dados
 
 
         void ExecuteProcedure(string procName, IDictionary<string, object> parameters = null);
+        Task ExecuteProcedureAsync(string procName, IDictionary<string, object> parameters = null);
         IDbTransaction GetTransaction();
 
         IList<TEntity> UnProxy(IList<TEntity> list);

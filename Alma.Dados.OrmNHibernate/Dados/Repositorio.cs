@@ -128,8 +128,12 @@ namespace Alma.Dados.OrmNHibernate
                 return list.Distinct().SingleOrDefault();
             }
         }
+        public IList<TEntity> ExecuteNamedQuery(string queryName, IDictionary<string, object> parameters = null)
+        {
+            return ExecuteNamedQueryAsync(queryName, parameters).GetAwaiter().GetResult();
+        }
 
-        public IList<T> ExecuteNamedQuery<T>(string queryName, IDictionary<string, object> parameters = null)
+        public async Task<IList<TEntity>> ExecuteNamedQueryAsync(string queryName, IDictionary<string, object> parameters = null)
         {
             var query = Session.GetNamedQuery(queryName);
 
@@ -141,11 +145,15 @@ namespace Alma.Dados.OrmNHibernate
                 }
             }
 
-            return query.List<T>();
+            return await query.ListAsync<TEntity>();
         }
 
         public T ExecuteNamedQueryScalar<T>(string queryName, IDictionary<string, object> parameters = null)
         {
+            return ExecuteNamedQueryScalarAsync<T>(queryName, parameters).GetAwaiter().GetResult();
+        }
+        public async Task<T> ExecuteNamedQueryScalarAsync<T>(string queryName, IDictionary<string, object> parameters = null)
+        {
             var query = Session.GetNamedQuery(queryName);
 
             if (parameters != null)
@@ -156,7 +164,54 @@ namespace Alma.Dados.OrmNHibernate
                 }
             }
 
-            return (T)System.Convert.ChangeType(query.UniqueResult(), typeof(T));
+            return (T)System.Convert.ChangeType(await query.UniqueResultAsync(), typeof(T));
+        }
+
+        public IList<TEntity> ExecuteCustomSql(string sql, IDictionary<string, object> parameters = null)
+        {
+            return ExecuteCustomSqlAsync(sql, parameters).GetAwaiter().GetResult();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sql"></param>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        public async Task<IList<TEntity>> ExecuteCustomSqlAsync(string sql, IDictionary<string, object> parameters = null)
+        {
+            IQuery query = Session
+                .CreateSQLQuery(sql)
+                .AddEntity("entity", typeof(TEntity));
+
+            if (parameters != null)
+            {
+                foreach (var item in parameters)
+                {
+                    query = query.SetParameter(item.Key, item.Value);
+                }
+            }
+
+            return await query.ListAsync<TEntity>();
+        }
+        public T ExecuteCustomSqlScalar<T>(string sql, IDictionary<string, object> parameters = null)
+        {
+            return ExecuteCustomSqlScalarAsync<T>(sql, parameters).GetAwaiter().GetResult();
+        }
+        public async Task<T> ExecuteCustomSqlScalarAsync<T>(string sql, IDictionary<string, object> parameters = null)
+        {
+            var query = Session
+                .CreateSQLQuery(sql)
+                .SetResultTransformer(NHibernate.Transform.Transformers.AliasToBean<T>());
+            if (parameters != null)
+            {
+                foreach (var item in parameters)
+                {
+                    query = query.SetParameter(item.Key, item.Value);
+                }
+            }
+
+            return (T)System.Convert.ChangeType(await query.UniqueResultAsync(), typeof(T));
         }
 
         public IList<TEntity> List<TProperty>(Expression<Func<TEntity, TProperty>> property, bool orderAsc = true)
@@ -396,6 +451,10 @@ namespace Alma.Dados.OrmNHibernate
 
         public void ExecuteProcedure(string procName, IDictionary<string, object> parameters = null)
         {
+            ExecuteProcedureAsync(procName, parameters).GetAwaiter().GetResult();
+        }
+        public async Task ExecuteProcedureAsync(string procName, IDictionary<string, object> parameters = null)
+        {
             var session = GetSession();
             if (session.Connection != null && session.Connection.State == ConnectionState.Open)
             {
@@ -429,7 +488,7 @@ namespace Alma.Dados.OrmNHibernate
                     foreach (var key in parameters.Keys)
                         query.SetParameter(key, parameters[key]);
 
-                var result = query.ExecuteUpdate();
+                var result = await query.ExecuteUpdateAsync();
             }
             else
                 throw new InvalidOperationException("Connection is invalid or closed.");

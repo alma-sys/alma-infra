@@ -4,6 +4,7 @@ using Microsoft.DotNet.PlatformAbstractions;
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Net;
 using System.Net.Mail;
 using System.Threading.Tasks;
 
@@ -158,6 +159,15 @@ namespace Alma.ApiExtensions.Log
                         mail.Subject = string.Format("{0} - {1} | {2} de {3} emails por dia", tag, erroTratado ? "Log" : "Exception", emailEnviados, totalEmails);
 
                         var smtp = new SmtpClient();
+
+#if NETSTANDARD
+                        smtp.Host = SmtpHost;
+                        smtp.Port = SmtpPort;
+                        smtp.EnableSsl = SmtpSsl;
+                        smtp.UseDefaultCredentials = false;
+                        smtp.Credentials = new NetworkCredential(SmtpUserName, SmtpPassword);
+#endif
+
                         smtp.Send(mail);
                     }
                     catch (Exception ex)
@@ -171,11 +181,19 @@ namespace Alma.ApiExtensions.Log
 
         private static void SalvarArquivo(string text, bool erroTratado, string tag)
         {
+            if (string.IsNullOrWhiteSpace(text))
+                return;
+
             if (string.IsNullOrEmpty(tag))
                 tag = "erro";
 
 
-            var fileName = DateTime.Now.ToString("yyyy-MM-dd.HH-mm-ss-fff_") + tag + ".html";
+            var fileName = DateTime.Now.ToString("yyyy-MM-dd.HH-mm-ss-fff_") + tag;
+            if (text.Contains("<html"))
+                fileName += ".html";
+            else
+                fileName += ".log";
+
             if (erroTratado)
                 fileName = System.IO.Path.Combine(CaminhoLog, fileName);
             else
@@ -209,5 +227,10 @@ namespace Alma.ApiExtensions.Log
             //throw new NotImplementedException();
         }
 
+        private static string SmtpHost => System.Configuration.ConfigurationManager.AppSettings[Core.Config.cfgRoot + "smtp"];
+        private static int SmtpPort => Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings[Core.Config.cfgRoot + "smtp:port"]);
+        private static bool SmtpSsl => Convert.ToBoolean(System.Configuration.ConfigurationManager.AppSettings[Core.Config.cfgRoot + "smtp:ssl"]);
+        private static string SmtpUserName => System.Configuration.ConfigurationManager.AppSettings[Core.Config.cfgRoot + "smtp:userName"];
+        private static string SmtpPassword => System.Configuration.ConfigurationManager.AppSettings[Core.Config.cfgRoot + "smtp:password"];
     }
 }
