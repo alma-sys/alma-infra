@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>Alma.Aplicativo</AssemblyName>
+    <RootNamespace>Alma.Aplicativo</RootNamespace>
+    <PackageId>Alma.Application</PackageId>
+    
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+    <DisableImplicitAssetTargetFallback>true</DisableImplicitAssetTargetFallback>
+
+    
+    <Description>Implementa uma base para a camada de orquestração da aplicação.</Description>
+    <Authors>Alma.Application</Authors>
+    <Company>Alma.Application</Company>
+    <Product>Alma.Application</Product>
+    <Copyright>$(Copyright)</Copyright>
+    <PackageLicenseUrl>https://opensource.org/licenses/MIT</PackageLicenseUrl>
+    <PackageProjectUrl>https://$(URL)</PackageProjectUrl>
+    <PackageIconUrl>https://$(URLICON)</PackageIconUrl>
+    <Configuration>$(Configuration)</Configuration>
+    <RepositoryUrl></RepositoryUrl>
+    <RepositoryType></RepositoryType>
+
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj" />
+  </ItemGroup>
+</Project>

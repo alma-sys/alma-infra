@@ -1,0 +1,37 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>Alma.Dados.OrmEntityFramework</AssemblyName>
+    <RootNamespace>Alma.Dados.OrmEntityFramework</RootNamespace>
+    <PackageId>Alma.Dados.OrmEntityFramework</PackageId>
+
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+    <DisableImplicitAssetTargetFallback>true</DisableImplicitAssetTargetFallback>
+
+    
+    <Description>Implementa acesso a dados via base relacional e ORM EntityFramework.</Description>
+    <Authors>$(Authors)</Authors>
+    <Company>$(Company)</Company>
+    <Product>$(Product)</Product>
+    <Copyright>$(Copyright)</Copyright>
+    <PackageLicenseUrl>https://$(URL)/license</PackageLicenseUrl>
+    <PackageProjectUrl>https://$(URL)</PackageProjectUrl>
+    <PackageIconUrl>https://$(URLICON)</PackageIconUrl>
+    <Configuration>$(Configuration)</Configuration>
+    <RepositoryUrl></RepositoryUrl>
+    <RepositoryType></RepositoryType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.0.1" />
+    <PackageReference Include="MiniProfiler.Shared" Version="4.0.119" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj" />
+    <ProjectReference Include="..\DataAccess\DataAccess.csproj" />
+    <ProjectReference Include="..\Domain\Domain.csproj" />
+  </ItemGroup>
+</Project>

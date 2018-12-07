@@ -1,0 +1,46 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>Alma.ApiExtensions</AssemblyName>
+    <RootNamespace>Alma.ApiExtensions</RootNamespace>
+    <PackageId>Alma.ApiExtensions</PackageId>
+
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+    <DisableImplicitAssetTargetFallback>true</DisableImplicitAssetTargetFallback>
+
+    
+    <Description>Implementa uma base para projetos Web Api e MVC em AspNetCore.</Description>
+    <Authors>$(Authors)</Authors>
+    <Company>$(Company)</Company>
+    <Product>$(Product)</Product>
+    <Copyright>$(Copyright)</Copyright>
+    <PackageLicenseUrl>https://$(URL)/license</PackageLicenseUrl>
+    <PackageProjectUrl>https://$(URL)</PackageProjectUrl>
+    <PackageIconUrl>https://$(URLICON)</PackageIconUrl>
+    <Configuration>$(Configuration)</Configuration>
+    <RepositoryUrl></RepositoryUrl>
+    <RepositoryType></RepositoryType>
+
+  </PropertyGroup>
+
+  
+  <ItemGroup>
+    <PackageReference Include="HtmlAgilityPack" Version="1.8.4" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication" Version="2.0.4" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="2.0.4" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Formatters.Json" Version="2.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor" Version="2.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Razor" Version="2.0.1" />
+    <PackageReference Include="Microsoft.IdentityModel.Tokens.Saml" Version="5.2.4" />
+    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.2.4" />
+  </ItemGroup>
+
+  
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj" />
+  </ItemGroup>
+</Project>
