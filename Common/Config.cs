@@ -11,40 +11,44 @@ namespace Alma.Common
     {
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
         public const string cfgRoot = "alma:";
-        public const string cfgAssemblies = cfgRoot + "mapeamentoentidades";
-        public const string cfgConnection = cfgRoot + "conexao";
+        public const string cfgAssemblies = cfgRoot + "assemblies";
+        public const string cfgConnection = cfgRoot + "connection";
 #pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
 
+        private const string commonAssembly = "Alma.Common";
+        private const string dataAssembly = "Alma.DataAccess";
 
-        private static Dictionary<string, Assembly[]> ListarAssembliesDeMapeamento()
+        private static Dictionary<string, Assembly[]> ListMappedAssemblies()
         {
-            var maps = new List<string>();
-            var cons = new List<string>();
+            var assemblies = new List<string>();
+            var connections = new List<string>();
             for (int i = 0; i <= 5; i++)
             {
                 var ass = ConfigurationManager.AppSettings[cfgAssemblies + (i == 0 ? "" : i.ToString())];
                 var cnn = ConfigurationManager.AppSettings[cfgConnection + (i == 0 ? "" : i.ToString())];
                 if (string.IsNullOrWhiteSpace(ass) || string.IsNullOrWhiteSpace(cnn))
                     continue;
-                maps.Add(ass);
-                cons.Add(cnn);
+                assemblies.Add(ass);
+                connections.Add(cnn);
             }
 
             var exMessage = $"Missing or invalid {cfgAssemblies} App Setting. Check your .config file. Valid values: semi-colon (;) separated assembly names that contains entities and mapping.";
             exMessage += $"Each {cfgAssemblies} must have a corresponding {cfgConnection}. Eg.: <add name=\"{cfgAssemblies}2\">, <add name=\"{cfgConnection}2\">";
-            if (maps.Count == 0)
+            if (assemblies.Count == 0)
                 throw new ConfigurationErrorsException(exMessage);
 
             var dict = new Dictionary<string, Assembly[]>();
 
-            for (var i = 0; i < cons.Count; i++)
+            for (var i = 0; i < connections.Count; i++)
             {
-                var ass = maps[i];
-                if (!ass.Contains("Alma.Core;")) //Colocando assemblies basicos para busca de modulos
-                    ass += ";Alma.Core;";
-                if (!ass.Contains("Alma.Dados;"))
-                    ass += ";Alma.Dados;";
-                //TODO: ver como colocar automaticamente o assembly do orm.
+                var ass = assemblies[i];
+
+                foreach (var basicAssembly in new[] { commonAssembly, dataAssembly })
+                {
+                    if (!ass.Contains($"{basicAssembly};")) // Injecting basic assemblies. 
+                        ass += $";{basicAssembly};";
+                }
+                //TODO: Find a way to automatically inject ORM assembly.
 
                 var list = new List<Assembly>();
                 foreach (var a in ass.Split(';'))
@@ -62,7 +66,7 @@ namespace Alma.Common
                         }
                     }
                 }
-                dict.Add(cons[i], list.ToArray());
+                dict.Add(connections[i], list.ToArray());
             }
 
             return dict;
@@ -74,12 +78,12 @@ namespace Alma.Common
         /// <summary>
         /// Lista de assemblies que foram mapeadas para a plataforma.
         /// </summary>
-        public static IDictionary<string, Assembly[]> AssembliesMapeadas
+        public static IDictionary<string, Assembly[]> MappedAssemblies
         {
             get
             {
                 if (_AssembliesCached == null)
-                    _AssembliesCached = ListarAssembliesDeMapeamento();
+                    _AssembliesCached = ListMappedAssemblies();
                 return _AssembliesCached;
             }
         }

@@ -22,7 +22,7 @@ namespace Alma.Dados
 
         protected override void Load(ContainerBuilder builder)
         {
-            var ass = Common.Config.AssembliesMapeadas.Values.SelectMany(x => x).ToArray();
+            var ass = Common.Config.MappedAssemblies.Values.SelectMany(x => x).ToArray();
 
             var reg = builder
                 .RegisterAssemblyTypes(ass)

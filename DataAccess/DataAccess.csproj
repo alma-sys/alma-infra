@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <AssemblyName>Alma.Dados</AssemblyName>
-    <RootNamespace>Alma.Dados</RootNamespace>
+    <AssemblyName>Alma.DataAccess</AssemblyName>
+    <RootNamespace>Alma.DataAccess</RootNamespace>
     <PackageId>Alma.Dados</PackageId>
 
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>

@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <AssemblyName>Alma.Core</AssemblyName>
+    <AssemblyName>Alma.Common</AssemblyName>
     <RootNamespace>Alma.Core</RootNamespace>
     <PackageId>Alma.Core</PackageId>
     

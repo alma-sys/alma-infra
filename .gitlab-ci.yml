@@ -1,5 +1,5 @@
 variables:
-  SOLUTION: "Alma.Infra.sln"
+  SOLUTION: "alma-Infrastructure.sln"
   CONFIGURATION: "Release"
 
   MSBUILD: "15.0"
@@ -16,9 +16,9 @@ variables:
   NUGETREPOSITORY: "https://dev.almasistemas.com.br/nuget/alma"
 
   AUTHORS: "Marcos Junior and Alex Duraes"
-  COMPANY: "Alma Sistemas"
-  PRODUCT: "Alma Infrastructure"
-  COPYRIGHT: "Copyright (c) Alma Sistemas"
+  COMPANY: "Marcos Junior and Alex Duraes"
+  PRODUCT: "Common Infrastructure"
+  COPYRIGHT: "Copyright (c) Marcos Junior and Alex Duraes"
   URL: "dev.almasistemas.com.br"
   URLICON: "dev.almasistemas.com.br/gitlab/uploads/appearance/header_logo/1/ghost-icon.png"
 

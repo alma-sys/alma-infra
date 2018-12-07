@@ -154,7 +154,7 @@ namespace Alma.Dados
         /// <summary>
         /// Lista de assemblies que foram mapeadas para a plataforma.
         /// </summary>
-        public static IDictionary<string, Assembly[]> AssembliesMapeadas => Common.Config.AssembliesMapeadas;
+        public static IDictionary<string, Assembly[]> AssembliesMapeadas => Common.Config.MappedAssemblies;
 
         /// <summary>
         /// Retorna se o lazy load está ativo.

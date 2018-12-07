@@ -15,7 +15,7 @@ namespace Alma.Exemplo.Api
 
             var assembly = typeof(DependencyResolverConfig).Assembly;
 
-            builder.RegisterAssemblyModules(Alma.Common.Config.AssembliesMapeadas.SelectMany(x => x.Value).ToArray());
+            builder.RegisterAssemblyModules(Alma.Common.Config.MappedAssemblies.SelectMany(x => x.Value).ToArray());
 
             builder.RegisterModule<Alma.Dados.MongoMapping.MongoModule>();
 

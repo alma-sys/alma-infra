@@ -8,7 +8,7 @@ namespace Alma.Dominio.Events
     {
         protected override void Load(ContainerBuilder builder)
         {
-            var assemblies = Common.Config.AssembliesMapeadas.Values.SelectMany(x => x).ToArray();
+            var assemblies = Common.Config.MappedAssemblies.Values.SelectMany(x => x).ToArray();
 
             var handlerType = typeof(IEventSubscriber<>);
 
