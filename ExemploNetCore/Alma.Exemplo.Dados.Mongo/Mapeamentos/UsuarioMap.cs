@@ -13,7 +13,7 @@ namespace Alma.Exemplo.Dados.Mongo.Mapeamentos
             map.MapMember(x => x.PersonUId)
                 .SetIsRequired(true);
 
-            map.MapMember(x => x.Nome)
+            map.MapMember(x => x.Name)
                 .SetIsRequired(true);
 
             map.MapMember(x => x.Sobrenome)

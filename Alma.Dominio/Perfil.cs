@@ -5,7 +5,7 @@ using Alma.Core;
 
 namespace Alma.Dominio
 {
-    public class Perfil : Entidade, IIdNome
+    public class Perfil : Entidade, IIdName
     {
         protected Perfil() { }
         public Perfil(string nome, string descricao, bool ativo = true)
@@ -16,7 +16,7 @@ namespace Alma.Dominio
             this.DefinirDescricao(descricao);
         }
 
-        public virtual string Nome { get; protected set; }
+        public virtual string Name { get; protected set; }
         public virtual string Descricao { get; protected set; }
         public virtual bool Ativo { get; protected set; }
         public virtual bool Privado { get; protected set; }
@@ -74,7 +74,7 @@ namespace Alma.Dominio
             if (nome.Length > tamanho)
                 throw new ArgumentException($"Nome deve ter no máximo {tamanho} caracteres.");
 
-            this.Nome = nome;
+            this.Name = nome;
         }
 
         public virtual void DefinirDescricao(string descricao)

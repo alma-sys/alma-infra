@@ -48,7 +48,7 @@ namespace Alma.Exemplo.Dados.Sql.Repositorios
             return query.ToList();
         }
 
-        public IListaPaginada<Usuario> Consultar(string termo = null, int pagina = 1, int tamanhoPagina = 10)
+        public IPagedList<Usuario> Consultar(string termo = null, int pagina = 1, int tamanhoPagina = 10)
         {
             var query = this.repositorio.AsQueryable();
 
@@ -56,14 +56,14 @@ namespace Alma.Exemplo.Dados.Sql.Repositorios
             {
                 termo = termo.ToUpper();
                 query = query.Where(g =>
-                                        g.Nome.ToUpper().Contains(termo)
+                                        g.Name.ToUpper().Contains(termo)
                                      || g.Sobrenome.ToUpper().Contains(termo)
                                      || g.Telefone.ToUpper().Contains(termo)
                                      || g.Email.Endereco.ToUpper().Contains(termo)
                                      || g.DomainUser.ToUpper().Contains(termo));
             }
 
-            query = query.OrderBy(x => x.Nome);
+            query = query.OrderBy(x => x.Name);
 
             var lista = query.ParaListaPaginada(pagina, tamanhoPagina);
             return lista;

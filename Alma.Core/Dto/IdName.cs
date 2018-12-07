@@ -1,32 +1,32 @@
 ﻿namespace Alma.Core.Dto
 {
-    public class IdNome : IIdNome
+    public class IdName : IIdName
     {
-        public IdNome() { }
+        public IdName() { }
 
-        public IdNome(long id, string nome) : this()
+        public IdName(long id, string name) : this()
         {
             this.Id = id;
-            this.Nome = nome;
+            this.Name = name;
         }
 
-        public IdNome(IIdNome src) : this(src.Id, src.Nome) { }
+        public IdName(IIdName src) : this(src.Id, src.Name) { }
 
         public long Id { get; set; }
 
-        public string Nome { get; set; }
+        public string Name { get; set; }
 
         public override string ToString()
         {
-            return Nome;
+            return Name;
         }
 
         public override bool Equals(object obj)
         {
-            return Equals(obj as IdNome);
+            return Equals(obj as IdName);
         }
 
-        public virtual bool Equals(IdNome obj)
+        public virtual bool Equals(IdName obj)
         {
             return obj != null && string.Equals(obj.Id, Id);
         }

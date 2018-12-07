@@ -19,7 +19,7 @@ namespace Alma.Exemplo.Dados.Mongo.Mapeamentos
                 map.NotNullable(true);
             });
 
-            Property(x => x.Nome, map =>
+            Property(x => x.Name, map =>
             {
                 map.NotNullable(true);
                 map.Length(100);

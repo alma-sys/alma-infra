@@ -35,10 +35,10 @@ namespace Alma.Dominio
 
         public override string ToString()
         {
-            if (typeof(INome).IsAssignableFrom(this.GetType()))
-                return ((INome)this).Nome;
-            else if (typeof(IDescricao).IsAssignableFrom(this.GetType()))
-                return ((IDescricao)this).Descricao;
+            if (typeof(IName).IsAssignableFrom(this.GetType()))
+                return ((IName)this).Name;
+            else if (typeof(IDescription).IsAssignableFrom(this.GetType()))
+                return ((IDescription)this).Description;
             else
                 return $"{base.ToString()}_{GetHashCode()}";
         }

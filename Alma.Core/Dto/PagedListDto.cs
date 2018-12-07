@@ -1,14 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using Alma.Core;
 
-namespace Alma.Dados
+namespace Alma.Core.Dto
 {
-    class ListaPaginada<T> : IPagedList<T> where T : class
+    class PagedListDto<T> : IPagedList<T> where T : class
     {
         public const int TamanhoPaginaPadrao = 10;
 
-        public ListaPaginada(int pagina, long totalItens, IList<T> lista, int tamanhoPagina = TamanhoPaginaPadrao)
+        public PagedListDto(int pagina, long totalItens, IList<T> lista, int tamanhoPagina = TamanhoPaginaPadrao)
         {
             this.CurrentPage = pagina;
             this.PageSize = tamanhoPagina;

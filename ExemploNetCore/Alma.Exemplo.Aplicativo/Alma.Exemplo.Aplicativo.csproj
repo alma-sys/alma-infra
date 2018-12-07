@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Alma.Aplicativo\Alma.Aplicativo.csproj" />
+    <ProjectReference Include="..\..\Alma.Aplicativo\Alma.Application.csproj" />
     <ProjectReference Include="..\..\Alma.Core\Alma.Core.csproj" />
     <ProjectReference Include="..\Alma.Exemplo.Dominio\Alma.Exemplo.Dominio.csproj" />
   </ItemGroup>

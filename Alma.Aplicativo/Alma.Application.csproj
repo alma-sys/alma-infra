@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>Alma.Aplicativo</AssemblyName>
     <RootNamespace>Alma.Aplicativo</RootNamespace>
-    <PackageId>Alma.Aplicativo</PackageId>
+    <PackageId>Alma.Application</PackageId>
     
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
@@ -12,11 +12,11 @@
 
     
     <Description>Implementa uma base para a camada de orquestração da aplicação.</Description>
-    <Authors>$(Authors)</Authors>
-    <Company>$(Company)</Company>
-    <Product>$(Product)</Product>
+    <Authors>Alma.Application</Authors>
+    <Company>Alma.Application</Company>
+    <Product>Alma.Application</Product>
     <Copyright>$(Copyright)</Copyright>
-    <PackageLicenseUrl>https://$(URL)/license</PackageLicenseUrl>
+    <PackageLicenseUrl>https://opensource.org/licenses/MIT</PackageLicenseUrl>
     <PackageProjectUrl>https://$(URL)</PackageProjectUrl>
     <PackageIconUrl>https://$(URLICON)</PackageIconUrl>
     <Configuration>$(Configuration)</Configuration>

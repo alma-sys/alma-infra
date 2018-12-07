@@ -16,7 +16,7 @@ namespace Alma.Exemplo.Dados.Mongo.Mapeamentos
             map.MapMember(x => x.Descricao)
                 .SetIsRequired(false);
 
-            map.MapMember(x => x.Nome)
+            map.MapMember(x => x.Name)
                 .SetIsRequired(true);
 
             map.MapListAsRefs(x => x.Permissoes, "_permissoes", cm => cm

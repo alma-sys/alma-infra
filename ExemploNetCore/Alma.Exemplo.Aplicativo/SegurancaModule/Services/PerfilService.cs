@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace Alma.Exemplo.Aplicativo.SegurancaModule.Services
 {
-    class PerfilService : Alma.Aplicativo.ServiceBase, IPerfilService
+    class PerfilService : Alma.Application.ServiceBase, IPerfilService
     {
         private IMapper mapper;
         private IRepositorioDePerfil repositorio;

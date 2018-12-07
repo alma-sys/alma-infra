@@ -13,7 +13,7 @@ namespace Alma.Exemplo.Dominio.Repositorios
 
         Usuario Salvar(Usuario usuario);
         IList<Usuario> Listar();
-        IListaPaginada<Usuario> Consultar(string termo = null, int pagina = 1, int tamanhoPagina = 10);
+        IPagedList<Usuario> Consultar(string termo = null, int pagina = 1, int tamanhoPagina = 10);
 
     }
 }

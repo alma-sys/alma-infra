@@ -52,17 +52,17 @@ namespace Alma.ApiExtensions.Serializadores
             var writer = new StringWriter(sb);
             serializer.Formatting = formatado ? Formatting.Indented : Formatting.None;
 
-            var lista = new List<IIdNome>();
+            var lista = new List<IIdName>();
 
             foreach (var item in Enum.GetValues(enumerador))
             {
-                lista.Add(((Enum)item).ToIdNome());
+                lista.Add(((Enum)item).ToIdName());
             }
 
             if (orderById)
                 lista = lista.OrderBy(t => t.Id).ToList();
             else
-                lista = lista.OrderBy(t => t.Nome).ToList();
+                lista = lista.OrderBy(t => t.Name).ToList();
 
             serializer.Serialize(writer, lista);
 
@@ -82,17 +82,17 @@ namespace Alma.ApiExtensions.Serializadores
             var writer = new StringWriter(sb);
             serializer.Formatting = formatado ? Formatting.Indented : Formatting.None;
 
-            var lista = new List<CodigoDescricao>();
+            var lista = new List<CodeDescription>();
 
             foreach (var item in Enum.GetValues(enumerador))
             {
-                lista.Add(((Enum)item).ToCodigoDescricao());
+                lista.Add(((Enum)item).ToCodeDescription());
             }
 
             if (orderByCodigo)
-                lista = lista.OrderBy(t => t.Codigo).ToList();
+                lista = lista.OrderBy(t => t.Code).ToList();
             else
-                lista = lista.OrderBy(t => t.Descricao).ToList();
+                lista = lista.OrderBy(t => t.Description).ToList();
 
             serializer.Serialize(writer, lista);
 

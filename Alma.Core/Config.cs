@@ -11,8 +11,8 @@ namespace Alma.Core
     {
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
         public const string cfgRoot = "alma:";
-        public const string cfgMapeamentoEntidades = cfgRoot + "mapeamentoentidades";
-        public const string cfgConexao = cfgRoot + "conexao";
+        public const string cfgAssemblies = cfgRoot + "mapeamentoentidades";
+        public const string cfgConnection = cfgRoot + "conexao";
 #pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
 
 
@@ -22,16 +22,16 @@ namespace Alma.Core
             var cons = new List<string>();
             for (int i = 0; i <= 5; i++)
             {
-                var ass = ConfigurationManager.AppSettings[cfgMapeamentoEntidades + (i == 0 ? "" : i.ToString())];
-                var cnn = ConfigurationManager.AppSettings[cfgConexao + (i == 0 ? "" : i.ToString())];
+                var ass = ConfigurationManager.AppSettings[cfgAssemblies + (i == 0 ? "" : i.ToString())];
+                var cnn = ConfigurationManager.AppSettings[cfgConnection + (i == 0 ? "" : i.ToString())];
                 if (string.IsNullOrWhiteSpace(ass) || string.IsNullOrWhiteSpace(cnn))
                     continue;
                 maps.Add(ass);
                 cons.Add(cnn);
             }
 
-            var exMessage = $"Missing or invalid {cfgMapeamentoEntidades} App Setting. Check your .config file. Valid values: semi-colon (;) separated assembly names that contains entities and mapping.";
-            exMessage += $"Each {cfgMapeamentoEntidades} must have a corresponding {cfgConexao}. Eg.: <add name=\"{cfgMapeamentoEntidades}2\">, <add name=\"{cfgConexao}2\">";
+            var exMessage = $"Missing or invalid {cfgAssemblies} App Setting. Check your .config file. Valid values: semi-colon (;) separated assembly names that contains entities and mapping.";
+            exMessage += $"Each {cfgAssemblies} must have a corresponding {cfgConnection}. Eg.: <add name=\"{cfgAssemblies}2\">, <add name=\"{cfgConnection}2\">";
             if (maps.Count == 0)
                 throw new ConfigurationErrorsException(exMessage);
 

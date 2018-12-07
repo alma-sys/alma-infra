@@ -50,7 +50,7 @@ namespace Alma.Dados
         /// <param name="paginaAtual">1-based current page index</param>
         /// <param name="pageSize"></param>
         /// <returns></returns>
-        public static IListaPaginada<T> ParaListaPaginada<T>(this IQueryable<T> query, int paginaAtual, int tamanhoPagina = ListaPaginada<T>.TamanhoPaginaPadrao) where T : class
+        public static IPagedList<T> ParaListaPaginada<T>(this IQueryable<T> query, int paginaAtual, int tamanhoPagina = ListaPaginada<T>.TamanhoPaginaPadrao) where T : class
         {
             var recordCount = query.Count();
             IList<T> pageRecords;

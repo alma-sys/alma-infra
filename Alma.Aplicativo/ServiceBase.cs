@@ -1,4 +1,4 @@
-﻿namespace Alma.Aplicativo
+﻿namespace Alma.Application
 {
     public interface IServiceBase
     {

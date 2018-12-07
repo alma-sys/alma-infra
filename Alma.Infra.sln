@@ -16,19 +16,19 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Alma.Dados", "Alma.Dados\Al
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "5-Dados", "5-Dados", "{B8FB6536-D1F1-4713-A3C1-73979FC25F8D}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1-Core", "1-Core", "{B1F37A83-8858-46C9-BB78-0BB11F52E46F}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1-Common", "1-Common", "{B1F37A83-8858-46C9-BB78-0BB11F52E46F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4-Dominio", "4-Dominio", "{81703DA2-11D7-41B8-8238-354885A429FA}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Alma.Dominio", "Alma.Dominio\Alma.Dominio.csproj", "{02C52EF0-2524-41BD-B2B4-CBF81109C45D}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3-Aplicativo", "3-Aplicativo", "{DFADFD2F-711A-4B60-806D-9E7A2D6222F4}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3-Application", "3-Application", "{DFADFD2F-711A-4B60-806D-9E7A2D6222F4}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2-Api", "2-Api", "{1D93CB06-AFB7-4640-AE10-5EAB216FF286}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Alma.ApiExtensions", "Alma.ApiExtensions\Alma.ApiExtensions.csproj", "{1D44995C-D2A1-4587-84C5-1A036661A5D5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Alma.Aplicativo", "Alma.Aplicativo\Alma.Aplicativo.csproj", "{5B2A3FF5-F5E2-45E1-B7C7-D3F9AED3A857}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Alma.Application", "Alma.Aplicativo\Alma.Application.csproj", "{5B2A3FF5-F5E2-45E1-B7C7-D3F9AED3A857}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Alma.ApiExtensions.TestHelper", "Alma.ApiExtensions.TestHelper\Alma.ApiExtensions.TestHelper.csproj", "{1A541B05-2703-4C6B-976D-384D7F8B3334}"
 EndProject

@@ -3,19 +3,19 @@ using System;
 
 namespace Alma.Dominio
 {
-    public class Permissao : Entidade, IIdNome
+    public class Permissao : Entidade, IIdName
     {
         protected Permissao() { }
 
         public Permissao(string nome, string descricao, string chave, bool privado)
         {
-            this.Nome = nome;
+            this.Name = nome;
             this.Descricao = descricao;
             this.Chave = chave;
             this.Privado = privado;
         }
 
-        public virtual string Nome { get; protected set; }
+        public virtual string Name { get; protected set; }
         public virtual string Descricao { get; protected set; }
         public virtual string Chave { get; protected set; }
         public virtual bool Privado { get; protected set; }
@@ -28,7 +28,7 @@ namespace Alma.Dominio
             if (nome.Length > tamanho)
                 throw new ArgumentException($"Nome deve ter no máximo {tamanho} caracteres.");
 
-            this.Nome = nome;
+            this.Name = nome;
         }
         public virtual void DefinirDescricao(string descricao)
         {

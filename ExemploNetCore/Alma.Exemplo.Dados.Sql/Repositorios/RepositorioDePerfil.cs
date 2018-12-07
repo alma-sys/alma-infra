@@ -15,7 +15,7 @@ namespace Alma.Exemplo.Dados.Sql.Repositorios
 
         public Perfil ObterPorNome(string nome)
         {
-            var obj = repositorio.Where(x => x.Nome == nome).SingleOrDefault();
+            var obj = repositorio.Where(x => x.Name == nome).SingleOrDefault();
 
             return obj;
         }

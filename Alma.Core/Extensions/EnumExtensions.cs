@@ -8,35 +8,34 @@ namespace Alma.Core
 {
     public static class EnumExtensions
     {
-        public static IEnumerable<IIdNome> ToCodigoNomeFlags(this Enum enumeration)
+        public static IEnumerable<IIdName> ToCodeNameFlags(this Enum enumeration)
         {
             var valores = enumeration.GetFlags();
             foreach (var item in valores)
             {
-                yield return item.ToIdNome();
+                yield return item.ToIdName();
             }
         }
 
-        public static CodigoNome ToCodigoNome(this Enum enumeration)
+        public static CodeName ToCodeName(this Enum enumeration)
         {
-            return new CodigoNome(
-
-                codigo: enumeration.ToString(),
-                nome: enumeration.ToDescription()
+            return new CodeName(
+                code: enumeration.ToString(),
+                name: enumeration.ToDescription()
             );
         }
 
-        public static IIdNome ToIdNome(this Enum enumeration)
+        public static IIdName ToIdName(this Enum enumeration)
         {
-            return new IdNome(
-                id: enumeration.ToInt(),
-                nome: enumeration.ToDescription()
+            return new IdName(
+                id: enumeration.ToInt32(),
+                name: enumeration.ToDescription()
             );
         }
 
-        public static CodigoDescricao ToCodigoDescricao(this Enum enumeration)
+        public static CodeDescription ToCodeDescription(this Enum enumeration)
         {
-            return new CodigoDescricao(enumeration.ToString(), enumeration.ToDescription());
+            return new CodeDescription(enumeration.ToString(), enumeration.ToDescription());
         }
 
         public static string ToDescription(this Enum enumeration, string valueWhenEmpty)
@@ -61,7 +60,7 @@ namespace Alma.Core
             return val.ToDescription(string.Empty);
         }
 
-        public static int ToInt(this Enum val)
+        public static int ToInt32(this Enum val)
         {
             return Convert.ToInt32(val);
         }
@@ -78,7 +77,7 @@ namespace Alma.Core
 
             foreach (var item in flags)
             {
-                lista.Add(item.ToInt());
+                lista.Add(item.ToInt32());
             }
 
             return lista.ToArray();
@@ -160,7 +159,7 @@ namespace Alma.Core
                     return item;
             }
 
-            throw new Exception("The description is invalid");
+            throw new ArgumentOutOfRangeException("The description was not found");
         }
 
         // Flags
