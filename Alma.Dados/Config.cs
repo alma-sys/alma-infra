@@ -16,7 +16,8 @@ namespace Alma.Dados
     {
         NaoDefinido,
         NHibernate,
-        EntityFramework
+        EntityFramework,
+        MongoMapping
     }
 
     /// <summary>
@@ -29,7 +30,8 @@ namespace Alma.Dados
         Oracle,
         MySql,
         PostgreSql,
-        SqLite
+        SqLite,
+        MongoDB
     }
 #pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
 
@@ -41,9 +43,11 @@ namespace Alma.Dados
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
         public const string cfgOrm = Core.Config.cfgRoot + "orm";
         public const string cfgExecutarMigracoes = cfgOrm + ":executar-migracoes";
+        public const string cfgPrepareCommands = cfgOrm + ":prepare-commands";
         public const string cfgLazy = cfgOrm + ":lazy";
         public const string cfgIsolationLevel = cfgOrm + ":isolation-level";
         public const string cfgLog = cfgOrm + ":log";
+        public const string cfgMiniProfiler = cfgOrm + ":miniprofiler";
 #pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
 
         /// <summary>
@@ -87,6 +91,8 @@ namespace Alma.Dados
                 return DBMS.Oracle;
             else if (cn.ProviderName.ToLower().Contains("mysql"))
                 return DBMS.MySql;
+            else if (cn.ProviderName.ToLower().Contains("mongo"))
+                return DBMS.MongoDB;
             else
                 throw new NotImplementedException("Not implemented provider: " + cn.ProviderName);
 
@@ -109,8 +115,29 @@ namespace Alma.Dados
                 catch { }
                 Trace.WriteLine(valor, nameof(ExecutarMigracoes));
                 return valor;
-                }
             }
+        }
+
+
+        /// <summary>
+        /// Preparar comandos.
+        /// </summary>
+        public static bool PrepareCommands
+        {
+            get
+            {
+                bool valor = false;
+                try
+                {
+                    var opt = ConfigurationManager.AppSettings[cfgPrepareCommands];
+                    if (!string.IsNullOrWhiteSpace(opt))
+                        valor = Convert.ToBoolean(opt);
+                }
+                catch { }
+                Trace.WriteLine(valor, nameof(PrepareCommands));
+                return valor;
+            }
+        }
 
         /// <summary>
         /// Retorna se a configuração do oracle é Managed
@@ -187,8 +214,25 @@ namespace Alma.Dados
                 catch { }
                 Trace.WriteLine(valor, nameof(AtivarLog));
                 return valor;
-                }
             }
+        }
+
+        public static bool AtivarMiniProfiler
+        {
+            get
+            {
+                bool valor = false;
+                try
+                {
+                    var opt = ConfigurationManager.AppSettings[cfgMiniProfiler];
+                    if (!string.IsNullOrWhiteSpace(opt))
+                        valor = Convert.ToBoolean(opt);
+                }
+                catch { }
+                Trace.WriteLine(valor, nameof(AtivarMiniProfiler));
+                return valor;
+            }
+        }
 
         /// <summary>
         /// Resolver nome da conexão pelo tipo.

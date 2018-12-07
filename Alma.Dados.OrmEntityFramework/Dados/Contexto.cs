@@ -1,25 +1,26 @@
-﻿using System;
-using System.Data.Entity;
-using System.Data.Entity.ModelConfiguration.Conventions;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq;
 
 namespace Alma.Dados.OrmEntityFramework
 {
     class Contexto : DbContext, IContexto
     {
-        public Contexto(string nameOrConnectionString) : base(nameOrConnectionString)
+        public Contexto(string nameOrConnectionString) : base()
         {
-            base.Configuration.LazyLoadingEnabled = false;
-            base.Configuration.ValidateOnSaveEnabled = true;
-            base.Database.Log = new Action<string>(str => System.Diagnostics.Trace.Write(str, nameOrConnectionString));
-            if (!Config.ExecutarMigracoes)
-                Database.SetInitializer<Contexto>(null);
+
+            //base.Configuration.LazyLoadingEnabled = false;
+            //base.Configuration.ValidateOnSaveEnabled = true;
+            //base.Database.Log = new Action<string>(str => System.Diagnostics.Trace.Write(str, nameOrConnectionString));
+            //if (!Config.ExecutarMigracoes)
+            //Database.SetInitializer<Contexto>(null);
         }
 
         public void Delete(object instance)
         {
             if (instance != null)
-                Set(instance.GetType()).Remove(instance);
+                base.Remove(instance);
+            //Set(instance.GetType()).Remove(instance);
         }
 
         public void Flush()
@@ -50,7 +51,7 @@ namespace Alma.Dados.OrmEntityFramework
             }
         }
 
-        public void Update(object instance)
+        public new void Update(object instance)
         {
             if (instance != null)
             {
@@ -59,11 +60,13 @@ namespace Alma.Dados.OrmEntityFramework
             }
         }
 
-        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
-            foreach (var a in Config.AssembliesMapeadas.Values.SelectMany(x => x))
-                modelBuilder.Configurations.AddFromAssembly(a);
+            //modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
+            //foreach (var a in Config.AssembliesMapeadas.Values.SelectMany(x => x))
+            //    modelBuilder.Configurations.AddFromAssembly(a);
+
+            throw new NotImplementedException("Implementação não concluída.");
         }
 
 

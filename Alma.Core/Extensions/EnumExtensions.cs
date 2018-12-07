@@ -1,9 +1,8 @@
-﻿using System;
+﻿using Alma.Core.Dto;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
-using Alma.Core.Dto;
 
 namespace Alma.Core
 {
@@ -40,14 +39,6 @@ namespace Alma.Core
             return new CodigoDescricao(enumeration.ToString(), enumeration.ToDescription());
         }
 
-        [Obsolete("Usar ToCodigoDescricao")]
-        public static CodigoNome ToCodigoCharNome(this Enum enumeration)
-        {
-            return new CodigoNome(
-                codigo: enumeration.ToString(),
-                nome: enumeration.ToDescription()
-            );
-        }
         public static string ToDescription(this Enum enumeration, string valueWhenEmpty)
         {
             if (enumeration == null)
@@ -56,7 +47,7 @@ namespace Alma.Core
             }
 
             var attributes = (DescriptionAttribute[])enumeration
-                .GetType()
+                .GetType().GetTypeInfo()
                 .GetField(enumeration.ToString())
                 .GetCustomAttributes(typeof(DescriptionAttribute), false);
 
@@ -96,13 +87,13 @@ namespace Alma.Core
         public static string AttributeToString<T>(this Enum enumeration)
         {
             Type type = enumeration.GetType();
-            MemberInfo[] memInfo = type.GetMember(enumeration.ToString());
+            MemberInfo[] memInfo = type.GetTypeInfo().GetMember(enumeration.ToString());
 
             if (null != memInfo && memInfo.Length > 0)
             {
-                object[] attrs = memInfo[0].GetCustomAttributes(typeof(T), false);
+                var attrs = memInfo[0].GetCustomAttributes(typeof(T), false);
 
-                if (null != attrs && attrs.Length > 0) return attrs.ToString();
+                if (null != attrs && attrs.Count() > 0) return attrs.ToString();
             }
 
             return string.Empty;
@@ -129,7 +120,7 @@ namespace Alma.Core
         private const string ArgumentEnumException = "T isn't an enumerable type";
         public static IList<T> EnumToList<T>()
         {
-            if (!typeof(T).IsEnum)
+            if (!typeof(T).GetTypeInfo().IsEnum)
                 throw new ArgumentException(ArgumentEnumException);
 
             IList<T> list = new List<T>();
@@ -157,7 +148,7 @@ namespace Alma.Core
 
         public static T GetEnumByDescription<T>(String description)
         {
-            if (!typeof(T).IsEnum)
+            if (!typeof(T).GetTypeInfo().IsEnum)
                 throw new ArgumentException(ArgumentEnumException);
 
             IList<T> list = EnumToList<T>();

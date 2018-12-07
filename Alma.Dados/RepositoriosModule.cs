@@ -10,7 +10,7 @@ namespace Alma.Dados
     {
         private Func<IRegistrationBuilder<object, ScanningActivatorData, DynamicRegistrationStyle>, object[], IRegistrationBuilder<object, ScanningActivatorData, DynamicRegistrationStyle>> lifetimeScope;
 
-        public RepositoriosModule() : this(Autofac.RegistrationExtensions.InstancePerRequest<object, ScanningActivatorData, DynamicRegistrationStyle>)
+        public RepositoriosModule() : this(null)
         {
 
         }
@@ -28,9 +28,12 @@ namespace Alma.Dados
                 .RegisterAssemblyTypes(ass)
                 .Where(p => p.Name.StartsWith("RepositorioDe")) //por convenção
                 .AsImplementedInterfaces();
-
-            this.lifetimeScope(reg, new object[] { });
-
+            if (this.lifetimeScope != null)
+            {
+                this.lifetimeScope(reg, new object[] { });
+            }
+            else
+                reg.InstancePerLifetimeScope();
         }
     }
 }

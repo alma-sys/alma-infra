@@ -1,8 +1,8 @@
-﻿using System;
+﻿using HtmlAgilityPack;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using HtmlAgilityPack;
 
 namespace Alma.ApiExtensions.Html
 {
@@ -104,9 +104,9 @@ namespace Alma.ApiExtensions.Html
                         }
                         else
                         {
-                            // AntiXss
-                            a.Value =
-                                System.Web.Security.AntiXss.AntiXssEncoder.UrlEncode(a.Value);
+                            //// AntiXss
+                            //a.Value =
+                            //    System.Web.Security.AntiXss.AntiXssEncoder.UrlEncode(a.Value);
                         }
                     }
                 }

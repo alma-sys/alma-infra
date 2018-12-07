@@ -1,9 +1,13 @@
 ﻿using Alma.Dados.OrmNHibernate.Events;
 using NHibernate;
+using NHibernate.AdoNet;
 using NHibernate.Cfg;
+using NHibernate.Engine;
 using NHibernate.Event;
 using NHibernate.Mapping.ByCode;
 using NHibernate.Tool.hbm2ddl;
+using StackExchange.Profiling;
+using StackExchange.Profiling.Internal;
 using System;
 using System.Collections.Generic;
 using System.Data.Common;
@@ -33,11 +37,14 @@ namespace Alma.Dados.OrmNHibernate
                     {
                         db.ConnectionProvider<NHibernate.Connection.DriverConnectionProvider>();
                         db.Dialect<NHibernate.Dialect.MsSql2008Dialect>();
+                        //db.Driver<DriverSqlClient>();
                         db.Driver<NHibernate.Driver.SqlClientDriver>();
                         db.ConnectionStringName = connectionKey;
                         db.ConnectionProvider<ConnectionProvider>();
+                        db.PrepareCommands = Config.PrepareCommands;
+
                         db.LogFormattedSql = true;
-                        db.LogSqlInConsole = true;
+                        db.LogSqlInConsole = false;
                         if (Config.IsolationLevel != null)
                             db.IsolationLevel = Config.IsolationLevel.Value;
                         //UseReflectionOptimizer
@@ -49,11 +56,13 @@ namespace Alma.Dados.OrmNHibernate
                     {
                         db.ConnectionProvider<NHibernate.Connection.DriverConnectionProvider>();
                         db.Dialect<NHibernate.Dialect.SQLiteDialect>();
+                        //db.Driver<DriverSQLite20>();
                         db.Driver<NHibernate.Driver.SQLite20Driver>();
                         db.ConnectionStringName = connectionKey;
                         db.ConnectionProvider<ConnectionProvider>();
+                        db.PrepareCommands = Config.PrepareCommands;
                         db.LogFormattedSql = true;
-                        db.LogSqlInConsole = true;
+                        db.LogSqlInConsole = false;
                         if (Config.IsolationLevel != null)
                             db.IsolationLevel = Config.IsolationLevel.Value;
                         //UseReflectionOptimizer
@@ -67,13 +76,16 @@ namespace Alma.Dados.OrmNHibernate
                         {
                             db.ConnectionProvider<NHibernate.Connection.DriverConnectionProvider>();
                             db.Dialect<NHibernate.Dialect.Oracle10gDialect>();
+                            //db.Driver<DriverOracleManaged>();
                             db.Driver<NHibernate.Driver.OracleManagedDataClientDriver>();
                             db.ConnectionStringName = connectionKey;
                             db.ConnectionProvider<ConnectionProvider>();
+                            db.PrepareCommands = Config.PrepareCommands;
                             db.LogFormattedSql = true;
-                            db.LogSqlInConsole = true;
+                            db.LogSqlInConsole = false;
                             if (Config.IsolationLevel != null)
                                 db.IsolationLevel = Config.IsolationLevel.Value;
+                            db.Batcher<OracleLoggingBatchingBatcherFactory>();
                             //UseReflectionOptimizer
                         });
                     }
@@ -83,14 +95,17 @@ namespace Alma.Dados.OrmNHibernate
                         {
                             db.ConnectionProvider<NHibernate.Connection.DriverConnectionProvider>();
                             db.Dialect<NHibernate.Dialect.Oracle10gDialect>();
+                            //db.Driver<DriverOracle>();
                             db.Driver<NHibernate.Driver.OracleDataClientDriver>();
                             db.ConnectionStringName = connectionKey;
                             db.ConnectionProvider<ConnectionProvider>();
+                            db.PrepareCommands = Config.PrepareCommands;
                             db.LogFormattedSql = true;
-                            db.LogSqlInConsole = true;
+                            db.LogSqlInConsole = false;
                             if (Config.IsolationLevel != null)
                                 db.IsolationLevel = Config.IsolationLevel.Value;
                             //UseReflectionOptimizer
+                            db.Batcher<OracleLoggingBatchingBatcherFactory>();
                         });
                     }
                     break;
@@ -101,11 +116,13 @@ namespace Alma.Dados.OrmNHibernate
                     {
                         db.ConnectionProvider<NHibernate.Connection.DriverConnectionProvider>();
                         db.Dialect<NHibernate.Dialect.MySQL55Dialect>();
+                        //db.Driver<DriverMySql>();
                         db.Driver<NHibernate.Driver.MySqlDataDriver>();
                         db.ConnectionStringName = connectionKey;
                         db.ConnectionProvider<ConnectionProvider>();
+                        db.PrepareCommands = Config.PrepareCommands;
                         db.LogFormattedSql = true;
-                        db.LogSqlInConsole = true;
+                        db.LogSqlInConsole = false;
                         if (Config.IsolationLevel != null)
                             db.IsolationLevel = Config.IsolationLevel.Value;
                         //UseReflectionOptimizer
@@ -114,6 +131,12 @@ namespace Alma.Dados.OrmNHibernate
                     break;
                 default:
                     throw new NotImplementedException("Not implemented provider: " + Config.DeterminarDBMS(connectionKey));
+            }
+
+            if (Config.AtivarLog)
+            {
+                cfg.SessionFactory()
+                    .GenerateStatistics();
             }
 
             var types =
@@ -234,11 +257,12 @@ O GAC do framework 4.0/4.5 fica em C:\Windows\Microsoft.NET\assembly
         {
             public static Func<string, string> connectionResolver;
 
-            private static readonly IInternalLogger log = LoggerProvider.LoggerFor(typeof(ConnectionProvider));
+            private static readonly INHibernateLogger log = NHibernateLogger.For(typeof(ConnectionProvider));
             public override DbConnection GetConnection()
             {
                 log?.Debug("Obtaining IDbConnection from Driver");
-                DbConnection conn = Driver.CreateConnection();
+
+                var conn = Driver.CreateConnection();
                 try
                 {
                     conn.ConnectionString = ConnectionString;
@@ -276,7 +300,7 @@ O GAC do framework 4.0/4.5 fica em C:\Windows\Microsoft.NET\assembly
 
         private static Configuration AddSchemaValidationAndMigration(this Configuration config)
         {
-            var logger = LoggerProvider.LoggerFor(typeof(SessionFactory));
+            var logger = NHibernateLogger.For(typeof(SessionFactory));
             System.Action<string> updateExport = x =>
             {
                 if (logger != null)
@@ -338,5 +362,125 @@ O GAC do framework 4.0/4.5 fica em C:\Windows\Microsoft.NET\assembly
             if (Config.ExecutarMigracoes)
                 cfg.AddSchemaValidationAndMigration();
         }
+
+        #region Drivers
+        /*
+        private static DbCommand CheckProfiled(DbCommand command)
+        {
+            if (Config.AtivarMiniProfiler && MiniProfiler.Current != null)
+                return new ProfiledDbCommand(command, command.Connection, MiniProfiler.Current);
+            else
+                return command;
+        }
+
+
+
+        private class DriverOracleManaged : NHibernate.Driver.OracleManagedDataClientDriver
+        {
+            public override DbCommand CreateCommand()
+            {
+                return CheckProfiled(base.CreateCommand());
+            }
+        }
+        private class DriverSqlClient : NHibernate.Driver.SqlClientDriver
+        {
+            public override DbCommand CreateCommand()
+            {
+                return CheckProfiled(base.CreateCommand());
+            }
+        }
+        private class DriverSQLite20 : NHibernate.Driver.SQLite20Driver
+        {
+            public override DbCommand CreateCommand()
+            {
+                return CheckProfiled(base.CreateCommand());
+            }
+        }
+        private class DriverOracle : NHibernate.Driver.OracleDataClientDriver
+        {
+            public override DbCommand CreateCommand()
+            {
+                return CheckProfiled(base.CreateCommand());
+            }
+        }
+
+        private class DriverMySql : NHibernate.Driver.MySqlDataDriver
+        {
+            public override DbCommand CreateCommand()
+            {
+                return CheckProfiled(base.CreateCommand());
+            }
+        }
+        */
+        #endregion
+
+        #region Oracle Profiler 
+        class OracleLoggingBatchingBatcherFactory : NHibernate.AdoNet.OracleDataClientBatchingBatcherFactory
+        {
+            public override IBatcher CreateBatcher(ConnectionManager connectionManager, IInterceptor interceptor)
+            {
+                return new OracleLoggingBatchingBatcher(connectionManager, interceptor);
+            }
+        }
+
+        class OracleLoggingBatchingBatcher : OracleDataClientBatchingBatcher, IBatcher
+        {
+            // here override ExecuteNonQuery, DoExecuteBatch and ExecuteReader. 
+            //You can do all kind of intercepting, logging or measuring here
+            //If they are not overrideable just implement them and use "new" keyword if necessary
+            //since we inherit IBatcher explicitly it will work polymorphically.
+            //Make sure you call base implementation too or re-implement the method from scratch
+            public OracleLoggingBatchingBatcher(ConnectionManager connectionManager, IInterceptor interceptor) :
+                base(connectionManager, interceptor)
+            {
+            }
+
+            public override DbDataReader ExecuteReader(DbCommand cmd)
+            {
+                if (MiniProfiler.Current != null)
+                    using (cmd.GetTiming("Reader", MiniProfiler.Current))
+                    {
+                        return base.ExecuteReader(cmd);
+                    }
+                else
+                    return base.ExecuteReader(cmd);
+            }
+
+            public override async Task<DbDataReader> ExecuteReaderAsync(DbCommand cmd, CancellationToken cancellationToken)
+            {
+                if (MiniProfiler.Current != null)
+                    using (cmd.GetTiming("Reader", MiniProfiler.Current))
+                    {
+                        return await base.ExecuteReaderAsync(cmd, cancellationToken);
+                    }
+                else
+                    return await base.ExecuteReaderAsync(cmd, cancellationToken);
+            }
+
+            protected override void DoExecuteBatch(DbCommand ps)
+            {
+                if (MiniProfiler.Current != null)
+                    using (ps.GetTiming("NonQuery", MiniProfiler.Current))
+                    {
+                        base.DoExecuteBatch(ps);
+                    }
+                else
+                    base.DoExecuteBatch(ps);
+            }
+
+            protected override async Task DoExecuteBatchAsync(DbCommand ps, CancellationToken cancellationToken)
+            {
+                if (MiniProfiler.Current != null)
+                    using (ps.GetTiming("NonQuery", MiniProfiler.Current))
+                    {
+                        await base.DoExecuteBatchAsync(ps, cancellationToken);
+                    }
+                else
+                    await base.DoExecuteBatchAsync(ps, cancellationToken);
+            }
+        }
+        #endregion
+
+
     }
 }

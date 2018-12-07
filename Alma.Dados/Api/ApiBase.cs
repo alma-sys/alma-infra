@@ -1,11 +1,12 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Routing;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Cache;
 using System.Text.RegularExpressions;
-using System.Web.Script.Serialization;
 using System.Xml;
 
 namespace Alma.Dados.Api
@@ -103,8 +104,8 @@ namespace Alma.Dados.Api
                     else
                     {
                         var postValuesDict = post is IDictionary<string, object> ?
-                            new System.Web.Routing.RouteValueDictionary((IDictionary<string, object>)post) :
-                            new System.Web.Routing.RouteValueDictionary((object)post);
+                            new RouteValueDictionary((IDictionary<string, object>)post) :
+                            new RouteValueDictionary((object)post);
 
                         var postValues =
                             string.Join("&", (from key in postValuesDict.Keys
@@ -211,38 +212,41 @@ namespace Alma.Dados.Api
         /// <param name="response"></param>
         protected virtual void FixCookies(HttpWebRequest request, HttpWebResponse response)
         {
+            var c = new CookieContainer();
+            var uri = response.ResponseUri;
+
             for (int i = 0; i < response.Headers.Count; i++)
             {
                 string name = response.Headers.GetKey(i);
                 if (name != "Set-Cookie")
                     continue;
                 string value = response.Headers.Get(i);
-                value = Regex.Replace(value, "(e|E)xpires=(.+?)(;|$)|(P|p)ath=(.+?);", "");
-                foreach (var singleCookie in value.Split(','))
-                {
-                    Match match = Regex.Match(singleCookie, "(.+?)=(.+?);");
-                    if (match.Captures.Count == 0)
-                        continue;
-                    response.Cookies.Add(
-                        new Cookie(
-                            match.Groups[1].ToString(),
-                            match.Groups[2].ToString(),
-                            "/",
-                            request.Host.Split(':')[0]));
-                }
+                c.SetCookies(uri, value);
+
+
+                //value = Regex.Replace(value, "(e|E)xpires=(.+?)(;|$)|(P|p)ath=(.+?);", "");
+                //foreach (var singleCookie in value.Split(','))
+                //{
+                //    Match match = Regex.Match(singleCookie, "(.+?)=(.+?);");
+                //    if (match.Captures.Count == 0)
+                //        continue;
+                //    response.Cookies.Add(
+                //        new Cookie(
+                //            match.Groups[1].ToString()?.Trim(),
+                //            match.Groups[2].ToString(),
+                //            "/",
+                //            request.Host.Split(':')[0]));
+                //}
             }
+            response.Cookies.Add(c.GetCookies(uri));
         }
 
         protected virtual Dictionary<string, object> GetUrlJson(string rota, object post = null)
         {
             var json = GetUrlRaw(rota, post);
-            var serializer = new JavaScriptSerializer
-            {
-                MaxJsonLength = int.MaxValue
-            };
             if (json.StartsWith("["))
             {
-                var obj = serializer.Deserialize<Dictionary<string, object>[]>(json);
+                var obj = JsonConvert.DeserializeObject<Dictionary<string, object>[]>(json);
                 var dict = new Dictionary<string, object>
                 {
                     { "", obj }
@@ -251,7 +255,7 @@ namespace Alma.Dados.Api
             }
             else
             {
-                var obj = serializer.Deserialize<Dictionary<string, object>>(json);
+                var obj = JsonConvert.DeserializeObject<Dictionary<string, object>>(json);
                 return obj;
             }
         }

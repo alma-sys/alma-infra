@@ -1,27 +1,26 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Xunit;
 
 namespace Alma.TestHelper.DataBuilder.Tests
 {
-    [TestClass()]
     public class DataBuilderBaseTests
     {
-        [TestMethod()]
+        [Fact()]
         public void DeveGerarTag()
         {
             var tag = DataBuilderBase.GerarTag();
-            Assert.IsNotNull(tag);
+            Assert.NotNull(tag);
         }
 
-        [TestMethod()]
+        [Fact()]
         public void DeveGerarTagsDiferentes()
         {
             var tag = DataBuilderBase.GerarTag();
             var tag2 = DataBuilderBase.GerarTag();
 
-            Assert.IsNotNull(tag);
-            Assert.IsNotNull(tag2);
+            Assert.NotNull(tag);
+            Assert.NotNull(tag2);
 
-            Assert.AreNotEqual(tag, tag2);
+            Assert.NotEqual(tag, tag2);
         }
     }
 }

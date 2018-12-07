@@ -1,24 +1,29 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Linq;
 using System.Security.Claims;
-using System.Web.Http;
 
 namespace Alma.ApiExtensions.Controllers
 {
-    public class BaseApiController : ApiController
+    [Controller]
+    public abstract class BaseApiController : Controller
     {
-        private ClaimsIdentity identity
+
+        [ActionContext]
+        public ActionContext ActionContext { get; set; }
+
+        private ClaimsIdentity Identity
         {
             get
             {
-                return User.Identity as ClaimsIdentity;
+                return ActionContext.HttpContext.User.Identity as ClaimsIdentity;
             }
         }
-        protected string Usuario { get { return identity.Name; } }
+        protected string Usuario { get { return Identity.Name; } }
 
         protected T ObterValorToken<T>(string key)
         {
-            var claim = identity.Claims.SingleOrDefault(c => c.Type.ToLower() == key);
+            var claim = Identity.Claims.SingleOrDefault(c => c.Type.ToLower() == key);
             if (claim == null || string.IsNullOrWhiteSpace(claim.Value))
                 return default(T);
             else if (typeof(T) == typeof(int) || typeof(T) == typeof(int?))

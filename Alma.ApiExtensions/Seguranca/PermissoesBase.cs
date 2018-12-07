@@ -1,6 +1,6 @@
 ﻿namespace Alma.ApiExtensions.Seguranca
 {
-    public abstract class PermissoesBase
+    public abstract class RolesBase
     {
         public const string Root = "ROOT";
     }

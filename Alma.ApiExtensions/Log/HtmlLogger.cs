@@ -1,5 +1,9 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Features;
+using Microsoft.DotNet.PlatformAbstractions;
+using System;
 using System.IO;
+using System.Reflection;
 using System.Text;
 using System.Web;
 
@@ -10,17 +14,14 @@ namespace Alma.ApiExtensions.Log
         public static StringBuilder Montar(Exception exception, HttpContext context)
         {
             var sb = new StringBuilder();
-            var currentException = exception as HttpException;
-            if (currentException == null)
-                currentException = new HttpUnhandledException(exception.Message, exception);
+            var currentException = exception;
 
-            string htmlError = currentException.GetHtmlErrorMessage();
-            if (string.IsNullOrEmpty(htmlError))
+            var htmlError = string.Empty;
             {
-                var app = "Unknown";
+                var app = "AspNetCore";
                 try
                 {
-                    app = VirtualPathUtility.ToAppRelative("~");
+                    app = Assembly.GetEntryAssembly().GetName().Name;
                 }
                 catch { }
 
@@ -48,6 +49,7 @@ namespace Alma.ApiExtensions.Log
 </pre></code></p>
 </body></html>", app, currentException.Message, currentException, currentException.StackTrace);
             }
+
             var bodyEnd = htmlError.IndexOf("</body>");
             if (bodyEnd == -1)
             {
@@ -75,37 +77,33 @@ namespace Alma.ApiExtensions.Log
                 {
                     try
                     {
-                        sb.AppendFormat("<br /><b>Url:</b><br />{0}<br />\r\n", context.Request.RawUrl);
+                        sb.AppendFormat("<br /><b>Url:</b><br />{0}<br />\r\n", context.Request.GetUri());
                     }
                     catch { }
                     try
                     {
-                        sb.AppendFormat("<br /><b>User Agent:</b><br />{0}<br />\r\n", context.Request.UserAgent);
+                        sb.AppendFormat("<br /><b>User Agent:</b><br />{0}<br />\r\n", context.Request.Headers["User-Agent"]);
                     }
                     catch { }
                     try
                     {
-                        sb.AppendFormat("<br /><b>User Host Address:</b><br />{0}<br />\r\n", context.Request.UserHostAddress);
+                        sb.AppendFormat("<br /><b>User Host Address:</b><br />{0}<br />\r\n", context.Features.Get<IHttpConnectionFeature>()?.RemoteIpAddress);
                     }
                     catch { }
                     try
                     {
-                        sb.AppendFormat("<br /><b>Server Machine Name:</b><br />{0}<br />\r\n", context.Server.MachineName);
+                        sb.AppendFormat("<br /><b>Server Machine Name:</b><br />{0}<br />\r\n", Environment.MachineName);
+                    }
+                    catch { }
+                    try
+                    {
+                        sb.AppendFormat("<br /><b>Server Base Path:</b><br />{0}<br />\r\n", ApplicationEnvironment.ApplicationBasePath);
                     }
                     catch { }
 
                     try
                     {
-                        sb.AppendFormat("<br /><b>Url Referrer:</b><br />{0}<br />\r\n", context.Request.UrlReferrer);
-                    }
-                    catch { }
-
-                    try
-                    {
-                        if (!context.Request.IsAuthenticated)
-                            sb.AppendFormat("<br /><b>Logged Windows User:</b><br />None<br />\r\n");
-                        else
-                            sb.AppendFormat("<br /><b>Logged Windows User:</b><br />{0}<br />\r\n", context.Request.LogonUserIdentity.Name);
+                        sb.AppendFormat("<br /><b>Url Referrer:</b><br />{0}<br />\r\n", context.Request.Headers["Referer"]);
                     }
                     catch { }
 
@@ -122,7 +120,7 @@ namespace Alma.ApiExtensions.Log
                     {
                         sb.AppendFormat("<br /><b>Request Headers:</b><br />\r\n");
                         sb.AppendFormat("<ul style=\"background-color: #ffffcc\">\r\n");
-                        foreach (var h in context.Request.Headers.AllKeys)
+                        foreach (var h in context.Request.Headers.Keys)
                         {
                             sb.AppendFormat("<li>{0}: {1}</li>\r\n", h, context.Request.Headers[h]);
 
@@ -134,16 +132,16 @@ namespace Alma.ApiExtensions.Log
 
                     try
                     {
-                        if (context.Request.HttpMethod == "POST")
+                        if (context.Request.Method == "POST")
                         {
                             sb.AppendFormat("<br /><b>Post Data:</b><br />\r\n");
                             if (context.Request.Form.Keys.Count > 0)
                             {
                                 sb.AppendFormat("<ul style=\"background-color: #ffffcc\">\r\n");
-                                foreach (string formKey in HttpContext.Current.Request.Form.Keys)
+                                foreach (string formKey in context.Request.Form.Keys)
                                 {
                                     if (!formKey.ToLower().Contains("senha") && !formKey.ToLower().Contains("password"))
-                                        sb.AppendFormat("<li>{0}: {1}</li>\r\n", formKey, HttpContext.Current.Request.Form[formKey]);
+                                        sb.AppendFormat("<li>{0}: {1}</li>\r\n", formKey, context.Request.Form[formKey]);
                                 }
                                 sb.AppendFormat("</ul>\r\n");
                             }
@@ -153,16 +151,19 @@ namespace Alma.ApiExtensions.Log
                                 sb.Append("<code><pre style=\"background-color: #ffffcc; padding: 8px; font-size: 1.1em\">");
                                 try
                                 {
-                                    context.Request.InputStream.Seek(0, SeekOrigin.Begin);
+                                    context.Request.Body.Seek(0, SeekOrigin.Begin);
                                 }
                                 catch { }
-                                sb.Append(HttpUtility.HtmlEncode(new StreamReader(context.Request.InputStream).ReadToEnd()));
+                                sb.Append(HttpUtility.HtmlEncode(new StreamReader(context.Request.Body).ReadToEnd()));
                                 sb.Append("</pre></code><br />");
 
                             }
                         }
                     }
-                    catch { }
+                    catch (Exception ex)
+                    {
+                        sb.AppendFormat("<br /><b>Error Getting Post Data:</b><br />{0}<br />\r\n", ex.Message);
+                    }
                 }
 
                 try

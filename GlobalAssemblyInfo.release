@@ -1,16 +1,24 @@
 ﻿using System.Reflection;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyCompany("Alma Sistemas")]
-[assembly: AssemblyProduct("Alma.Infra")]
-[assembly: AssemblyCopyright("Copyright © Alma Sistemas $YEAR")]
+[assembly: AssemblyCompany("$COMPANY")]
+[assembly: AssemblyProduct("$PRODUCT")]
+[assembly: AssemblyCopyright("$COPYRIGHT $YEAR")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: AssemblyVersion(AssemblyValues.Version)]
 [assembly: AssemblyFileVersion(AssemblyValues.Version)]
+[assembly: AssemblyInformationalVersion(AssemblyValues.InfoVersion)]
 [assembly: ComVisible(false)]
+
+#if DEBUG
+[assembly: AssemblyConfiguration("Debug")]
+#else
+[assembly: AssemblyConfiguration("Release")]
+#endif
 
 static class AssemblyValues
 {
-    public const string Version = "2.$VERSION";
+    public const string Version = "3.$PACKVERSION";
+    public const string InfoVersion = Version + "$VERSIONINFO";
 }

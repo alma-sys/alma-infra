@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Alma.Core\Alma.Core.csproj" />
+    <ProjectReference Include="..\..\Alma.Dados.MongoMapping\Alma.Dados.MongoMapping.csproj" />
+    <ProjectReference Include="..\..\Alma.Dados\Alma.Dados.csproj" />
+    <ProjectReference Include="..\..\Alma.Dominio\Alma.Dominio.csproj" />
+    <ProjectReference Include="..\Alma.Exemplo.Dominio\Alma.Exemplo.Dominio.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Mapeamentos\ValueObject\" />
+  </ItemGroup>
+
+</Project>

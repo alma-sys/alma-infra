@@ -1,8 +1,6 @@
-﻿using System;
+﻿using Owin;
+using System;
 using System.Diagnostics;
-using System.Web.Http;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Owin;
 
 namespace Alma.ApiExtensions.TestHelper
 {
@@ -11,8 +9,8 @@ namespace Alma.ApiExtensions.TestHelper
         //TODO: Melhorar para mais de um projeto a ser testado com o mesmo host.
         public static Uri HostBase = new Uri("http://localhost:80/Temporary_Listen_Addresses/api" + Guid.NewGuid().ToString().Substring(0, 6));
         public static Uri IniciarSelfHost(
-            TestContext testContext,
-            Action<IAppBuilder, HttpConfiguration> startupConfig,
+            //TestContext testContext,
+            Action<IAppBuilder> startupConfig,
             Type owinFactory)
         {
             FinalizarTodosOsSelfHost();
@@ -22,12 +20,15 @@ namespace Alma.ApiExtensions.TestHelper
         }
 
         public static void IniciarDatabase(
-            TestContext testContext,
+            //TestContext testContext,
             string projetoBancoDeDados)
         {
             FinalizarDatabase();
             if (!string.IsNullOrWhiteSpace(projetoBancoDeDados))
-                ConfigDatabase.BuildAndDeploy(testContext, projetoBancoDeDados);
+            {
+                throw new NotImplementedException("Deploy of database DAC during test is not supported. We strongly advise to use any kind of migrations.");
+                //ConfigDatabase.BuildAndDeploy(projetoBancoDeDados);
+            }
         }
 
         public static void FinalizarTodosOsSelfHost()
@@ -39,8 +40,9 @@ namespace Alma.ApiExtensions.TestHelper
         public static void FinalizarDatabase()
         {
             Trace.Write("Limpando banco de dados... ");
-            ConfigDatabase.DropDatabase();
-            Trace.WriteLine("OK");
+            throw new NotImplementedException("Deploy of database DAC during test is not supported. We strongly advise to use any kind of migrations.");
+            //ConfigDatabase.DropDatabase();
+            //Trace.WriteLine("OK");
         }
 
     }

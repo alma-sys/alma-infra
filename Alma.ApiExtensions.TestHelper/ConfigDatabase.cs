@@ -1,17 +1,6 @@
-﻿using System;
-using System.Configuration;
-using System.Data.Common;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Text.RegularExpressions;
-using Microsoft.Build.Evaluation;
-using Microsoft.Build.Framework;
-using Microsoft.SqlServer.Dac;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
-namespace Alma.ApiExtensions.TestHelper
+﻿namespace Alma.ApiExtensions.TestHelper
 {
+    /*
     static class ConfigDatabase
     {
 
@@ -21,9 +10,9 @@ namespace Alma.ApiExtensions.TestHelper
             get
             {
                 var config = ConfigurationManager.AppSettings[Core.Config.cfgConexao];
-                Assert.IsNotNull(config, $"Conexão {Core.Config.cfgConexao} não encontrada.");
+                Assert.NotNull(config); //, $"Conexão {Core.Config.cfgConexao} não encontrada.");
                 var cn = ConfigurationManager.ConnectionStrings[config];
-                Assert.IsNotNull(cn, $"Conexão {Core.Config.cfgConexao} não encontrada.");
+                Assert.NotNull(cn); //, $"Conexão {Core.Config.cfgConexao} não encontrada.");
                 return cn;
             }
         }
@@ -42,7 +31,7 @@ namespace Alma.ApiExtensions.TestHelper
                     connectionSb.TryGetValue("Database", out dbNameobj);
 
                 var dbname = dbNameobj as string;
-                Assert.IsNotNull(dbname, "Database não encontrado.");
+                Assert.NotNull(dbname); //, "Database não encontrado.");
                 return dbname;
             }
         }
@@ -61,13 +50,13 @@ namespace Alma.ApiExtensions.TestHelper
                     connectionSb.TryGetValue("Server", out dbNameobj);
 
                 var dbname = dbNameobj as string;
-                Assert.IsNotNull(dbname, "Server não encontrado.");
+                Assert.NotNull(dbname); //, "Server não encontrado.");
                 return dbname;
             }
         }
 
 
-        public static void BuildAndDeploy(TestContext testContext, string projetoBanco)
+        public static void BuildAndDeploy(string projetoBanco)
         {
             Trace.Write("Levantando banco de dados...");
 
@@ -76,7 +65,7 @@ namespace Alma.ApiExtensions.TestHelper
             var dbProject = new DirectoryInfo(testContext.DeploymentDirectory).Parent.Parent.Parent.FullName;
             dbProject = Path.Combine(dbProject, projectPath);
 
-            Assert.IsTrue(File.Exists(dbProject), "Arquivo " + dbProject + " não encontrado.");
+            Assert.True(File.Exists(dbProject), "Arquivo " + dbProject + " não encontrado.");
 
 
             var sw = new Stopwatch();
@@ -89,7 +78,7 @@ namespace Alma.ApiExtensions.TestHelper
             {
                 Verbosity = LoggerVerbosity.Minimal
             }))
-                Assert.Fail(string.Format("Não foi possível compilar o projeto {0}", projectName));
+                Assert.True(false, string.Format("Não foi possível compilar o projeto {0}", projectName));
             //at this point the .dacpac is built and put in the debug folder for the project
 
             sw.Stop();
@@ -215,13 +204,13 @@ DROP DATABASE [{0}]", DatabaseName);
         {
             var localdbInstance = Regex.Replace(Server, @"\(localdb\)\\", "", RegexOptions.IgnoreCase);
             var key = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Microsoft SQL Server Local DB\Installed Versions\12.0");
-            Assert.IsNotNull(key);
+            Assert.NotNull(key);
             var path = new FileInfo(key.GetValue("InstanceAPIPath") as string).Directory.Parent.Parent;
 
             var path_sqlLocaldb = Path.Combine(path.FullName, "Tools", "Binn", "SqlLocalDB.exe");
             if (!File.Exists(path_sqlLocaldb))
                 path_sqlLocaldb = path_sqlLocaldb.Replace(" (x86)", "");
-            Assert.IsTrue(File.Exists(path_sqlLocaldb));
+            Assert.True(File.Exists(path_sqlLocaldb));
 
             var procInfo = new ProcessStartInfo();
             procInfo.CreateNoWindow = true;
@@ -258,7 +247,8 @@ DROP DATABASE [{0}]", DatabaseName);
             proc.WaitForExit();
             listOutput = proc.StandardOutput.ReadToEnd().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries).Select(x => x.ToLower()).ToArray();
 
-            CollectionAssert.Contains(listOutput, localdbInstance.ToLower());
+            Assert.Contains(localdbInstance.ToLower(), listOutput);
         }
     }
+    */
 }

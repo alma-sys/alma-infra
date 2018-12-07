@@ -1,11 +1,10 @@
-﻿using System;
+﻿using Microsoft.Owin.Hosting;
+using Owin;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net;
 using System.Net.NetworkInformation;
-using System.Web.Http;
-using Microsoft.Owin.Hosting;
-using Owin;
 
 namespace Alma.ApiExtensions.TestHelper
 {
@@ -29,7 +28,7 @@ namespace Alma.ApiExtensions.TestHelper
         /// <param name="factory">Usually Microsoft.Owin.Host.HttpListener.OwinHttpListener</param>
         /// <param name="hostBase"></param>
         /// <param name="setConfig"></param>
-        internal static void BuildAndDeployOwin(Type factory, Uri hostBase, Action<IAppBuilder, HttpConfiguration> setConfig)
+        internal static void BuildAndDeployOwin(Type factory, Uri hostBase, Action<IAppBuilder> setConfig)
         {
             Trace.Write("Levantando http host... ");
             if (hostBase == null)
@@ -53,10 +52,10 @@ namespace Alma.ApiExtensions.TestHelper
                 var listener = (HttpListener)app.Properties["System.Net.HttpListener"];
                 listener.AuthenticationSchemes = AuthenticationSchemes.Anonymous;
 
-                var config = new HttpConfiguration();
-                new HttpServer(config);
+                //var config = new HttpConfiguration();
+                //new HttpServer(config);
 
-                setConfig(app, config);
+                setConfig(app); //, config);
             });
             Trace.WriteLine("Http host iniciado em " + urlReal);
 

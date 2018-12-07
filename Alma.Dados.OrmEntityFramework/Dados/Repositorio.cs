@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace Alma.Dados.OrmEntityFramework
 {
@@ -172,6 +173,41 @@ namespace Alma.Dados.OrmEntityFramework
         }
 
         public void DisableFilter(string name)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task CreateAsync(TEntity entidade)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task CreateAsync(IList<TEntity> entidades)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task SaveAsync(TEntity entidade)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task SaveAsync(IList<TEntity> entidade)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task DeleteAsync(TEntity entidade)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task DeleteAsync(IList<TEntity> entidades)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task MergeUpdateAsync(TEntity entidade)
         {
             throw new NotImplementedException();
         }

@@ -1,6 +1,8 @@
 ﻿using Alma.Dados.Hooks;
 using Autofac;
 using NHibernate;
+using StackExchange.Profiling;
+using StackExchange.Profiling.Data;
 using System.Data;
 using System.Linq;
 
@@ -109,24 +111,27 @@ namespace Alma.Dados.OrmNHibernate
         {
             if (Config.AtivarLog)
             {
-                var hierarchy = (log4net.Repository.Hierarchy.Hierarchy)log4net.LogManager.GetRepository();
+                var hierarchy = (log4net.Repository.Hierarchy.Hierarchy)log4net.LogManager.GetRepository(System.Reflection.Assembly.GetExecutingAssembly());
                 // Remove any other appenders
                 hierarchy.Root.RemoveAllAppenders();
                 // define some basic settings for the root
                 var rootLogger = hierarchy.Root;
                 rootLogger.Level = log4net.Core.Level.Error;
 
-                // declare a TraceAppender with 5MB per file and max. 10 files
-                var pattern = new log4net.Layout.PatternLayout("%message%newline");
-                pattern.Header = "";
-                var appender = new log4net.Appender.TraceAppender();
-                appender.Layout = pattern;
-                rootLogger.AddAppender(appender);
 
                 // This is required, so that we can access the Logger by using 
                 // LogManager.GetLogger("NHibernate.SQL") and it can used by NHibernate
                 var loggerNH = hierarchy.GetLogger("NHibernate.SQL") as log4net.Repository.Hierarchy.Logger;
                 loggerNH.Level = log4net.Core.Level.Debug;
+                loggerNH.RemoveAllAppenders();
+
+                // declare a TraceAppender with 5MB per file and max. 10 files
+                var pattern = new log4net.Layout.PatternLayout("%message%newline");
+                pattern.Header = "";
+                var appender = new log4net.Appender.TraceAppender();
+                appender.Layout = pattern;
+                loggerNH.AddAppender(appender);
+
 
 
                 // this is required to tell log4net that we're done 
@@ -143,12 +148,17 @@ namespace Alma.Dados.OrmNHibernate
 
         private static IDbCommand GetCommand(ISession session)
         {
-            return session.Connection.CreateCommand();
+            var command = session.Connection.CreateCommand();
+            if (Config.AtivarMiniProfiler && command != null && command.GetType() != typeof(ProfiledDbCommand) && MiniProfiler.Current != null)
+                command = new ProfiledDbCommand(command, command.Connection, MiniProfiler.Current);
+
+            return command;
         }
 
         private static ISession GetSession(ISessionFactory factory)
         {
-            return factory.OpenSession();
+            return factory.WithOptions()
+                .OpenSession();
         }
 
         //public static void SetConnectionStringResolver(Func<string, string> connectionStringResolver)

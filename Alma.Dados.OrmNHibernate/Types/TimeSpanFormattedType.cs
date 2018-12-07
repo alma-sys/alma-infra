@@ -8,9 +8,28 @@ using System.Data.Common;
 
 namespace Alma.Dados.OrmNHibernate.Types
 {
-    public class TimeSpanFormattedType : IUserType
+    public class TimeSpanFormattedType : TimeSpanFormattedBaseType
     {
-        public const int MaxLength = 5;
+        public const int MaxLength = 15;
+
+        protected override string Format => "dd\\.hh\\:mm\\:ss";
+    }
+
+    public class TimeSpanHourMinuteFormattedType : TimeSpanFormattedBaseType
+    {
+        protected override string Format => "hh\\:mm";
+    }
+
+    public class TimeSpanHourMinuteSecondFormattedType : TimeSpanFormattedBaseType
+    {
+        protected override string Format => "hh\\:mm\\:ss";
+    }
+
+
+
+    public abstract class TimeSpanFormattedBaseType : IUserType
+    {
+
         public new bool Equals(object x, object y)
         {
             if (ReferenceEquals(x, y))
@@ -29,6 +48,12 @@ namespace Alma.Dados.OrmNHibernate.Types
             return x.GetHashCode();
         }
 
+        protected abstract string Format
+        {
+            get;
+        }
+
+
         public object NullSafeGet(DbDataReader rs, string[] names, ISessionImplementor session, object owner)
         {
             var valueToGet = NHibernateUtil.String.NullSafeGet(rs, names[0], session) as string;
@@ -45,7 +70,7 @@ namespace Alma.Dados.OrmNHibernate.Types
             if (typedValue == null)
                 NHibernateUtil.String.NullSafeSet(cmd, (string)null, index, session);
             else
-                NHibernateUtil.String.NullSafeSet(cmd, typedValue.Value.ToString("hh:mm:ss"), index, session);
+                NHibernateUtil.String.NullSafeSet(cmd, typedValue.Value.ToString(Format), index, session);
         }
 
         public object DeepCopy(object value)
@@ -72,7 +97,7 @@ namespace Alma.Dados.OrmNHibernate.Types
         {
             get
             {
-                return new[] { new SqlType(DbType.String) };
+                return new[] { new SqlType(DbType.String, Format.Replace("\\", "").Length) };
             }
         }
 
