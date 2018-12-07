@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Routing;
-using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -241,24 +241,14 @@ namespace Alma.Dados.Api
             response.Cookies.Add(c.GetCookies(uri));
         }
 
-        protected virtual Dictionary<string, object> GetUrlJson(string rota, object post = null)
+        protected virtual JToken GetUrlJson(string rota, object post = null)
         {
             var json = GetUrlRaw(rota, post);
-            if (json.StartsWith("["))
-            {
-                var obj = JsonConvert.DeserializeObject<Dictionary<string, object>[]>(json);
-                var dict = new Dictionary<string, object>
-                {
-                    { "", obj }
-                };
-                return dict;
-            }
-            else
-            {
-                var obj = JsonConvert.DeserializeObject<Dictionary<string, object>>(json);
+
+            var obj = JToken.Parse(json);
+
                 return obj;
             }
-        }
 
         protected virtual XmlDocument GetUrlXml(string rota, object post = null)
         {

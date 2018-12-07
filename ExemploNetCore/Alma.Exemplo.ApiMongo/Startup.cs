@@ -85,7 +85,7 @@ namespace Alma.Exemplo.Api
         //private static void ConfigureBasicAuth(IApplicationBuilder app, IContainer container)
         //{
         //    var provider = new BasicAuthProvider(config);
-        //    var options = new BasicAuthenticationOptions("samara", provider.Validate);
+        //    var options = new BasicAuthenticationOptions("alma", provider.Validate);
         //    // options.AuthenticationMode = AuthenticationMode.Passive; // Isso evita que a janela de auth do browser apareça.
 
         //    app.UseBasicAuthentication(options);
@@ -102,7 +102,7 @@ namespace Alma.Exemplo.Api
         //        AccessTokenFormat = new CustomJwtFormat(issuer, key)
         //    };
 
-        //    oauthServerOptions.AllowInsecureHttp = !Convert.ToBoolean(ConfigurationManager.ConnectionStrings["samara:https"]);
+        //    oauthServerOptions.AllowInsecureHttp = !Convert.ToBoolean(ConfigurationManager.ConnectionStrings["alma:https"]);
         //    // OAuth 2.0 Bearer Access Token Generation
         //    app.UseOAuthAuthorizationServer(oauthServerOptions);
         //}

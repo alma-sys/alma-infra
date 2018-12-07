@@ -27,19 +27,26 @@ namespace Alma.ApiExtensions.Security
 
         public JsonWebToken Create(string login, string email, string given_name, string family_name, IList<string> roles, IList<Claim> additional_claims = null)
         {
+            if (string.IsNullOrWhiteSpace(login))
+                throw new ArgumentNullException(nameof(login));
 
             var expires = DateTime.UtcNow.AddMinutes(Config.JwtExpiryInMintures);
 
             var claims = new List<Claim>();
+            if (!string.IsNullOrWhiteSpace(given_name))
             claims.Add(new Claim(JwtRegisteredClaimNames.GivenName, given_name));
+            if (!string.IsNullOrWhiteSpace(family_name))
             claims.Add(new Claim(JwtRegisteredClaimNames.FamilyName, family_name));
             claims.Add(new Claim(JwtRegisteredClaimNames.Sub, login));
             claims.Add(new Claim(JwtRegisteredClaimNames.UniqueName, login));
+
+            if (!string.IsNullOrWhiteSpace(email))
             claims.Add(new Claim(JwtRegisteredClaimNames.Email, email));
 
             if (roles != null)
                 foreach (var r in roles)
-                    claims.Add(new Claim("role", r));
+                    if (!string.IsNullOrWhiteSpace(r))
+                    	claims.Add(new Claim("role", r));
 
             if (additional_claims != null)
                 foreach (var r in additional_claims)

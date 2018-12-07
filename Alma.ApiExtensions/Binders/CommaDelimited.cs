@@ -34,12 +34,12 @@ namespace Alma.ApiExtensions.Binders
 
                         values.CopyTo(typedValues, 0);
 
-                        bindingContext.Model = typedValues;
+                        bindingContext.Result = ModelBindingResult.Success(typedValues);
                     }
                     else
                     {
                         // change this line to null if you prefer nulls to empty arrays 
-                        bindingContext.Model = Array.CreateInstance(elementType, 0);
+                        bindingContext.Result = ModelBindingResult.Success(Array.CreateInstance(elementType, 0));
                     }
                 }
             });
