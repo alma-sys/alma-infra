@@ -1,0 +1,112 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<s:Envelope xmlns:s="http://www.w3.org/2003/05/soap-envelope" xmlns:a="http://www.w3.org/2005/08/addressing" xmlns:u="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd">
+  <s:Header>
+    <a:Action s:mustUnderstand="1">http://docs.oasis-open.org/ws-sx/ws-trust/200512/RSTRC/IssueFinal</a:Action>
+    <a:RelatesTo>urn:uuid:c78d45ef-fccf-4568-8706-c8b0a5a4c47b</a:RelatesTo>
+    <o:Security s:mustUnderstand="1" xmlns:o="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
+      <u:Timestamp u:Id="_0">
+        <u:Created>2018-07-09T11:09:47.297Z</u:Created>
+        <u:Expires>2018-07-09T11:14:47.297Z</u:Expires>
+      </u:Timestamp>
+    </o:Security>
+  </s:Header>
+  <s:Body>
+    <trust:RequestSecurityTokenResponseCollection xmlns:trust="http://docs.oasis-open.org/ws-sx/ws-trust/200512">
+      <trust:RequestSecurityTokenResponse>
+        <trust:Lifetime>
+          <wsu:Created xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd">2018-07-09T11:09:47.074Z</wsu:Created>
+          <wsu:Expires xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd">2018-07-09T12:09:47.074Z</wsu:Expires>
+        </trust:Lifetime>
+        <wsp:AppliesTo xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy">
+          <wsa:EndpointReference xmlns:wsa="http://www.w3.org/2005/08/addressing">
+            <wsa:Address>https://myprojectname.azurewebsites.net</wsa:Address>
+          </wsa:EndpointReference>
+        </wsp:AppliesTo>
+        <trust:RequestedSecurityToken>
+          <saml:Assertion MajorVersion="1" MinorVersion="1" AssertionID="_af4ab46a-556b-4fa9-8520-94c80763debf" Issuer="http://fsc01h.company.com.br/adfs/services/trust" IssueInstant="2018-07-09T11:09:47.297Z" xmlns:saml="urn:oasis:names:tc:SAML:1.0:assertion">
+            <saml:Conditions NotBefore="2018-07-09T11:09:47.074Z" NotOnOrAfter="2018-07-09T12:09:47.074Z">
+              <saml:AudienceRestrictionCondition>
+                <saml:Audience>https://myprojectname.azurewebsites.net</saml:Audience>
+              </saml:AudienceRestrictionCondition>
+            </saml:Conditions>
+            <saml:AttributeStatement>
+              <saml:Subject>
+                <saml:SubjectConfirmation>
+                  <saml:ConfirmationMethod>urn:oasis:names:tc:SAML:1.0:cm:bearer</saml:ConfirmationMethod>
+                </saml:SubjectConfirmation>
+              </saml:Subject>
+              <saml:Attribute AttributeName="company" AttributeNamespace="http://corp.company.com.br">
+                <saml:AttributeValue>TECNOLOGIA</saml:AttributeValue>
+              </saml:Attribute>
+              <saml:Attribute AttributeName="id" AttributeNamespace="http://corp.company.com.br">
+                <saml:AttributeValue>12345</saml:AttributeValue>
+              </saml:Attribute>
+              <saml:Attribute AttributeName="windowsaccountname" AttributeNamespace="http://schemas.microsoft.com/ws/2008/06/identity/claims">
+                <saml:AttributeValue>marcosjunior</saml:AttributeValue>
+              </saml:Attribute>
+              <saml:Attribute AttributeName="emailaddress" AttributeNamespace="http://schemas.xmlsoap.org/ws/2005/05/identity/claims">
+                <saml:AttributeValue>MARCOS.ALMEIDA@company.COM.BR</saml:AttributeValue>
+              </saml:Attribute>
+              <saml:Attribute AttributeName="givenname" AttributeNamespace="http://schemas.xmlsoap.org/ws/2005/05/identity/claims">
+                <saml:AttributeValue>Marcos</saml:AttributeValue>
+              </saml:Attribute>
+              <saml:Attribute AttributeName="name" AttributeNamespace="http://schemas.xmlsoap.org/ws/2005/05/identity/claims">
+                <saml:AttributeValue>Marcos Junior</saml:AttributeValue>
+              </saml:Attribute>
+              <saml:Attribute AttributeName="upn" AttributeNamespace="http://schemas.xmlsoap.org/ws/2005/05/identity/claims">
+                <saml:AttributeValue>marcos.junior@company.com.br</saml:AttributeValue>
+              </saml:Attribute>
+              <saml:Attribute AttributeName="surname" AttributeNamespace="http://schemas.xmlsoap.org/ws/2005/05/identity/claims">
+                <saml:AttributeValue>Junior</saml:AttributeValue>
+              </saml:Attribute>
+              <saml:Attribute AttributeName="role" AttributeNamespace="http://schemas.microsoft.com/ws/2008/06/identity/claims">
+                <saml:AttributeValue>Domain Users</saml:AttributeValue>
+                <saml:AttributeValue>WirelessAccounts</saml:AttributeValue>
+              </saml:Attribute>
+            </saml:AttributeStatement>
+            <saml:AuthenticationStatement AuthenticationMethod="urn:oasis:names:tc:SAML:1.0:am:password" AuthenticationInstant="2018-07-09T11:09:47.043Z">
+              <saml:Subject>
+                <saml:SubjectConfirmation>
+                  <saml:ConfirmationMethod>urn:oasis:names:tc:SAML:1.0:cm:bearer</saml:ConfirmationMethod>
+                </saml:SubjectConfirmation>
+              </saml:Subject>
+            </saml:AuthenticationStatement>
+            <ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+              <ds:SignedInfo>
+                <ds:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" />
+                <ds:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256" />
+                <ds:Reference URI="#_af4ab46a-556b-4fa9-8520-94c80763debf">
+                  <ds:Transforms>
+                    <ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" />
+                    <ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" />
+                  </ds:Transforms>
+                  <ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256" />
+                  <ds:DigestValue>0qyy6GfA0f6VpwL/avbE+f0cMGcKaCnbjVF5+GffRQk=</ds:DigestValue>
+                </ds:Reference>
+              </ds:SignedInfo>
+              <ds:SignatureValue>D0n8gzzNmfkPGkgOXifzUNxfZfjzMdFg04CtOfWulNXQsfcSF9QrEbOI4KjPMcjOH9JBslra9IEP2qNV9RR6lb1TRbBTeICEEu+1Y8BGEURP+n8i0R9B40cETzqg+rpersqP3gOhNUYNGMqurFo9/Cn8p+lQEahgNEkhclu2rxBb099bNnxZd7ny/pBy7V0ZDiKYV4WpRQda8alR7OKTUm5XWCvH25+y2yPbbo4wPbtCUgBDBW3Bo0V5uZVG4BK9bSexwqutS3l7Oan+MKr3K5Di9N4/Xp5FqH7Bin8i/GgeSdWOvmZ2NDaLK+6d7PGSecwsn6NPkspkek1fjX5ItA==</ds:SignatureValue>
+              <KeyInfo xmlns="http://www.w3.org/2000/09/xmldsig#">
+                <X509Data>
+                  <X509Certificate>MIIC5jCCAc6gAwIBAgIQO3ssWhVQ4LJNMkV/QViQnDANBgkqhkiG9w0BAQsFADAvMS0wKwYDVQQDEyRBREZTIFNpZ25pbmcgLSBmc2MwMWgudHZnbG9iby5jb20uYnIwHhcNMTYwNzIyMTUxODE3WhcNMTkwNzIyMTUxODE3WjAvMS0wKwYDVQQDEyRBREZTIFNpZ25pbmcgLSBmc2MwMWgudHZnbG9iby5jb20uYnIwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCjIs+9qVFjuxb0XhG5vO640kOjJ4jjncpjwXQKFIcTzviHTr0NGocTOmtG7TJyTSg3CnGl3dJ1Fw3gD5N14sHygLZVNOGnbhlrjDvbqZHMU4JL/r0p9stnJjsmryGNz2fZcR737Wxt/YwRqWKwo43wQkgUoGUa41JOg91XDUsRxb2LFkpW/CjGe24h5ck1Jja70YqPPnxXx/bM2f0wUnDkfwsjN/SJqOwt9FR406fsXq+xcrrVDuj8taU/l4KzyRrnKVfcAmCF6boB7E01YnzUiLYWzICQzjViYKYf6LSIsjjt/E8OCKzJLWfQrDcHa7KTshpzOB8rM0dEa4cWYIaRAgMBAAEwDQYJKoZIhvcNAQELBQADggEBAEwdPXOmObjuXAmMXkk74FPczuE/G6XnsJxwxYmvL9ADl4+CIMhIHOe0tN3MIaM82tjOGLb+g4LA4j5hBoIMyAWkSBk0QFC3mXfZomHM1P+1ZBsJ8XyUGGaoMSLdyPr+WhGFk8Z8g6kVK4LTx3TIvnP7uovnHK6pabtQCYoa46CkfZain41C9XvOnGOZ6pAF/mSi+vdGwp/r0vNonVQ41xuZV/K2AXhZrOV+gEfFw1WXfm+GG41b4ny+AXBGya5Yj1Lcvn89e0wxtRQWsG5Pd7n1/2VKbVFDsXDH1tjjfNUKVTniAfTnmr/LiAbua5f12NSrR5tjcVLU0zVslChvr5c=</X509Certificate>
+                </X509Data>
+              </KeyInfo>
+            </ds:Signature>
+          </saml:Assertion>
+        </trust:RequestedSecurityToken>
+        <trust:RequestedAttachedReference>
+          <o:SecurityTokenReference k:TokenType="http://docs.oasis-open.org/wss/oasis-wss-saml-token-profile-1.1#SAMLV1.1" xmlns:o="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd" xmlns:k="http://docs.oasis-open.org/wss/oasis-wss-wssecurity-secext-1.1.xsd">
+            <o:KeyIdentifier ValueType="http://docs.oasis-open.org/wss/oasis-wss-saml-token-profile-1.0#SAMLAssertionID">_af4ab46a-556b-4fa9-8520-94c80763debf</o:KeyIdentifier>
+          </o:SecurityTokenReference>
+        </trust:RequestedAttachedReference>
+        <trust:RequestedUnattachedReference>
+          <o:SecurityTokenReference k:TokenType="http://docs.oasis-open.org/wss/oasis-wss-saml-token-profile-1.1#SAMLV1.1" xmlns:o="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd" xmlns:k="http://docs.oasis-open.org/wss/oasis-wss-wssecurity-secext-1.1.xsd">
+            <o:KeyIdentifier ValueType="http://docs.oasis-open.org/wss/oasis-wss-saml-token-profile-1.0#SAMLAssertionID">_af4ab46a-556b-4fa9-8520-94c80763debf</o:KeyIdentifier>
+          </o:SecurityTokenReference>
+        </trust:RequestedUnattachedReference>
+        <trust:TokenType>urn:oasis:names:tc:SAML:1.0:assertion</trust:TokenType>
+        <trust:RequestType>http://docs.oasis-open.org/ws-sx/ws-trust/200512/Issue</trust:RequestType>
+        <trust:KeyType>http://docs.oasis-open.org/ws-sx/ws-trust/200512/Bearer</trust:KeyType>
+      </trust:RequestSecurityTokenResponse>
+    </trust:RequestSecurityTokenResponseCollection>
+  </s:Body>
+</s:Envelope>

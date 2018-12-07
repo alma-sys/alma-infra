@@ -285,5 +285,41 @@ namespace Alma.Dados.MongoMapping.Dados
             throw new NotSupportedException();
 
         }
+
+        public IList<TEntity> ExecuteCustomSql(string sql, IDictionary<string, object> parameters = null)
+        {
+            //TODO: This should be supported.
+            throw new NotSupportedException();
+        }
+
+        public T ExecuteCustomSqlScalar<T>(string sql, IDictionary<string, object> parameters = null)
+        {
+            throw new NotSupportedException();
+        }
+
+        public Task<IList<TEntity>> ExecuteCustomSqlAsync(string sql, IDictionary<string, object> parameters = null)
+        {
+            throw new NotSupportedException();
+        }
+
+        public Task<T> ExecuteCustomSqlScalarAsync<T>(string sql, IDictionary<string, object> parameters = null)
+        {
+            throw new NotSupportedException();
+        }
+
+        public Task ExecuteProcedureAsync(string procName, IDictionary<string, object> parameters = null)
+        {
+            throw new NotSupportedException();
+        }
+
+        public IList<TEntity> ExecuteNamedQuery(string queryName, IDictionary<string, object> parameters = null)
+        {
+            throw new NotSupportedException();
+        }
+
+        public Task<IList<TEntity>> ExecuteNamedQueryAsync(string queryName, IDictionary<string, object> parameters = null)
+        {
+            throw new NotSupportedException();
+        }
     }
 }

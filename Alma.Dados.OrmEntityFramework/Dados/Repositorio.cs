@@ -211,5 +211,50 @@ namespace Alma.Dados.OrmEntityFramework
         {
             throw new NotImplementedException();
         }
+
+        public IList<T> ExecuteCustomSql<T>(string sql, IDictionary<string, object> parameters = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        public T ExecuteCustomSqlScalar<T>(string sql, IDictionary<string, object> parameters = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IList<T>> ExecuteCustomSqlAsync<T>(string sql, IDictionary<string, object> parameters = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<T> ExecuteCustomSqlScalarAsync<T>(string sql, IDictionary<string, object> parameters = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task ExecuteProcedureAsync(string procName, IDictionary<string, object> parameters = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IList<TEntity> ExecuteNamedQuery(string queryName, IDictionary<string, object> parameters = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IList<TEntity>> ExecuteNamedQueryAsync(string queryName, IDictionary<string, object> parameters = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IList<TEntity> ExecuteCustomSql(string sql, IDictionary<string, object> parameters = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IList<TEntity>> ExecuteCustomSqlAsync(string sql, IDictionary<string, object> parameters = null)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

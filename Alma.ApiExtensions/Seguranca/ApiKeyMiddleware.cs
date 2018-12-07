@@ -13,24 +13,37 @@ namespace Alma.ApiExtensions.Security
 {
     public static class ApiKeyAuthenticationExtensions
     {
+        public const string SchemeName = "ApiKey";
         public static AuthenticationBuilder AddApiKey<TAuthService>(this AuthenticationBuilder builder, string realm)
         where TAuthService : class, IApiKeyAuthenticationService
         {
-            return AddApiKey<TAuthService>(builder, ApiKeyAuthenticationHandler.SchemeName, (x) => x.Realm = realm);
+            return AddApiKey<TAuthService>(builder, (x) =>
+            {
+                x.Realm = realm;
+                x.Scheme = SchemeName;
+            });
         }
+        public static AuthenticationBuilder AddApiKey<TAuthService>(this AuthenticationBuilder builder, string realm, string schemeName)
+            where TAuthService : class, IApiKeyAuthenticationService
+        {
+            return AddApiKey<TAuthService>(builder, (x) =>
+            {
+                x.Realm = realm;
+                x.Scheme = schemeName;
+            });
+        }
+
 
 
         private static AuthenticationBuilder AddApiKey<TAuthService>(this AuthenticationBuilder builder, Action<ApiKeyAuthenticationOptions> configureOptions)
             where TAuthService : class, IApiKeyAuthenticationService
         {
-            return AddApiKey<TAuthService>(builder, ApiKeyAuthenticationHandler.SchemeName, configureOptions);
-        }
-
-        private static AuthenticationBuilder AddApiKey<TAuthService>(this AuthenticationBuilder builder, string authenticationScheme, Action<ApiKeyAuthenticationOptions> configureOptions)
-            where TAuthService : class, IApiKeyAuthenticationService
-        {
             builder.Services.AddSingleton<IPostConfigureOptions<ApiKeyAuthenticationOptions>, ApiKeyAuthenticationPostConfigureOptions>();
             builder.Services.AddTransient<IApiKeyAuthenticationService, TAuthService>();
+
+            var obj = new ApiKeyAuthenticationOptions();
+            configureOptions(obj);
+            var authenticationScheme = obj.Scheme;
 
             return builder.AddScheme<ApiKeyAuthenticationOptions, ApiKeyAuthenticationHandler>(
                 authenticationScheme, configureOptions);
@@ -41,6 +54,7 @@ namespace Alma.ApiExtensions.Security
     public class ApiKeyAuthenticationOptions : AuthenticationSchemeOptions
     {
         public string Realm { get; set; }
+        public string Scheme { get; set; }
     }
 
     public interface IApiKeyAuthenticationService
@@ -61,13 +75,16 @@ namespace Alma.ApiExtensions.Security
             {
                 throw new InvalidOperationException("Realm must be provided in options");
             }
+            if (string.IsNullOrEmpty(options.Scheme))
+            {
+                throw new InvalidOperationException("Scheme must be provided in options");
+            }
         }
     }
 
     class ApiKeyAuthenticationHandler : AuthenticationHandler<ApiKeyAuthenticationOptions>
     {
         private const string AuthorizationHeaderName = "Authorization";
-        internal const string SchemeName = "ApiKey";
         private readonly IApiKeyAuthenticationService _authenticationService;
 
         public ApiKeyAuthenticationHandler(
@@ -95,7 +112,7 @@ namespace Alma.ApiExtensions.Security
                 return AuthenticateResult.NoResult();
             }
 
-            if (!SchemeName.Equals(headerValue.Scheme, StringComparison.OrdinalIgnoreCase))
+            if (!Options.Scheme.Equals(headerValue.Scheme, StringComparison.OrdinalIgnoreCase))
             {
                 //Not Basic authentication header
                 return AuthenticateResult.NoResult();
@@ -119,7 +136,7 @@ namespace Alma.ApiExtensions.Security
 
         protected override async Task HandleChallengeAsync(AuthenticationProperties properties)
         {
-            Response.Headers["WWW-Authenticate"] = $"{SchemeName} realm=\"{Options.Realm}\", charset=\"UTF-8\"";
+            Response.Headers["WWW-Authenticate"] = $"{Options.Scheme} realm=\"{Options.Realm}\", charset=\"UTF-8\"";
             await base.HandleChallengeAsync(properties);
         }
     }

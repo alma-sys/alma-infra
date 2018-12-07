@@ -25,6 +25,31 @@ namespace Alma.ApiExtensions.Log
                 }
                 catch { }
 
+
+                Func<Exception, int, string> recursiveException = null;
+
+                recursiveException = new Func<Exception, int, string>((e, i) =>
+                {
+                    var r = new StringBuilder();
+                    if (e != null)
+                    {
+                        var pad = "".PadLeft(i * 3, ' ');
+                        r.AppendLine($"{pad}{e.GetType().FullName}: {e.Message.Replace(Environment.NewLine, Environment.NewLine + pad)}");
+                        r.AppendLine($"{pad}HelpLink: {e.HelpLink}");
+                        r.AppendLine($"{pad}Source: {e.Source}");
+                        r.AppendLine($"{pad}------");
+                        if (e is AggregateException)
+                        {
+                            foreach (var ie in ((AggregateException)e).InnerExceptions)
+                                r.Append(recursiveException(ie, ++i));
+                        }
+                        else
+                            r.Append(recursiveException(e.InnerException, ++i));
+                    }
+                    return r.ToString();
+                });
+
+
                 htmlError = string.Format(@"<html>
 <head>        <style>
          body {{font-family:""Verdana"";font-weight:normal;font-size: .7em;color:black;}} 
@@ -42,12 +67,12 @@ namespace Alma.ApiExtensions.Log
     <h1>Server Error in '{0}' Application.<hr width=""100%"" size=""1"" color=""silver""></h1>
     <h2>{1}</h2>    
 <p><b>Exception Details: </b><code><pre style=""background-color: #ffffcc; padding: 8px; font-size: 1.1em"">
-    {2}
+{2}
 </pre></code></p>
 <p><b>Stack Trace: </b><code><pre style=""background-color: #ffffcc; padding: 8px; font-size: 1.1em"">
-    {3}
+{3}
 </pre></code></p>
-</body></html>", app, currentException.Message, currentException, currentException.StackTrace);
+</body></html>", app, currentException.Message, recursiveException(currentException, 0), currentException.StackTrace);
             }
 
             var bodyEnd = htmlError.IndexOf("</body>");
