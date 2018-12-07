@@ -1,10 +1,9 @@
 variables:
   SOLUTION: "Alma.Infra.sln"
   CONFIGURATION: "Release"
-  BUILDACTION: "Clean,Build"
 
-  MSBUILD: "14.0"
-  VISUALSTUDIO: "14.0"
+  MSBUILD: "15.0"
+  VISUALSTUDIO: "15.0"
   VERBOSITY: "minimal"
 
   PUBLISHDBPROJ: ""
@@ -16,13 +15,25 @@ variables:
 
   NUGETREPOSITORY: "https://dev.almasistemas.com.br/nuget/alma"
 
-before_script:
-  - nuget.exe restore
+  AUTHORS: "Marcos Junior and Alex Duraes"
+  COMPANY: "Alma Sistemas"
+  PRODUCT: "Alma Infrastructure"
+  COPYRIGHT: "Copyright (c) Alma Sistemas"
+  URL: "dev.almasistemas.com.br"
+  URLICON: "dev.almasistemas.com.br/gitlab/uploads/appearance/header_logo/1/ghost-icon.png"
 
 cache:
-    key: "$CI_PROJECT_PATH/$CI_BUILD_REF_NAME"
+    key: "$CI_PROJECT_PATH_$CI_BUILD_REF_NAME"
     paths:
         - "packages"
+        - "*/obj"
+        - "*/*/obj"
+        - "*/*/*/obj"
+        - "*/*/*/*/obj"
+
+before_script:
+  - export PACKVERSION=3.`date -u +%y.%m%d.%H%M`;echo $PACKVERSION
+  - msbuild "$SOLUTION" -t:restore -tv:$MSBUILD -verbosity:$VERBOSITY -p:Configuration=$CONFIGURATION -p:VisualStudioVersion=$VISUALSTUDIO -p:GeneratePackageOnBuild=false
 
 stages:
   - build
@@ -31,15 +42,19 @@ stages:
 
 Build:
   stage: build
+  variables:
+    BUILDACTION: "Clean,Build"
   script:
-    - gitlab-msbuild.sh "$SOLUTION" -t:$BUILDACTION -tv:$MSBUILD -verbosity:$VERBOSITY -p:Configuration=$CONFIGURATION\;VisualStudioVersion=$VISUALSTUDIO
+    - msbuild "$SOLUTION" -t:$BUILDACTION -tv:$MSBUILD -verbosity:$VERBOSITY -p:Configuration=$CONFIGURATION -p:VisualStudioVersion=$VISUALSTUDIO -p:GeneratePackageOnBuild=false
   tags:
     - windows
 
 Test:
   stage: test
+  variables:
+    BUILDACTION: "Clean,Build"
   script:
-    - gitlab-msbuild.sh "$SOLUTION" -t:$BUILDACTION -tv:$MSBUILD -verbosity:$VERBOSITY -p:Configuration=$CONFIGURATION\;VisualStudioVersion=$VISUALSTUDIO
+    - msbuild "$SOLUTION" -t:$BUILDACTION -tv:$MSBUILD -verbosity:$VERBOSITY -p:Configuration=$CONFIGURATION -p:VisualStudioVersion=$VISUALSTUDIO -p:GeneratePackageOnBuild=false
     - gitlab-mstest.sh
   tags:
     - windows
@@ -52,16 +67,33 @@ Test:
 ProGet:
   stage: deploy
   environment: Producao
+  variables:
+    BUILDACTION: "Clean,Restore,Build"
+    VERSIONINFO: ""
   script:
-    - export YEAR=`date +%Y`
-    - export VERSION=`date +%y.%m%d.%H%M`
-    - gitlab-transform.sh GlobalAssemblyInfo.release GlobalAssemblyInfo.cs
-    - gitlab-msbuild.sh "$SOLUTION" -t:$BUILDACTION -tv:$MSBUILD -verbosity:$VERBOSITY -p:Configuration=$CONFIGURATION\;VisualStudioVersion=$VISUALSTUDIO
+    - msbuild "$SOLUTION" -t:$BUILDACTION -tv:$MSBUILD -verbosity:$VERBOSITY -p:Configuration=$CONFIGURATION -p:VisualStudioVersion=$VISUALSTUDIO -p:Version=$PACKVERSION$VERSIONINFO -p:AssemblyVersion=$PACKVERSION -property:Authors="$AUTHORS" -property:Company="$COMPANY" -property:Product="$PRODUCT" -property:Copyright="$COPYRIGHT" -property:URL="$URL" -property:URLICON="$URLICON" -property:GeneratePackageOnBuild=true
     - shopt -s globstar
-    - for i in **/bin/$CONFIGURATION/*.nupkg; do # Whitespace-safe and recursive
+    - for i in **/bin/$CONFIGURATION/**/*.nupkg; do # Whitespace-safe and recursive
     -     nuget push -ApiKey $NUGETAPIKEY -Source $NUGETREPOSITORY "$i"
     - done
   only:
     - master
+  tags:
+    - windows
+
+ProGet:
+  stage: deploy
+  environment: Beta
+  variables:
+    BUILDACTION: "Clean,Restore,Build"
+    VERSIONINFO: "-beta"
+  script:
+    - msbuild "$SOLUTION" -t:$BUILDACTION -tv:$MSBUILD -verbosity:$VERBOSITY -p:Configuration=$CONFIGURATION -p:VisualStudioVersion=$VISUALSTUDIO -p:Version=$PACKVERSION$VERSIONINFO -p:AssemblyVersion=$PACKVERSION -property:Authors="$AUTHORS" -property:Company="$COMPANY" -property:Product="$PRODUCT" -property:Copyright="$COPYRIGHT" -property:URL=$URL -property:URLICON="$URLICON" -property:GeneratePackageOnBuild=true
+    - shopt -s globstar
+    - for i in **/bin/$CONFIGURATION/**/*.nupkg; do # Whitespace-safe and recursive
+    -     nuget push -ApiKey $NUGETAPIKEY -Source $NUGETREPOSITORY "$i"
+    - done
+  only:
+    - beta
   tags:
     - windows

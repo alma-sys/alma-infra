@@ -1,12 +1,12 @@
-﻿using System;
+﻿using NHibernate;
+using NHibernate.Proxy;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Linq.Expressions;
-using NHibernate;
-using NHibernate.Linq;
-using NHibernate.Proxy;
+using System.Threading.Tasks;
 
 namespace Alma.Dados.OrmNHibernate
 {
@@ -226,6 +226,23 @@ namespace Alma.Dados.OrmNHibernate
             Session.Flush();
         }
 
+
+        //[Transacao]
+        public async Task CreateAsync(TEntity instance)
+        {
+            await Session.SaveAsync(instance);
+            await Session.FlushAsync();
+        }
+
+        //[Transacao]
+        public async Task CreateAsync(IList<TEntity> instances)
+        {
+            var tasks = instances.Select(x => Session.SaveAsync(x)).ToList();
+            await Task.WhenAll(tasks);
+            await Session.FlushAsync();
+        }
+
+
         //[Transacao]
         public void Save(TEntity instance)
         {
@@ -241,6 +258,20 @@ namespace Alma.Dados.OrmNHibernate
                 Session.Update(instance);
             }
             Session.Flush();
+        }
+
+        public async Task SaveAsync(TEntity instance)
+        {
+            await Session.UpdateAsync(instance);
+            await Session.FlushAsync();
+        }
+
+        //[Transacao]
+        public async Task SaveAsync(IList<TEntity> instances)
+        {
+            var tasks = instances.Select(x => Session.UpdateAsync(x)).ToList();
+            await Task.WhenAll(tasks);
+            await Session.FlushAsync();
         }
 
         //[Transacao]
@@ -260,12 +291,36 @@ namespace Alma.Dados.OrmNHibernate
             Session.Flush();
         }
 
+
+        //[Transacao]
+        public async Task DeleteAsync(TEntity instance)
+        {
+            await Session.DeleteAsync(instance);
+            await Session.FlushAsync();
+        }
+
+        //[Transacao]
+        public async Task DeleteAsync(IList<TEntity> instances)
+        {
+            var tasks = instances.Select(x => Session.DeleteAsync(x)).ToList();
+            await Task.WhenAll(tasks);
+            await Session.FlushAsync();
+        }
+
         //[Transacao]
         public void MergeUpdate(TEntity instance)
         {
             this.Session.Merge(instance);
             Session.Flush();
         }
+
+        //[Transacao]
+        public async Task MergeUpdateAsync(TEntity instance)
+        {
+            await this.Session.MergeAsync(instance);
+            await Session.FlushAsync();
+        }
+
 
         #endregion
 

@@ -1,20 +1,18 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.10
+VisualStudioVersion = 15.0.27130.2026
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alma.Core", "Alma.Core\Alma.Core.csproj", "{1F3D8A36-9402-46B6-80E1-F356F402206C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Alma.Core", "Alma.Core\Alma.Core.csproj", "{1F3D8A36-9402-46B6-80E1-F356F402206C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alma.Dados.OrmNHibernate", "Alma.Dados.OrmNHibernate\Alma.Dados.OrmNHibernate.csproj", "{77C6F236-B4C2-48F9-B0E6-3068C75D8FE4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Alma.Dados.OrmNHibernate", "Alma.Dados.OrmNHibernate\Alma.Dados.OrmNHibernate.csproj", "{77C6F236-B4C2-48F9-B0E6-3068C75D8FE4}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{77367E95-703A-4F40-A564-697A833A375A}"
 	ProjectSection(SolutionItems) = preProject
 		.gitlab-ci.yml = .gitlab-ci.yml
-		GlobalAssemblyInfo.cs = GlobalAssemblyInfo.cs
-		GlobalAssemblyInfo.release = GlobalAssemblyInfo.release
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alma.Dados", "Alma.Dados\Alma.Dados.csproj", "{36722228-B90A-4FA5-BD18-30BA8D700A45}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Alma.Dados", "Alma.Dados\Alma.Dados.csproj", "{36722228-B90A-4FA5-BD18-30BA8D700A45}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "5-Dados", "5-Dados", "{B8FB6536-D1F1-4713-A3C1-73979FC25F8D}"
 EndProject
@@ -22,27 +20,57 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1-Core", "1-Core", "{B1F37A
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4-Dominio", "4-Dominio", "{81703DA2-11D7-41B8-8238-354885A429FA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alma.Dominio", "Alma.Dominio\Alma.Dominio.csproj", "{02C52EF0-2524-41BD-B2B4-CBF81109C45D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Alma.Dominio", "Alma.Dominio\Alma.Dominio.csproj", "{02C52EF0-2524-41BD-B2B4-CBF81109C45D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3-Aplicativo", "3-Aplicativo", "{DFADFD2F-711A-4B60-806D-9E7A2D6222F4}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2-Api", "2-Api", "{1D93CB06-AFB7-4640-AE10-5EAB216FF286}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alma.ApiExtensions", "Alma.ApiExtensions\Alma.ApiExtensions.csproj", "{1D44995C-D2A1-4587-84C5-1A036661A5D5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Alma.ApiExtensions", "Alma.ApiExtensions\Alma.ApiExtensions.csproj", "{1D44995C-D2A1-4587-84C5-1A036661A5D5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alma.Aplicativo", "Alma.Aplicativo\Alma.Aplicativo.csproj", "{5B2A3FF5-F5E2-45E1-B7C7-D3F9AED3A857}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Alma.Aplicativo", "Alma.Aplicativo\Alma.Aplicativo.csproj", "{5B2A3FF5-F5E2-45E1-B7C7-D3F9AED3A857}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alma.ApiExtensions.TestHelper", "Alma.ApiExtensions.TestHelper\Alma.ApiExtensions.TestHelper.csproj", "{1A541B05-2703-4C6B-976D-384D7F8B3334}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Alma.ApiExtensions.TestHelper", "Alma.ApiExtensions.TestHelper\Alma.ApiExtensions.TestHelper.csproj", "{1A541B05-2703-4C6B-976D-384D7F8B3334}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alma.Dados.OrmEntityFramework", "Alma.Dados.OrmEntityFramework\Alma.Dados.OrmEntityFramework.csproj", "{8D2D432A-65BF-4FAF-9CA3-73DB16A2505B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Alma.Dados.OrmEntityFramework", "Alma.Dados.OrmEntityFramework\Alma.Dados.OrmEntityFramework.csproj", "{8D2D432A-65BF-4FAF-9CA3-73DB16A2505B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "6-Testes", "6-Testes", "{3FB36C13-6EB6-402E-9FB2-CC51927ED1F9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alma.TestHelper", "Alma.TestHelper\Alma.TestHelper.csproj", "{4C624147-E802-4B00-8AD5-CD615F140326}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Alma.TestHelper", "Alma.TestHelper\Alma.TestHelper.csproj", "{4C624147-E802-4B00-8AD5-CD615F140326}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alma.TestHelper.Tests", "Alma.TestHelper.Tests\Alma.TestHelper.Tests.csproj", "{9DA67942-D6DC-43CE-A765-1B90C5123FF2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Alma.TestHelper.Tests", "Alma.TestHelper.Tests\Alma.TestHelper.Tests.csproj", "{9DA67942-D6DC-43CE-A765-1B90C5123FF2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alma.ApiExtensions.TestHelper.Tests", "Alma.ApiExtensions.TestHelper.Tests\Alma.ApiExtensions.TestHelper.Tests.csproj", "{CC4B38F3-FBC7-4519-9F49-751E62BD4289}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Alma.ApiExtensions.TestHelper.Tests", "Alma.ApiExtensions.TestHelper.Tests\Alma.ApiExtensions.TestHelper.Tests.csproj", "{CC4B38F3-FBC7-4519-9F49-751E62BD4289}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Alma.Core.Drawing", "Alma.Core.Drawing\Alma.Core.Drawing.csproj", "{6C78C951-6799-4057-88EE-48507AD09E8D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "7-ExemploNetCore", "7-ExemploNetCore", "{DE9E6ED8-568D-4E1B-A5F4-9478FBADCFEC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1-Web", "1-Web", "{E8D6F064-32D9-4AFA-A769-005FD83CFA60}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Alma.Exemplo.ApiMongo", "ExemploNetCore\Alma.Exemplo.ApiMongo\Alma.Exemplo.ApiMongo.csproj", "{F49B9A2B-7586-4C10-A14E-B49CCE66D3DA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Alma.Exemplo.Web", "ExemploNetCore\Alma.Exemplo.Web\Alma.Exemplo.Web.csproj", "{9BD350BB-973C-47A8-A4DF-01ADD13912B0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2-Aplicativo", "2-Aplicativo", "{1CA0F1C2-8968-4C1C-9E7F-15AD13561DDD}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Alma.Exemplo.Aplicativo", "ExemploNetCore\Alma.Exemplo.Aplicativo\Alma.Exemplo.Aplicativo.csproj", "{D48FA439-F878-4FBB-B716-DCD21A519C12}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3-Dominio", "3-Dominio", "{66F5B04F-0B3F-41D0-B06A-B5609C204263}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Alma.Exemplo.Dominio", "ExemploNetCore\Alma.Exemplo.Dominio\Alma.Exemplo.Dominio.csproj", "{4AEB7313-DB61-4755-853E-DA24E414491B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4-Infra", "4-Infra", "{A819F0D0-4698-4098-88D7-AEACF0A58068}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Alma.Exemplo.Dados.Mongo", "ExemploNetCore\Alma.Exemplo.Dados.Mongo\Alma.Exemplo.Dados.Mongo.csproj", "{123DC860-3C8F-425C-8BC5-C565F953F38B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Alma.Dados.MongoMapping", "Alma.Dados.MongoMapping\Alma.Dados.MongoMapping.csproj", "{5D0FC54E-A0E3-413D-A8BC-51D10FA5FD1C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Alma.Exemplo.ApiMSSql", "ExemploNetCore\Alma.Exemplo.ApiMSSql\Alma.Exemplo.ApiMSSql.csproj", "{1FE87528-9271-4731-AA8A-574430C02F96}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Alma.Exemplo.Dados.Sql", "ExemploNetCore\Alma.Exemplo.Dados.Sql\Alma.Exemplo.Dados.Sql.csproj", "{B1FB0722-7DCE-434A-9423-D999C6AA9232}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Alma.ApiExtensions.Tests", "Alma.ApiExtensions.Tests\Alma.ApiExtensions.Tests.csproj", "{FBED9569-F51F-4C91-B1D7-5FFEB735620F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -94,6 +122,46 @@ Global
 		{CC4B38F3-FBC7-4519-9F49-751E62BD4289}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CC4B38F3-FBC7-4519-9F49-751E62BD4289}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CC4B38F3-FBC7-4519-9F49-751E62BD4289}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6C78C951-6799-4057-88EE-48507AD09E8D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6C78C951-6799-4057-88EE-48507AD09E8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6C78C951-6799-4057-88EE-48507AD09E8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6C78C951-6799-4057-88EE-48507AD09E8D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F49B9A2B-7586-4C10-A14E-B49CCE66D3DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F49B9A2B-7586-4C10-A14E-B49CCE66D3DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F49B9A2B-7586-4C10-A14E-B49CCE66D3DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F49B9A2B-7586-4C10-A14E-B49CCE66D3DA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9BD350BB-973C-47A8-A4DF-01ADD13912B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9BD350BB-973C-47A8-A4DF-01ADD13912B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9BD350BB-973C-47A8-A4DF-01ADD13912B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9BD350BB-973C-47A8-A4DF-01ADD13912B0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D48FA439-F878-4FBB-B716-DCD21A519C12}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D48FA439-F878-4FBB-B716-DCD21A519C12}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D48FA439-F878-4FBB-B716-DCD21A519C12}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D48FA439-F878-4FBB-B716-DCD21A519C12}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4AEB7313-DB61-4755-853E-DA24E414491B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4AEB7313-DB61-4755-853E-DA24E414491B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4AEB7313-DB61-4755-853E-DA24E414491B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4AEB7313-DB61-4755-853E-DA24E414491B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{123DC860-3C8F-425C-8BC5-C565F953F38B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{123DC860-3C8F-425C-8BC5-C565F953F38B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{123DC860-3C8F-425C-8BC5-C565F953F38B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{123DC860-3C8F-425C-8BC5-C565F953F38B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5D0FC54E-A0E3-413D-A8BC-51D10FA5FD1C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5D0FC54E-A0E3-413D-A8BC-51D10FA5FD1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5D0FC54E-A0E3-413D-A8BC-51D10FA5FD1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5D0FC54E-A0E3-413D-A8BC-51D10FA5FD1C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1FE87528-9271-4731-AA8A-574430C02F96}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1FE87528-9271-4731-AA8A-574430C02F96}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1FE87528-9271-4731-AA8A-574430C02F96}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1FE87528-9271-4731-AA8A-574430C02F96}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B1FB0722-7DCE-434A-9423-D999C6AA9232}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B1FB0722-7DCE-434A-9423-D999C6AA9232}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B1FB0722-7DCE-434A-9423-D999C6AA9232}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B1FB0722-7DCE-434A-9423-D999C6AA9232}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FBED9569-F51F-4C91-B1D7-5FFEB735620F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FBED9569-F51F-4C91-B1D7-5FFEB735620F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FBED9569-F51F-4C91-B1D7-5FFEB735620F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FBED9569-F51F-4C91-B1D7-5FFEB735620F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -110,6 +178,20 @@ Global
 		{4C624147-E802-4B00-8AD5-CD615F140326} = {3FB36C13-6EB6-402E-9FB2-CC51927ED1F9}
 		{9DA67942-D6DC-43CE-A765-1B90C5123FF2} = {3FB36C13-6EB6-402E-9FB2-CC51927ED1F9}
 		{CC4B38F3-FBC7-4519-9F49-751E62BD4289} = {1D93CB06-AFB7-4640-AE10-5EAB216FF286}
+		{6C78C951-6799-4057-88EE-48507AD09E8D} = {B1F37A83-8858-46C9-BB78-0BB11F52E46F}
+		{E8D6F064-32D9-4AFA-A769-005FD83CFA60} = {DE9E6ED8-568D-4E1B-A5F4-9478FBADCFEC}
+		{F49B9A2B-7586-4C10-A14E-B49CCE66D3DA} = {E8D6F064-32D9-4AFA-A769-005FD83CFA60}
+		{9BD350BB-973C-47A8-A4DF-01ADD13912B0} = {E8D6F064-32D9-4AFA-A769-005FD83CFA60}
+		{1CA0F1C2-8968-4C1C-9E7F-15AD13561DDD} = {DE9E6ED8-568D-4E1B-A5F4-9478FBADCFEC}
+		{D48FA439-F878-4FBB-B716-DCD21A519C12} = {1CA0F1C2-8968-4C1C-9E7F-15AD13561DDD}
+		{66F5B04F-0B3F-41D0-B06A-B5609C204263} = {DE9E6ED8-568D-4E1B-A5F4-9478FBADCFEC}
+		{4AEB7313-DB61-4755-853E-DA24E414491B} = {66F5B04F-0B3F-41D0-B06A-B5609C204263}
+		{A819F0D0-4698-4098-88D7-AEACF0A58068} = {DE9E6ED8-568D-4E1B-A5F4-9478FBADCFEC}
+		{123DC860-3C8F-425C-8BC5-C565F953F38B} = {A819F0D0-4698-4098-88D7-AEACF0A58068}
+		{5D0FC54E-A0E3-413D-A8BC-51D10FA5FD1C} = {B8FB6536-D1F1-4713-A3C1-73979FC25F8D}
+		{1FE87528-9271-4731-AA8A-574430C02F96} = {E8D6F064-32D9-4AFA-A769-005FD83CFA60}
+		{B1FB0722-7DCE-434A-9423-D999C6AA9232} = {A819F0D0-4698-4098-88D7-AEACF0A58068}
+		{FBED9569-F51F-4C91-B1D7-5FFEB735620F} = {1D93CB06-AFB7-4640-AE10-5EAB216FF286}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {82D93C88-2AE6-4B7C-994E-089B74302560}

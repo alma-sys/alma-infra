@@ -1,55 +1,86 @@
-﻿using System.Linq;
-using System.Net.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Linq;
 using System.Security.Claims;
-using System.Web.Http;
-using System.Web.Http.Controllers;
+using System.Threading.Tasks;
 
 namespace Alma.ApiExtensions.Seguranca
 {
-    public class SegurancaAttribute : AuthorizeAttribute
+    //public static class SecurityExtension
+    //{
+
+    //    public static void UseSecurityAuthorization(this IServiceCollection services)
+    //    {
+    //        var permissoes = new string[] { };
+    //        //pegar attributos das classes e adicionar as autorizações. 
+    //        foreach (var permissao in permissoes)
+    //        {
+    //            services.AddAuthorization(options =>
+    //            {
+    //                options.AddPolicy("Seguranca_" + permissao,
+    //                                  policy => policy.Requirements.Add(new SegurancaRequirement(permissao)));
+    //            });
+    //        }
+    //        throw new NotImplementedException();
+    //    }
+    //}
+
+    public sealed class AuthorizationAttribute : AuthorizeAttribute
     {
-        private string[] permissoes { get; set; }
-
-        public SegurancaAttribute()
+        public AuthorizationAttribute(params string[] roles)
+            : base()
         {
-            permissoes = new string[0];
-        }
-
-        public SegurancaAttribute(params string[] permissoes)
-        {
-            this.permissoes = permissoes;
-        }
-
-        protected override bool IsAuthorized(HttpActionContext actionContext)
-        {
-            if (actionContext.RequestContext.Principal == null ||
-                !actionContext.RequestContext.Principal.Identity.IsAuthenticated)
-                return false;
-
-            var identity = actionContext.RequestContext.Principal.Identity as ClaimsIdentity;
-            var permissoesUsuario = identity.Claims?.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToList();
-
-            var temAcesso = false;
-
-            if (permissoesUsuario.Contains(PermissoesBase.Root))
-                return true;
-
-            foreach (var permissao in permissoes)
-            {
-                temAcesso = temAcesso || permissoesUsuario.Contains(permissao);
-            }
-
-            return temAcesso;
-        }
-
-        protected override void HandleUnauthorizedRequest(HttpActionContext ctx)
-        {
-            if (ctx.RequestContext.Principal.Identity == null || !ctx.RequestContext.Principal.Identity.IsAuthenticated)
-                base.HandleUnauthorizedRequest(ctx);
-            else
-            {
-                ctx.Response = new HttpResponseMessage(System.Net.HttpStatusCode.Forbidden);
-            }
+            this.Roles = roles != null && roles.Length > 0 ? string.Join(",", roles) : null;
         }
     }
+
+
+    //public class SegurancaRequirement : AuthorizationHandler<SegurancaRequirement>, IAuthorizationRequirement
+    //{
+    //    public SegurancaRequirement(params string[] permissao)
+    //    {
+    //        this.Permissoes = permissao;
+    //    }
+
+    //    public string[] Permissoes { get; private set; }
+
+    //    protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, SegurancaRequirement requirement)
+    //    {
+    //        if (context.User == null || context.User.Identity == null ||
+    //               !context.User.Identity.IsAuthenticated)
+    //        {
+    //            context.Fail();
+    //            return Task.CompletedTask;
+    //        }
+
+    //        var identity = context.User.Identity as ClaimsIdentity;
+    //        var permissoesUsuario = identity.Claims?.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToList();
+
+    //        var temAcesso = false;
+
+    //        if (permissoesUsuario.Contains(PermissoesBase.Root))
+    //            temAcesso = true;
+    //        else
+    //        {
+    //            temAcesso = permissoesUsuario.Count == 0; //começa com true se a api não tiver permissão específica.
+    //            foreach (var permissao in Permissoes)
+    //            {
+    //                temAcesso = temAcesso || permissoesUsuario.Contains(permissao);
+    //            }
+    //        }
+
+    //        if (temAcesso)
+    //        {
+    //            context.Succeed(requirement);
+    //        }
+    //        else
+    //        {
+    //            context.Fail();
+    //        }
+
+    //        return Task.CompletedTask;
+    //    }
+    //}
 }
+

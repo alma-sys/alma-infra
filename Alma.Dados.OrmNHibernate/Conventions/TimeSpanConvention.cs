@@ -14,7 +14,13 @@ namespace Alma.Dados.OrmNHibernate.Conventions
             IPropertyMapper map)
         {
             var prop = member.LocalMember as PropertyInfo;
-            if (prop.PropertyType == typeof(TimeSpan) || prop.PropertyType == typeof(TimeSpan?))
+            var field = member.LocalMember as FieldInfo;
+            if (
+                prop?.PropertyType == typeof(TimeSpan) ||
+                prop?.PropertyType == typeof(TimeSpan?) ||
+                field?.FieldType == typeof(TimeSpan) ||
+                field?.FieldType == typeof(TimeSpan?)
+                )
             {
                 map.Type<TimeSpanFormattedType>();
                 map.Length(TimeSpanFormattedType.MaxLength);

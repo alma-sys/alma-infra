@@ -1,25 +1,24 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Xunit;
 
 namespace Alma.ApiExtensions.Serializadores.Tests
 {
-    [TestClass()]
     public class SerializadorConstantesTests
     {
         enum ParaTestar
         {
             Valor1 = 1,
             Valor2 = 2,
-            [System.ComponentModel.Description("Valor 3")]
+            [Alma.Core.Description("Valor 3")]
             Valor3 = 3
         }
 
 
-        [TestMethod()]
+        [Fact]
         public void DeveSerializarEnumsEmCodigoNome()
         {
 
             var resultado = SerializadorConstantes.SerializarEnum(typeof(ParaTestar), true, true);
-            Assert.AreEqual(@"[
+            Assert.Equal(@"[
   {
     ""id"": 1,
     ""nome"": ""Valor1""
@@ -36,12 +35,12 @@ namespace Alma.ApiExtensions.Serializadores.Tests
         }
 
 
-        [TestMethod()]
+        [Fact()]
         public void DeveSerializarEnumsComTextoEmCodigoDescricao()
         {
 
             var resultado = SerializadorConstantes.SerializarEnumChar(typeof(ParaTestar), true, true);
-            Assert.AreEqual(@"[
+            Assert.Equal(@"[
   {
     ""codigo"": ""Valor1"",
     ""descricao"": ""Valor1""

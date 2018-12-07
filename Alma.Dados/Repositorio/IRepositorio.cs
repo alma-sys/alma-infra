@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace Alma.Dados
 {
@@ -32,6 +33,20 @@ namespace Alma.Dados
         void Delete(TEntity entidade);
         void Delete(IList<TEntity> entidades);
         void MergeUpdate(TEntity entidade);
+
+
+
+
+        Task CreateAsync(TEntity entidade);
+        Task CreateAsync(IList<TEntity> entidades);
+        Task SaveAsync(TEntity entidade);
+        Task SaveAsync(IList<TEntity> entidade);
+        Task DeleteAsync(TEntity entidade);
+        Task DeleteAsync(IList<TEntity> entidades);
+        Task MergeUpdateAsync(TEntity entidade);
+
+
+
         void ExecuteProcedure(string procName, IDictionary<string, object> parameters = null);
         IDbTransaction GetTransaction();
 

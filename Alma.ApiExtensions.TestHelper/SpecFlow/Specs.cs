@@ -1,16 +1,15 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Reflection;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using RestSharp;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Reflection;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
-using System.Diagnostics;
+using Xunit;
 
 namespace Alma.ApiExtensions.TestHelper.SpecFlow
 {
@@ -51,7 +50,7 @@ namespace Alma.ApiExtensions.TestHelper.SpecFlow
                     metodo = Method.DELETE;
                     break;
                 default:
-                    Assert.Fail("Método HTTP não esperado");
+                    Assert.True(false, "Método HTTP não esperado"); //indicação da doc xunit para Assert.Fail
                     break;
             }
 
@@ -151,9 +150,9 @@ namespace Alma.ApiExtensions.TestHelper.SpecFlow
         {
             var response = ScenarioContext.Response();
 
-            Assert.AreEqual(p0, response.StatusCode.ToString(),
-                response.StatusCode == HttpStatusCode.InternalServerError ?
-                response.Content : null);
+            Assert.Equal(p0, response.StatusCode.ToString()); //xunit n tem mensagem
+                                                              //response.StatusCode == HttpStatusCode.InternalServerError ?
+                                                              //response.Content : null);
         }
 
         private Type LocalizarTipo(string nomeTipo)
@@ -437,10 +436,13 @@ namespace Alma.ApiExtensions.TestHelper.SpecFlow
 
             var model = JsonConvert.DeserializeObject(content, type) as IList;
 
-            Assert.IsNotNull(model);
-            CollectionAssert.AllItemsAreNotNull(model);
-            CollectionAssert.AllItemsAreInstancesOfType(model, typeOfActualModel);
-            Assert.AreNotEqual(0, model.Count);
+            Assert.NotNull(model);
+            Assert.NotEmpty(model);
+            Assert.All(model.Cast<object>(), x =>
+            {
+                Assert.NotNull(x);
+                Assert.IsType(typeOfActualModel, x);
+            });
         }
 
         private void ValidarRespostaListaComUmItem(Table expectedTable, Type typeOfActualModel)
@@ -451,10 +453,13 @@ namespace Alma.ApiExtensions.TestHelper.SpecFlow
             var type = typeof(List<>).MakeGenericType(typeOfActualModel);
             var model = JsonConvert.DeserializeObject(content, type) as IList;
 
-            Assert.IsNotNull(model);
-            CollectionAssert.AllItemsAreNotNull(model);
-            CollectionAssert.AllItemsAreInstancesOfType(model, typeOfActualModel);
-            Assert.AreEqual(1, model.Count);
+            Assert.NotNull(model);
+            Assert.Equal(1, model.Count);
+            Assert.All(model.Cast<object>(), x =>
+            {
+                Assert.NotNull(x);
+                Assert.IsType(typeOfActualModel, x);
+            });
 
             expectedTable.CompareToInstance(model[0]);
         }
@@ -466,10 +471,13 @@ namespace Alma.ApiExtensions.TestHelper.SpecFlow
             var type = typeof(List<>).MakeGenericType(tipoItem);
             var model = JsonConvert.DeserializeObject(content, type) as IList;
 
-            Assert.IsNotNull(model);
-            CollectionAssert.AllItemsAreNotNull(model);
-            CollectionAssert.AllItemsAreInstancesOfType(model, tipoItem);
-            Assert.AreNotEqual(0, model.Count);
+            Assert.NotNull(model);
+            Assert.NotEmpty(model);
+            Assert.All(model.Cast<object>(), x =>
+            {
+                Assert.NotNull(x);
+                Assert.IsType(tipoItem, x);
+            });
 
             var reflPropriedade = type.GetProperty(propriedade, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
             if (reflPropriedade == null)
@@ -480,9 +488,9 @@ namespace Alma.ApiExtensions.TestHelper.SpecFlow
                 var propriedadeObj = reflPropriedade.GetValue(item);
 
                 if (valor == null)
-                    Assert.IsNull(propriedadeObj);
+                    Assert.Null(propriedadeObj);
                 else
-                    Assert.AreEqual(valor, propriedadeObj.ToString());
+                    Assert.Equal(valor, propriedadeObj.ToString());
             }
         }
 

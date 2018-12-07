@@ -1,104 +1,139 @@
-﻿using System;
-using System.Configuration;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
+using Microsoft.DotNet.PlatformAbstractions;
+using System;
+using System.Diagnostics;
+using System.IO;
 using System.Net.Mail;
-using System.Web;
-using System.Web.Http.ExceptionHandling;
+using System.Threading.Tasks;
 
 namespace Alma.ApiExtensions.Log
 {
-    public class LogModule : IHttpModule
+    public static class LogModuleExtensions
     {
+        public static IApplicationBuilder UseLogModule(this IApplicationBuilder builder)
+        {
+            LogModule.CaminhoErro = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "App_Data", "Erros");
+            LogModule.CaminhoLog = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "App_Data", "Logs");
+
+            if (!Directory.Exists(LogModule.CaminhoErro))
+                Directory.CreateDirectory(LogModule.CaminhoErro);
+            if (!Directory.Exists(LogModule.CaminhoLog))
+                Directory.CreateDirectory(LogModule.CaminhoLog);
+
+
+            return builder.UseMiddleware<LogModule>();
+        }
+
+        public static void Report(this Exception ex, HttpContext context)
+        {
+            LogModule.OnError(context, ex);
+        }
+
+        public static void Report(this Exception ex)
+        {
+            HttpContext ctx = null;
+            try
+            {
+                ctx = new HttpContextAccessor().HttpContext;
+            }
+            catch { }
+
+            LogModule.OnError(ctx, ex);
+        }
+
+    }
+    public class LogModule : IDisposable
+    {
+
+        private readonly RequestDelegate _next;
+
+        public LogModule(RequestDelegate next)
+        {
+            _next = next;
+        }
+
+        public async Task Invoke(HttpContext context)
+        {
+            // Do something with context near the beginning of request processing.
+
+
+
+            //var config = ConfigurationManager.GetSection("system.web/customErrors") as System.Web.Configuration.CustomErrorsSection;
+            //if (config != null && config.Mode != System.Web.Configuration.CustomErrorsMode.Off)
+            //    ErrosPersonalizados = true;
+            ErrosPersonalizados = true;
+
+            //app.Error += App_Error;
+            //AppDomain.CurrentDomain.UnhandledException -= CurrentDomain_UnhandledException;
+            //AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+
+
+            try
+            {
+
+                await _next.Invoke(context);
+            }
+            catch (Exception ex)
+            {
+                OnError(context, ex);
+                throw;
+            }
+
+        }
+
+
+
+
+
         public void Dispose()
         {
         }
 
-        private static bool _startWasCalled;
 
-        public void Init(HttpApplication app)
-        {
-            if (_startWasCalled) return;
-            _startWasCalled = true;
+        //private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        //{
+        //    OnError((Exception)e.ExceptionObject);
+        //}
 
-            CaminhoErro = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "App_Data", "Erros");
-            CaminhoLog = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "App_Data", "Logs");
-            var config = ConfigurationManager.GetSection("system.web/customErrors") as System.Web.Configuration.CustomErrorsSection;
-            if (config != null && config.Mode != System.Web.Configuration.CustomErrorsMode.Off)
-                ErrosPersonalizados = true;
-
-            app.Error += App_Error;
-            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
-            System.Web.Http.GlobalConfiguration.Configuration.Services.Add(typeof(System.Web.Http.ExceptionHandling.IExceptionLogger), new WebApiExceptionLogger());
-        }
-
-        private class WebApiExceptionLogger : System.Web.Http.ExceptionHandling.ExceptionLogger
-        {
-            public override void Log(ExceptionLoggerContext context)
-            {
-                LogModule module = null;
-                foreach (var key in HttpContext.Current.ApplicationInstance.Modules.AllKeys)
-                {
-                    var mod = HttpContext.Current.ApplicationInstance.Modules[key];
-                    if (mod is LogModule)
-                    {
-                        module = (LogModule)mod;
-                        break;
-                    }
-                }
-                //deixa dar exception se for null?
-                module.OnError(context.Exception);
-                base.Log(context);
-            }
-        }
-
-        private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
-        {
-            OnError((Exception)e.ExceptionObject);
-        }
-
-        public static string CaminhoLog { get; private set; }
-        public static string CaminhoErro { get; private set; }
+        public static string CaminhoLog { get; internal set; }
+        public static string CaminhoErro { get; internal set; }
         public static bool ErrosPersonalizados { get; private set; }
 
-        private void App_Error(object sender, EventArgs e)
-        {
-            var context = HttpContext.Current;
-            if (context == null)
-                throw new InvalidOperationException();
-            var ex = context.Server.GetLastError();
-            OnError(ex);
-        }
 
-        protected virtual void OnError(Exception exception)
+        internal static void OnError(HttpContext context, Exception exception)
         {
 
-            var httpException = exception as HttpException;
+            var httpException = (Exception)null; // exception as HttpException;
 
-            if (httpException != null && httpException.GetHttpCode() < 500)
+            if (httpException != null) // && httpException.GetHttpCode() < 500)
             {
                 //filtro de 404
                 //não logar ou configurar?
             }
             else
             {
-                var context = HttpContext.Current;
 
-                var isAjax = context.Request != null && context.Request.Headers.Get("X-Requested-With") == "XMLHttpRequest";
-                var appType = context.ApplicationInstance.GetType();
-                if (appType.Assembly.GetName().Name.Contains(".asax"))
-                    appType = appType.BaseType;
+                //var isAjax = context.Request != null && context.Request.Headers["X-Requested-With"] == "XMLHttpRequest";
+                //var appType = context.ApplicationInstance.GetType();
+                //if (appType.Assembly.GetName().Name.Contains(".asax"))
+                //    appType = appType.BaseType;
+                var appType = Path.GetFileNameWithoutExtension(ApplicationEnvironment.ApplicationBasePath);
+                if (string.IsNullOrWhiteSpace(appType))
+                    appType = System.Reflection.Assembly.GetEntryAssembly()?.GetName()?.Name;
 
                 var content = HtmlLogger.Montar(exception, context).ToString();
 
-                EnviarEmail(content, false, appType.Assembly.GetName().Name);
-                SalvarArquivo(content, false, appType.Assembly.GetName().Name);
-                //CriarTicketGitLab();
+                EnviarEmail(content, false, appType);
+                SalvarArquivo(content, false, appType);
+                //CriarIncidente();
             }
 
         }
 
 
-        public static DateTime emailUltimaData = DateTime.MinValue;
-        public static int emailEnviados = 0;
+        private static DateTime emailUltimaData = DateTime.MinValue;
+        private static int emailEnviados = 0;
         private static void EnviarEmail(string conteudo, bool erroTratado, string tag)
         {
             if (emailUltimaData != DateTime.Today)
@@ -127,6 +162,7 @@ namespace Alma.ApiExtensions.Log
                     }
                     catch (Exception ex)
                     {
+                        SalvarArquivo(ex.ToString(), true, tag + ".email");
                         System.Diagnostics.Debug.WriteLine(ex.ToString());
                     }
                 }).Start();
@@ -147,7 +183,13 @@ namespace Alma.ApiExtensions.Log
 
             try
             {
+                if (!Directory.Exists(CaminhoLog))
+                    Directory.CreateDirectory(CaminhoLog);
+                if (!Directory.Exists(CaminhoErro))
+                    Directory.CreateDirectory(CaminhoErro);
 
+
+                Trace.WriteLine(fileName, "log");
                 using (var file = System.IO.File.Create(fileName))
                 using (var stream = new System.IO.StreamWriter(file))
                 {
@@ -155,11 +197,14 @@ namespace Alma.ApiExtensions.Log
                     stream.Flush();
                 }
             }
-            catch { }
+            catch (Exception ex)
+            {
+                Trace.WriteLine(ex.ToString());
+            }
 
         }
 
-        private static void CriarTicketGitLab()
+        private static void CriarIncidente()
         {
             //throw new NotImplementedException();
         }

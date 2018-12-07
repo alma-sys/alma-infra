@@ -1,7 +1,7 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.IO;
 using System.Threading;
-using System.Web;
 
 namespace Alma.ApiExtensions.Arquivo
 {
@@ -40,12 +40,13 @@ namespace Alma.ApiExtensions.Arquivo
         {
             get
             {
-                if (HttpContext.Current.Session == null)
+                var acessor = new HttpContextAccessor(); //untested
+                if (acessor.HttpContext.Session == null)
                 {
                     return PathUploads;
                 }
 
-                var pathSession = Path.Combine(PathUploads, HttpContext.Current.Session.SessionID);
+                var pathSession = Path.Combine(PathUploads, acessor.HttpContext.Session.Id);
                 if (!Directory.Exists(pathSession))
                 {
                     Directory.CreateDirectory(pathSession);
