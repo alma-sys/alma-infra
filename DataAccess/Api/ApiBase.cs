@@ -9,7 +9,7 @@ using System.Net.Cache;
 using System.Text.RegularExpressions;
 using System.Xml;
 
-namespace Alma.Dados.Api
+namespace Alma.DataAccess.Api
 {
     public abstract class ApiBase
     {

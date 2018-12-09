@@ -8,9 +8,9 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace Alma.Dados.OrmNHibernate
+namespace Alma.DataAccess.OrmNHibernate
 {
-    sealed class Repositorio<TEntity> : IQueryable<TEntity>, IRepositorio<TEntity> where TEntity : class
+    sealed class Repositorio<TEntity> : IQueryable<TEntity>, IRepository<TEntity> where TEntity : class
     {
 
 

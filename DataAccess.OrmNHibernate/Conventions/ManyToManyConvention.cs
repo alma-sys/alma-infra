@@ -1,6 +1,6 @@
 ﻿//using FluentNHibernate.Conventions;
 
-namespace Alma.Dados.OrmNHibernate.Conventions
+namespace Alma.DataAccess.OrmNHibernate.Conventions
 {
     //public class ManyToManyConvention : IHasManyToManyConvention
     //{

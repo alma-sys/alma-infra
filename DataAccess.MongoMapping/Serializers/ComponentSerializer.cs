@@ -5,7 +5,7 @@ using System;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace Alma.Dados.MongoMapping.Serializers
+namespace Alma.DataAccess.MongoMapping.Serializers
 {
     internal class ComponentSerializer<TClass, TMember> : IBsonSerializer<TClass>, IBsonSerializer where TClass : class
     {

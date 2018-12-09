@@ -1,4 +1,4 @@
-﻿namespace Alma.Dados.OrmNHibernate.Conventions
+﻿namespace Alma.DataAccess.OrmNHibernate.Conventions
 {
     //public class ForeignKeyConventions : FluentNHibernate.Conventions.ForeignKeyConvention
     //{

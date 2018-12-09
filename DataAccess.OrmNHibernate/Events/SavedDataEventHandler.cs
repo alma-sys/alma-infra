@@ -1,5 +1,5 @@
-﻿using Alma.Dados.Hooks;
-using Alma.Dominio;
+﻿using Alma.DataAccess.Hooks;
+using Alma.Domain;
 using Autofac;
 using NHibernate.Event;
 using System;
@@ -9,7 +9,7 @@ using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Alma.Dados.OrmNHibernate.Events
+namespace Alma.DataAccess.OrmNHibernate.Events
 {
     internal class SavedDataEventHandler : IPostUpdateEventListener, IPostInsertEventListener, IPostDeleteEventListener, IPostLoadEventListener
     {
@@ -62,18 +62,18 @@ namespace Alma.Dados.OrmNHibernate.Events
 
         private void Dispatch(Type tipo, Type interfaceType, object entity)
         {
-            if (!typeof(Entidade).IsAssignableFrom(tipo))
+            if (!typeof(Entity).IsAssignableFrom(tipo))
                 return;
 
             var handle = typeof(IDataHook<>).MakeGenericType(tipo)
-                .GetMethod(nameof(IDataHook<Entidade>.Handle));
+                .GetMethod(nameof(IDataHook<Entity>.Handle));
 
             var concreteIFaceType = interfaceType.MakeGenericType(tipo);
             var inumerable = typeof(IEnumerable<>).MakeGenericType(concreteIFaceType);
             var handlers = Container.Resolve(inumerable) as IEnumerable;
             foreach (var item in handlers)
             {
-                if (Config.AtivarLog)
+                if (Config.EnableLog)
                     Trace.WriteLine($"Executado handler {item} para {interfaceType.Name}...", nameof(SavedDataEventHandler));
                 handle.Invoke(item, new object[] { entity }); //devo tratar exceptions?
             }

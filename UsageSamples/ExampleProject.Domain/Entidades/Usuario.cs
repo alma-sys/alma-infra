@@ -1,5 +1,5 @@
 ﻿using Alma.Common;
-using Alma.Dominio;
+using Alma.Domain;
 using Alma.Exemplo.Dominio.Entidades.ValueObjects;
 using System;
 using System.Collections.Generic;
@@ -7,7 +7,7 @@ using System.Collections.ObjectModel;
 
 namespace Alma.Exemplo.Dominio.Entidades
 {
-    public class Usuario : Entidade, IIdName
+    public class Usuario : Entity, IIdName
     {
         internal Usuario() { }
 
@@ -62,8 +62,8 @@ namespace Alma.Exemplo.Dominio.Entidades
         public virtual string DomainUser { get; protected set; }
         public virtual DateTime? UltimoAcesso { get; protected set; }
 
-        private IList<Perfil> _perfis = new List<Perfil>();
-        public virtual IList<Perfil> Perfis => new ReadOnlyCollection<Perfil>(_perfis);
+        private IList<Role> _perfis = new List<Role>();
+        public virtual IList<Role> Perfis => new ReadOnlyCollection<Role>(_perfis);
 
 
         public virtual Usuario UsuarioPai { get; protected set; }

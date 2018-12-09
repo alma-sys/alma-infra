@@ -8,9 +8,9 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace Alma.Dados.MongoMapping.Dados
+namespace Alma.DataAccess.MongoMapping.Dados
 {
-    sealed class Repositorio<TEntity> : IQueryable<TEntity>, IRepositorio<TEntity> where TEntity : class
+    sealed class Repositorio<TEntity> : IQueryable<TEntity>, IRepository<TEntity> where TEntity : class
     {
         private IMongoDatabase db;
         private IMongoCollection<TEntity> collection;

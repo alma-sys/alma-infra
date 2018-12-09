@@ -1,6 +1,6 @@
 ﻿using NHibernate.Type;
 
-namespace Alma.Dados.OrmNHibernate.Types
+namespace Alma.DataAccess.OrmNHibernate.Types
 {
     /// <summary>
     /// Conversor de enumeração para tipos inteiro.

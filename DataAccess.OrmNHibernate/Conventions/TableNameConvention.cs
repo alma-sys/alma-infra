@@ -1,5 +1,5 @@
 ﻿
-namespace Alma.Dados.OrmNHibernate.Conventions
+namespace Alma.DataAccess.OrmNHibernate.Conventions
 {
     //class TableNameConvention : IClassConvention
     //{

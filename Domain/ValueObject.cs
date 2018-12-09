@@ -1,4 +1,4 @@
-﻿namespace Alma.Dominio
+﻿namespace Alma.Domain
 {
     public abstract class ValueObject
     {

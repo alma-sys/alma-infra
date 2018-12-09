@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using NHibernate.Engine;
 using NHibernate.Type;
 
-namespace Alma.Dados.OrmNHibernate.Mapper
+namespace Alma.DataAccess.OrmNHibernate.Mapper
 {
     public abstract class GlobalFilterMapping
     {

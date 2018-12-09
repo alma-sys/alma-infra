@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Alma.Dominio.Events
+namespace Alma.Domain.Events
 {
     public interface IEventDispatcher
     {
@@ -36,7 +36,7 @@ namespace Alma.Dominio.Events
         public void Dispatch<TEvent>(TEvent eventToDispatch) where TEvent : IDomainEvent
         {
             var handlers = scope.Resolve<IEnumerable<IEventSubscriber<TEvent>>>().ToList();
-            handlers.ForEach(handler => handler.Handle(eventToDispatch));
+            handlers.ForEach(handler => handler.Execute(eventToDispatch));
         }
     }
 }

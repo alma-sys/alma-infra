@@ -1,5 +1,5 @@
 ﻿using Alma.Common.Mapper;
-using Alma.Dominio;
+using Alma.Domain;
 using Alma.Exemplo.Aplicativo.SegurancaModule.Dto;
 using AutoMapper;
 using System;
@@ -12,7 +12,7 @@ namespace Alma.Exemplo.Aplicativo.SegurancaModule.Maps
     {
         public void Config(IMapperConfigurationExpression cfg)
         {
-            var map = cfg.CreateMap<Perfil, PerfilDto>();
+            var map = cfg.CreateMap<Role, PerfilDto>();
 
 
         }

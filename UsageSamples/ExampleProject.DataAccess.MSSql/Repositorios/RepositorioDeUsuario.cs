@@ -1,5 +1,5 @@
 ﻿using Alma.Common;
-using Alma.Dados;
+using Alma.DataAccess;
 using Alma.Exemplo.Dominio.Entidades;
 using Alma.Exemplo.Dominio.Repositorios;
 using System.Collections.Generic;
@@ -9,9 +9,9 @@ namespace Alma.Exemplo.Dados.Sql.Repositorios
 {
     class RepositorioDeUsuario : IRepositorioDeUsuario
     {
-        IRepositorio<Usuario> repositorio;
+        IRepository<Usuario> repositorio;
 
-        public RepositorioDeUsuario(IRepositorio<Usuario> repositorio)
+        public RepositorioDeUsuario(IRepository<Usuario> repositorio)
         {
             this.repositorio = repositorio;
         }
@@ -65,7 +65,7 @@ namespace Alma.Exemplo.Dados.Sql.Repositorios
 
             query = query.OrderBy(x => x.Name);
 
-            var lista = query.ParaListaPaginada(pagina, tamanhoPagina);
+            var lista = query.ToPagedList(pagina, tamanhoPagina);
             return lista;
         }
 

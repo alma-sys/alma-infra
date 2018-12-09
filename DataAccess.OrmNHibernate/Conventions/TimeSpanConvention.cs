@@ -1,10 +1,10 @@
 ﻿
-using Alma.Dados.OrmNHibernate.Types;
+using Alma.DataAccess.OrmNHibernate.Types;
 using NHibernate.Mapping.ByCode;
 using System;
 using System.Reflection;
 
-namespace Alma.Dados.OrmNHibernate.Conventions
+namespace Alma.DataAccess.OrmNHibernate.Conventions
 {
     class TimeSpanConvention
     {

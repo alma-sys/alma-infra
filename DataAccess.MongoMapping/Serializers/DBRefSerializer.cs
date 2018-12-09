@@ -4,7 +4,7 @@ using MongoDB.Driver;
 using System;
 using System.Linq;
 
-namespace Alma.Dados.MongoMapping.Serializers
+namespace Alma.DataAccess.MongoMapping.Serializers
 {
     class DBRefSerializer<TClass> : IBsonSerializer<TClass>, IBsonSerializer where TClass : class
     {

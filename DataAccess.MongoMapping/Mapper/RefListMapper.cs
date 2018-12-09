@@ -1,7 +1,7 @@
-﻿using Alma.Dados.MongoMapping.Serializers;
+﻿using Alma.DataAccess.MongoMapping.Serializers;
 using MongoDB.Bson.Serialization;
 
-namespace Alma.Dados.MongoMapping
+namespace Alma.DataAccess.MongoMapping
 {
     public interface IRefListMapper<TClass> where TClass : class
     {

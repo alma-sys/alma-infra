@@ -6,26 +6,26 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 
-namespace Alma.Dados
+namespace Alma.DataAccess
 {
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
     /// <summary>
-    /// Lista de ORM's suportados.
+    /// List of supported ORM's
     /// </summary>
     public enum ORM
     {
-        NaoDefinido,
+        Undefined,
         NHibernate,
         EntityFramework,
         MongoMapping
     }
 
     /// <summary>
-    /// Lista de tipos de banco de dados
+    /// List of supported databases and storages.
     /// </summary>
     public enum DBMS
     {
-        NaoDefinido,
+        Undefined,
         MsSql,
         Oracle,
         MySql,
@@ -42,7 +42,7 @@ namespace Alma.Dados
     {
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
         public const string cfgOrm = Common.Config.cfgRoot + "orm";
-        public const string cfgExecutarMigracoes = cfgOrm + ":executar-migracoes";
+        public const string cfgExecuteMigrations = cfgOrm + ":run-migrations";
         public const string cfgPrepareCommands = cfgOrm + ":prepare-commands";
         public const string cfgLazy = cfgOrm + ":lazy";
         public const string cfgIsolationLevel = cfgOrm + ":isolation-level";
@@ -69,14 +69,14 @@ namespace Alma.Dados
                                            select e.ToString()));
 
                     throw new ConfigurationErrorsException(
-                        $"Missing or invalid {cfgOrm} App Setting. Check your .config file. Valid values: " +
+                        $"Missing or invalid {cfgOrm} App Setting. Check your .config or appsettings.json file. Valid values: " +
                         possibleValues, ex);
                 }
             }
         }
 
         /// <summary>
-        /// Determina qual DBMS será usado para a conexão
+        /// Choose the right DBMS used on your connection
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
@@ -85,9 +85,9 @@ namespace Alma.Dados
             var cn = ConfigurationManager.ConnectionStrings[key];
             if (cn == null)
                 throw new ConfigurationErrorsException("Cannot find connection string: " + key);
-            if (cn.ProviderName.Contains("SqlClient"))
+            if (cn.ProviderName.ToLower().Contains("sqlclient"))
                 return DBMS.MsSql;
-            else if (cn.ProviderName.Contains("Oracle"))
+            else if (cn.ProviderName.ToLower().Contains("oracle"))
                 return DBMS.Oracle;
             else if (cn.ProviderName.ToLower().Contains("mysql"))
                 return DBMS.MySql;
@@ -99,28 +99,28 @@ namespace Alma.Dados
         }
 
         /// <summary>
-        /// Retorna se o lazy load está ativo.
+        /// Returns if default orm migrations can be run.
         /// </summary>
-        public static bool ExecutarMigracoes
+        public static bool ExecuteMigrations
         {
             get
             {
                 bool valor = true;
                 try
                 {
-                    var opt = ConfigurationManager.AppSettings[cfgExecutarMigracoes];
+                    var opt = ConfigurationManager.AppSettings[cfgExecuteMigrations];
                     if (!string.IsNullOrWhiteSpace(opt))
                         valor = Convert.ToBoolean(opt);
                 }
                 catch { }
-                Trace.WriteLine(valor, nameof(ExecutarMigracoes));
+                Trace.WriteLine(valor, nameof(ExecuteMigrations));
                 return valor;
             }
         }
 
 
         /// <summary>
-        /// Preparar comandos.
+        /// Returns if DbCommands should be 'prepared'. This is specific to some ORMs
         /// </summary>
         public static bool PrepareCommands
         {
@@ -140,26 +140,26 @@ namespace Alma.Dados
         }
 
         /// <summary>
-        /// Retorna se a configuração do oracle é Managed
+        /// Returns if this connection will be created using Oracle Managed Drivers.
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
         public static bool IsManagedOracle(string key)
         {
             return DeterminarDBMS(key) == DBMS.Oracle &&
-                ConfigurationManager.ConnectionStrings[key].ProviderName.Contains("Managed");
+                ConfigurationManager.ConnectionStrings[key].ProviderName.ToLower().Contains("managed");
 
         }
 
         /// <summary>
-        /// Lista de assemblies que foram mapeadas para a plataforma.
+        /// List of all mapped assemblies.
         /// </summary>
-        public static IDictionary<string, Assembly[]> AssembliesMapeadas => Common.Config.MappedAssemblies;
+        public static IDictionary<string, Assembly[]> MappedAssemblies => Common.Config.MappedAssemblies;
 
         /// <summary>
-        /// Retorna se o lazy load está ativo.
+        /// Returns if lazy loading will be enabled at ORM level.
         /// </summary>
-        public static bool AtivarLazy
+        public static bool EnableLazyLoad
         {
             get
             {
@@ -171,14 +171,14 @@ namespace Alma.Dados
                         valor = Convert.ToBoolean(opt);
                 }
                 catch { }
-                Trace.WriteLine(valor, nameof(AtivarLazy));
+                Trace.WriteLine(valor, nameof(EnableLazyLoad));
                 return valor;
 
             }
         }
 
         /// <summary>
-        /// Retorna o tipo de isolamento de transação
+        /// Returns the isolation level of each transaction.
         /// </summary>
         public static IsolationLevel? IsolationLevel
         {
@@ -191,16 +191,16 @@ namespace Alma.Dados
                     if (!string.IsNullOrWhiteSpace(opt))
                         valor = (IsolationLevel)Enum.Parse(typeof(IsolationLevel), opt);
                 }
-                catch { throw new ConfigurationErrorsException($"Valor inválido para {cfgIsolationLevel}"); }
+                catch { throw new ConfigurationErrorsException($"Invalid value for {cfgIsolationLevel}"); }
                 Trace.WriteLine(valor, nameof(IsolationLevel));
                 return valor;
             }
         }
 
         /// <summary>
-        /// Retorna se deve ativar os logs de configuração
+        /// Returns if ORM logging will be enabled.
         /// </summary>
-        public static bool AtivarLog
+        public static bool EnableLog
         {
             get
             {
@@ -212,12 +212,12 @@ namespace Alma.Dados
                         valor = Convert.ToBoolean(opt);
                 }
                 catch { }
-                Trace.WriteLine(valor, nameof(AtivarLog));
+                Trace.WriteLine(valor, nameof(EnableLog));
                 return valor;
             }
         }
 
-        public static bool AtivarMiniProfiler
+        public static bool EnableMiniProfiler
         {
             get
             {
@@ -229,19 +229,19 @@ namespace Alma.Dados
                         valor = Convert.ToBoolean(opt);
                 }
                 catch { }
-                Trace.WriteLine(valor, nameof(AtivarMiniProfiler));
+                Trace.WriteLine(valor, nameof(EnableMiniProfiler));
                 return valor;
             }
         }
 
         /// <summary>
-        /// Resolver nome da conexão pelo tipo.
+        /// Resolve the connection name by assembly type.
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
         public static string ResolveConnectionName(Type type)
         {
-            var assemblies = AssembliesMapeadas;
+            var assemblies = MappedAssemblies;
             var assembly = type.Assembly;
             foreach (var key in assemblies.Keys)
             {

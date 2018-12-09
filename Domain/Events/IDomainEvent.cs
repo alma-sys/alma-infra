@@ -1,4 +1,4 @@
-﻿namespace Alma.Dominio.Events
+﻿namespace Alma.Domain.Events
 {
     /// <summary>
     /// Representa um evento de domínio

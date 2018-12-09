@@ -2,7 +2,7 @@
 using MongoDB.Bson.Serialization.Conventions;
 using System.Text.RegularExpressions;
 
-namespace Alma.Dados.MongoMapping.Conventions
+namespace Alma.DataAccess.MongoMapping.Conventions
 {
     class SeperateWordsNamingConvention : IMemberMapConvention
     {

@@ -1,19 +1,19 @@
 ﻿using Alma.Common;
 
-namespace Alma.Dominio
+namespace Alma.Domain
 {
     /// <summary>
-    /// Classe base de entidades com ID
+    /// Base class for entities with numeric Id
     /// </summary>
-    public abstract class Entidade : Entidade<long>
+    public abstract class Entity : Entity<long>
     {
 
     }
 
     /// <summary>
-    /// Classe base de entidades com ID
+    /// Base class for entities with Id of any type.
     /// </summary>
-    public abstract class Entidade<T> : EntidadeBase, IId<T> where T : struct
+    public abstract class Entity<T> : EntityBase, IId<T> where T : struct
     {
         /// <summary>
         /// Id de referencia da entidade. 
@@ -24,7 +24,7 @@ namespace Alma.Dominio
         {
             if (object.ReferenceEquals(this, obj))
                 return true;
-            var other = obj as Entidade<T>;
+            var other = obj as Entity<T>;
             return other != null && !this.Id.Equals(default(T)) && other.Id.Equals(this.Id);
         }
 
@@ -44,8 +44,10 @@ namespace Alma.Dominio
         }
     }
 
-    //Classe base de entidades sem ID.
-    public abstract class EntidadeBase
+    /// <summary>
+    /// Base class for entities with no Id.
+    /// </summary>
+    public abstract class EntityBase
     {
 
     }

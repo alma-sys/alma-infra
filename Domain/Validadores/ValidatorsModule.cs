@@ -1,10 +1,10 @@
-﻿using System.Linq;
-using Autofac;
+﻿using Autofac;
 using FluentValidation;
+using System.Linq;
 
-namespace Alma.Dominio.Validadores
+namespace Alma.Domain.Validators
 {
-    public class ValidadoresModule : Module
+    public class ValidatorsModule : Module
     {
         protected override void Load(ContainerBuilder builder)
         {
@@ -15,7 +15,7 @@ namespace Alma.Dominio.Validadores
 
                 foreach (AssemblyScanner.AssemblyScanResult item in findValidatorsInAssembly)
                 {
-                    var iface = typeof(IValidator<>).MakeGenericType(item.InterfaceType.GetGenericArguments()[0]);
+                    var iface = typeof(FluentValidation.IValidator<>).MakeGenericType(item.InterfaceType.GetGenericArguments()[0]);
                     builder
                         .RegisterType(item.ValidatorType)
                         .AsImplementedInterfaces()
@@ -26,9 +26,9 @@ namespace Alma.Dominio.Validadores
             }
 
             builder
-                .RegisterGeneric(typeof(Validador<>))
+                .RegisterGeneric(typeof(Validator<>))
                 .InstancePerLifetimeScope()
-                .As(typeof(IValidador<>));
+                .As(typeof(IValidator<>));
 
 
         }

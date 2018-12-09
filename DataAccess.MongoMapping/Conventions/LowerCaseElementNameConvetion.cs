@@ -1,7 +1,7 @@
 ﻿using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Conventions;
 
-namespace Alma.Dados.MongoMapping.Conventions
+namespace Alma.DataAccess.MongoMapping.Conventions
 {
     class LowerCaseElementNameConvetion : IMemberMapConvention
     {

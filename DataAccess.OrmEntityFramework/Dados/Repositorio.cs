@@ -6,9 +6,9 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace Alma.Dados.OrmEntityFramework
+namespace Alma.DataAccess.OrmEntityFramework
 {
-    sealed class Repositorio<TEntity> : IRepositorio<TEntity> where TEntity : class
+    sealed class Repositorio<TEntity> : IRepository<TEntity> where TEntity : class
     {
         private IContexto contexto;
         public Repositorio(IContexto contexto)

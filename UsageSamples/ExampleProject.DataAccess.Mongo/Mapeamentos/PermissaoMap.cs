@@ -1,25 +1,25 @@
-﻿using Alma.Dados.MongoMapping;
-using Alma.Dominio;
+﻿using Alma.DataAccess.MongoMapping;
+using Alma.Domain;
 using MongoDB.Bson.Serialization;
 
 namespace Alma.Exemplo.Dados.Mongo.Mapeamentos
 {
-    public class PermissaoMap : ClassMapping<Permissao>
+    public class PermissaoMap : ClassMapping<Access>
     {
-        protected override void Map(BsonClassMap<Permissao> map)
+        protected override void Map(BsonClassMap<Access> map)
         {
             map.SetCollection("Permissoes");
 
-            map.MapMember(x => x.Chave)
+            map.MapMember(x => x.Key)
                 .SetIsRequired(true);
 
-            map.MapMember(x => x.Descricao)
+            map.MapMember(x => x.Description)
                 .SetIsRequired(false);
 
             map.MapMember(x => x.Name)
                 .SetIsRequired(true);
 
-            map.MapMember(x => x.Privado)
+            map.MapMember(x => x.Private)
                 .SetIsRequired(true);
 
         }

@@ -3,7 +3,7 @@ using System;
 using System.Data;
 using System.Data.Common;
 
-namespace Alma.Dados.OrmNHibernate.Types
+namespace Alma.DataAccess.OrmNHibernate.Types
 {
     /// <summary>
     /// Conversor de Enum para VARCHAR(1)

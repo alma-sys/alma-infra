@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
 
-namespace Alma.Dados.Api
+namespace Alma.DataAccess.Api
 {
     public static class DalApiClientExtensions
     {

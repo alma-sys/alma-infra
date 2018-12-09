@@ -1,4 +1,4 @@
-﻿using Alma.Dados.Hooks;
+﻿using Alma.DataAccess.Hooks;
 using Autofac;
 using NHibernate;
 using StackExchange.Profiling;
@@ -6,7 +6,7 @@ using StackExchange.Profiling.Data;
 using System.Data;
 using System.Linq;
 
-namespace Alma.Dados.OrmNHibernate
+namespace Alma.DataAccess.OrmNHibernate
 {
     public class NHibernateModule : Module
     {
@@ -17,7 +17,7 @@ namespace Alma.Dados.OrmNHibernate
             SetupLog();
 
 
-            var assemblies = Config.AssembliesMapeadas;
+            var assemblies = Config.MappedAssemblies;
             if (assemblies.Keys.Count > 1)
             {
                 foreach (var key in assemblies.Keys)
@@ -58,7 +58,7 @@ namespace Alma.Dados.OrmNHibernate
 
 
                 builder.RegisterGeneric(typeof(Repositorio<>))
-                    .As(typeof(IQueryable<>), typeof(IRepositorio<>))
+                    .As(typeof(IQueryable<>), typeof(IRepository<>))
                     .InstancePerLifetimeScope();
             }
 
@@ -109,7 +109,7 @@ namespace Alma.Dados.OrmNHibernate
 
         private static void SetupLog()
         {
-            if (Config.AtivarLog)
+            if (Config.EnableLog)
             {
                 var hierarchy = (log4net.Repository.Hierarchy.Hierarchy)log4net.LogManager.GetRepository(System.Reflection.Assembly.GetExecutingAssembly());
                 // Remove any other appenders
@@ -149,7 +149,7 @@ namespace Alma.Dados.OrmNHibernate
         private static IDbCommand GetCommand(ISession session)
         {
             var command = session.Connection.CreateCommand();
-            if (Config.AtivarMiniProfiler && command != null && command.GetType() != typeof(ProfiledDbCommand) && MiniProfiler.Current != null)
+            if (Config.EnableMiniProfiler && command != null && command.GetType() != typeof(ProfiledDbCommand) && MiniProfiler.Current != null)
                 command = new ProfiledDbCommand(command, command.Connection, MiniProfiler.Current);
 
             return command;

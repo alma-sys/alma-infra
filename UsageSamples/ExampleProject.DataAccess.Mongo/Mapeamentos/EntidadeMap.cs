@@ -1,13 +1,13 @@
-﻿using Alma.Dados.MongoMapping;
-using Alma.Dados.MongoMapping.Generators;
-using Alma.Dominio;
+﻿using Alma.DataAccess.MongoMapping;
+using Alma.DataAccess.MongoMapping.Generators;
+using Alma.Domain;
 using MongoDB.Bson.Serialization;
 
 namespace Alma.Exemplo.Dados.Mongo.Mapeamentos
 {
-    class EntidadeMap : ClassMapping<Entidade<long>>
+    class EntidadeMap : ClassMapping<Entity<long>>
     {
-        protected override void Map(BsonClassMap<Entidade<long>> map)
+        protected override void Map(BsonClassMap<Entity<long>> map)
         {
             map.MapIdMember(x => x.Id)
                 .SetIdGenerator(new Int64IdGenerator())

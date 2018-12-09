@@ -2,7 +2,7 @@
 using System.Linq;
 using Alma.Common;
 
-namespace Alma.Dominio.Events
+namespace Alma.Domain.Events
 {
     public class EventModule : Module
     {

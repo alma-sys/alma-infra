@@ -1,4 +1,4 @@
-﻿using Alma.Dados.OrmNHibernate.Events;
+﻿using Alma.DataAccess.OrmNHibernate.Events;
 using NHibernate;
 using NHibernate.AdoNet;
 using NHibernate.Cfg;
@@ -17,7 +17,7 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Alma.Dados.OrmNHibernate
+namespace Alma.DataAccess.OrmNHibernate
 {
     static class SessionFactory
     {
@@ -133,7 +133,7 @@ namespace Alma.Dados.OrmNHibernate
                     throw new NotImplementedException("Not implemented provider: " + Config.DeterminarDBMS(connectionKey));
             }
 
-            if (Config.AtivarLog)
+            if (Config.EnableLog)
             {
                 cfg.SessionFactory()
                     .GenerateStatistics();
@@ -325,7 +325,7 @@ O GAC do framework 4.0/4.5 fica em C:\Windows\Microsoft.NET\assembly
 
         private static void AddFilters(Configuration cfg, IEnumerable<Type> types)
         {
-            var logger = Config.AtivarLog ? (Action<string>)((string text) => Trace.WriteLine(text, nameof(AddFilters))) : null;
+            var logger = Config.EnableLog ? (Action<string>)((string text) => Trace.WriteLine(text, nameof(AddFilters))) : null;
 
             var filters = types.Where(x => typeof(Mapper.GlobalFilterMapping).IsAssignableFrom(x)).ToArray();
             logger?.Invoke($"Registrando {filters.Length} filtros globais de repositório.");
@@ -338,7 +338,7 @@ O GAC do framework 4.0/4.5 fica em C:\Windows\Microsoft.NET\assembly
         }
         private static void AddEvents(Configuration cfg, IEnumerable<Type> types)
         {
-            var logger = Config.AtivarLog ? (Action<string>)((string text) => Trace.WriteLine(text, nameof(AddEvents))) : null;
+            var logger = Config.EnableLog ? (Action<string>)((string text) => Trace.WriteLine(text, nameof(AddEvents))) : null;
 
             logger?.Invoke($"Registrando SavedDataEventHandler para listeners.");
 
@@ -356,10 +356,10 @@ O GAC do framework 4.0/4.5 fica em C:\Windows\Microsoft.NET\assembly
 
             var hbm = mapper.CompileMappingForAllExplicitlyAddedEntities();
             hbm.autoimport = true;
-            hbm.defaultlazy = Config.AtivarLazy;
+            hbm.defaultlazy = Config.EnableLazyLoad;
 
             cfg.AddMapping(hbm);
-            if (Config.ExecutarMigracoes)
+            if (Config.ExecuteMigrations)
                 cfg.AddSchemaValidationAndMigration();
         }
 

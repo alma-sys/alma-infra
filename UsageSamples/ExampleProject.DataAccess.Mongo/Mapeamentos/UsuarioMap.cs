@@ -1,4 +1,4 @@
-﻿using Alma.Dados.MongoMapping;
+﻿using Alma.DataAccess.MongoMapping;
 using Alma.Exemplo.Dominio.Entidades;
 using MongoDB.Bson.Serialization;
 

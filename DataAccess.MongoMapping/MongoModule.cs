@@ -1,13 +1,13 @@
-﻿using Alma.Dados.Hooks;
-using Alma.Dados.MongoMapping.Conventions;
-using Alma.Dados.MongoMapping.Dados;
+﻿using Alma.DataAccess.Hooks;
+using Alma.DataAccess.MongoMapping.Conventions;
+using Alma.DataAccess.MongoMapping.Dados;
 using Autofac;
 using MongoDB.Bson.Serialization.Conventions;
 using MongoDB.Driver;
 using System.Configuration;
 using System.Linq;
 
-namespace Alma.Dados.MongoMapping
+namespace Alma.DataAccess.MongoMapping
 {
     public class MongoModule : Module
     {
@@ -20,7 +20,7 @@ namespace Alma.Dados.MongoMapping
             SetupLog();
 
 
-            var assemblies = Config.AssembliesMapeadas;
+            var assemblies = Config.MappedAssemblies;
             var mappingType = typeof(ClassMapping<>);
 
             if (assemblies.Keys.Count > 1)
@@ -65,7 +65,7 @@ namespace Alma.Dados.MongoMapping
                     .InstancePerLifetimeScope();
 
                 builder.RegisterGeneric(typeof(Repositorio<>))
-                    .As(typeof(IQueryable<>), typeof(IRepositorio<>))
+                    .As(typeof(IQueryable<>), typeof(IRepository<>))
                      .InstancePerLifetimeScope();
 
                 builder.RegisterAssemblyTypes(assemblies[key])
@@ -119,7 +119,7 @@ namespace Alma.Dados.MongoMapping
 
         private static void SetupLog()
         {
-            if (Config.AtivarLog)
+            if (Config.EnableLog)
             {
                 //var hierarchy = (log4net.Repository.Hierarchy.Hierarchy)log4net.LogManager.GetRepository();
                 //// Remove any other appenders

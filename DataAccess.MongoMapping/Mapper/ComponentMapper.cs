@@ -1,9 +1,9 @@
-﻿using Alma.Dados.MongoMapping.Serializers;
+﻿using Alma.DataAccess.MongoMapping.Serializers;
 using MongoDB.Bson.Serialization;
 using System;
 using System.Linq.Expressions;
 
-namespace Alma.Dados.MongoMapping
+namespace Alma.DataAccess.MongoMapping
 {
     public interface IComponentMapper<TClass> where TClass : class
     {

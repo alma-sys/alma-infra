@@ -2,7 +2,7 @@
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace Alma.Dados.MongoMapping
+namespace Alma.DataAccess.MongoMapping
 {
     internal static class ReflectionTools
     {

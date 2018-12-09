@@ -1,4 +1,4 @@
-﻿using Alma.Dominio;
+﻿using Alma.Domain;
 using Alma.Exemplo.Aplicativo.SegurancaModule.Dto;
 using Alma.Exemplo.Dominio.Repositorios;
 using AutoMapper;
@@ -43,7 +43,7 @@ namespace Alma.Exemplo.Aplicativo.SegurancaModule.Services
 
         public IList<PerfilDto> Listar()
         {
-            var lista = repositorio.Listar();
+            var lista = repositorio.ListAsync();
             var dto = this.mapper.Map<List<PerfilDto>>(lista);
             return dto;
         }
@@ -52,17 +52,17 @@ namespace Alma.Exemplo.Aplicativo.SegurancaModule.Services
         {
             var perfil = repositorio.ObterPorNome(dto.Nome);
             if (perfil == null)
-                perfil = new Perfil(dto.Nome, dto.Descricao, dto.Ativo);
+                perfil = new Role(dto.Nome, dto.Descricao, dto.Ativo);
             else
             {
-                perfil.DefinirDescricao(dto.Descricao);
-                perfil.DefinirNome(dto.Nome);
+                perfil.ChangeDescription(dto.Descricao);
+                perfil.ChangeName(dto.Nome);
 
 
                 if (dto.Ativo)
-                    perfil.Ativar();
+                    perfil.Enable();
                 else
-                    perfil.Desativar();
+                    perfil.Disable();
             }
 
 
@@ -73,11 +73,11 @@ namespace Alma.Exemplo.Aplicativo.SegurancaModule.Services
             {
                 if (rnd.Next(0, 2) == 1)
                 {
-                    perfil.AssociarPermissao(p);
+                    perfil.AddAccess(p);
                 }
             }
 
-            this.repositorio.Salvar(perfil);
+            this.repositorio.SaveAsync(perfil);
 
             var retorno = this.mapper.Map<PerfilDto>(perfil);
             //return retorno;

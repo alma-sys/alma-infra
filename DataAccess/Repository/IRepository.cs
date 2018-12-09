@@ -5,15 +5,14 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace Alma.Dados
+namespace Alma.DataAccess
 {
 
     /// <summary>
-    /// A interface <see cref="IRepositorio{TEntidade}"/> define um contrato
-    /// padrão que todo repositório deve implementar.
+    /// The interface <see cref="IRepository{TEntity}"/> defines a standard contract for all types of repositories.
     /// </summary>
-    /// <typeparam name="TEntidade">Tipo de entidade que o respositório encapsula.</typeparam>
-    public interface IRepositorio<TEntity> : IQueryable<TEntity> where TEntity : class
+    /// <typeparam name="TEntity">The entity type that this repository will work for.</typeparam>
+    public interface IRepository<TEntity> : IQueryable<TEntity> where TEntity : class
     {
         TEntity Get(object primaryKey);
         TEntity GetSessionless(object primaryKey);

@@ -1,6 +1,6 @@
-﻿using Alma.Dominio;
+﻿using Alma.Domain;
 
-namespace Alma.Dados.Hooks
+namespace Alma.DataAccess.Hooks
 {
 //    public interface IPreLoadDataHook<TEntity> : IDataHook<TEntity> where TEntity : Entidade
 //    {

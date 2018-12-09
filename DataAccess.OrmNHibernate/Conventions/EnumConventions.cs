@@ -3,7 +3,7 @@
 //using FluentNHibernate.Conventions.Inspections;
 //using FluentNHibernate.Conventions.Instances;
 
-namespace Alma.Dados.OrmNHibernate.Conventions
+namespace Alma.DataAccess.OrmNHibernate.Conventions
 {
     //public class EnumConvention : IUserTypeConvention
     //{

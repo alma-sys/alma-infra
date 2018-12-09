@@ -1,19 +1,19 @@
-﻿using Alma.Dados;
-using Alma.Dominio;
+﻿using Alma.DataAccess;
+using Alma.Domain;
 using Alma.Exemplo.Dominio.Repositorios;
 using System.Linq;
 
 namespace Alma.Exemplo.Dados.Sql.Repositorios
 {
-    class RepositorioDePerfil : Alma.Dados.RepositorioCrud<Perfil>, IRepositorioDePerfil
+    class RepositorioDePerfil : Alma.DataAccess.CrudRepository<Role>, IRepositorioDePerfil
     {
-        private IRepositorio<Perfil> repositorio;
-        public RepositorioDePerfil(IRepositorio<Perfil> repositorio) : base(repositorio)
+        private IRepository<Role> repositorio;
+        public RepositorioDePerfil(IRepository<Role> repositorio) : base(repositorio)
         {
             this.repositorio = repositorio;
         }
 
-        public Perfil ObterPorNome(string nome)
+        public Role ObterPorNome(string nome)
         {
             var obj = repositorio.Where(x => x.Name == nome).SingleOrDefault();
 

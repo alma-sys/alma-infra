@@ -1,9 +1,9 @@
-﻿using Alma.Dominio;
+﻿using Alma.Domain;
 
 namespace Alma.Exemplo.Dominio.Repositorios
 {
-    public interface IRepositorioDePerfil : Alma.Dominio.Repositorios.IRepositorioCrud<Perfil>
+    public interface IRepositorioDePerfil : Alma.Domain.Repositories.ICrudRepository<Role>
     {
-        Perfil ObterPorNome(string nome);
+        Role ObterPorNome(string nome);
     }
 }

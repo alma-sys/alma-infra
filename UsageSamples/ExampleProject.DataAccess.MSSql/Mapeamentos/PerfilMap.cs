@@ -1,10 +1,10 @@
-﻿using Alma.Dominio;
+﻿using Alma.Domain;
 using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Conformist;
 
 namespace Alma.Exemplo.Dados.Mongo.Mapeamentos
 {
-    public class PerfilMap : ClassMapping<Perfil>
+    public class PerfilMap : ClassMapping<Role>
     {
         public PerfilMap()
         {
@@ -21,13 +21,13 @@ namespace Alma.Exemplo.Dados.Mongo.Mapeamentos
                 map.Index("IX_PERFIL_NOME");
             });
 
-            Property(x => x.Descricao, map =>
+            Property(x => x.Description, map =>
             {
                 map.NotNullable(false);
                 map.Length(150);
             });
 
-            Property(x => x.Ativo, map =>
+            Property(x => x.Enabled, map =>
             {
                 map.Column(c =>
                 {
@@ -36,7 +36,7 @@ namespace Alma.Exemplo.Dados.Mongo.Mapeamentos
                 });
             });
 
-            Property(x => x.Privado, map =>
+            Property(x => x.Private, map =>
             {
                 map.Column(c =>
                 {
@@ -47,12 +47,12 @@ namespace Alma.Exemplo.Dados.Mongo.Mapeamentos
 
 
 
-            Bag(x => x.Permissoes, map =>
+            Bag(x => x.AccessList, map =>
             {
                 map.Table("PerfilPermissao");
                 map.Key(key =>
                 {
-                    key.Column(nameof(Perfil));
+                    key.Column(nameof(Role));
                     key.NotNullable(true);
                 });
                 map.Access(Accessor.Field);

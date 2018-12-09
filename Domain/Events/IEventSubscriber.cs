@@ -1,4 +1,4 @@
-﻿namespace Alma.Dominio.Events
+﻿namespace Alma.Domain.Events
 {
     /// <summary>
     /// Representa um subscriber de evento
@@ -9,6 +9,6 @@
         /// 
         /// </summary>
         /// <param name="arg"></param>
-        void Handle(T arg);
+        void Execute(T arg);
     }
 }

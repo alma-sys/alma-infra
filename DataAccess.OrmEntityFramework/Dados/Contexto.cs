@@ -2,7 +2,7 @@
 using System;
 using System.Linq;
 
-namespace Alma.Dados.OrmEntityFramework
+namespace Alma.DataAccess.OrmEntityFramework
 {
     class Contexto : DbContext, IContexto
     {

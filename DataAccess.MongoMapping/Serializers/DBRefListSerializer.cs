@@ -6,7 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Alma.Dados.MongoMapping.Serializers
+namespace Alma.DataAccess.MongoMapping.Serializers
 {
     class DBRefListSerializer<TClass> : IBsonSerializer<TClass>, IBsonSerializer where TClass : class
     {

@@ -18,7 +18,7 @@ namespace Alma.Exemplo.ApiMSSql
             builder.RegisterAssemblyModules(Alma.Common.Config.MappedAssemblies.SelectMany(x => x.Value).ToArray());
 
             //builder.RegisterModule<Alma.Dominio.Events.EventModule>(); // por enquanto só no autofac do hangfire.
-            builder.RegisterModule<Alma.Dados.OrmNHibernate.NHibernateModule>();
+            builder.RegisterModule<Alma.DataAccess.OrmNHibernate.NHibernateModule>();
 
             var container = builder.Build();
 

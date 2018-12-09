@@ -1,21 +1,22 @@
-﻿using Autofac;
+﻿using Alma.Domain.Repositories;
+using Autofac;
 using Autofac.Builder;
 using Autofac.Features.Scanning;
 using System;
 using System.Linq;
 
-namespace Alma.Dados
+namespace Alma.DataAccess
 {
-    public class RepositoriosModule : Module
+    public class DataAccessModule : Module
     {
         private Func<IRegistrationBuilder<object, ScanningActivatorData, DynamicRegistrationStyle>, object[], IRegistrationBuilder<object, ScanningActivatorData, DynamicRegistrationStyle>> lifetimeScope;
 
-        public RepositoriosModule() : this(null)
+        public DataAccessModule() : this(null)
         {
 
         }
 
-        public RepositoriosModule(Func<IRegistrationBuilder<object, ScanningActivatorData, DynamicRegistrationStyle>, object[], IRegistrationBuilder<object, ScanningActivatorData, DynamicRegistrationStyle>> lifetimeScope)
+        public DataAccessModule(Func<IRegistrationBuilder<object, ScanningActivatorData, DynamicRegistrationStyle>, object[], IRegistrationBuilder<object, ScanningActivatorData, DynamicRegistrationStyle>> lifetimeScope)
         {
             this.lifetimeScope = lifetimeScope;
         }
@@ -26,8 +27,9 @@ namespace Alma.Dados
 
             var reg = builder
                 .RegisterAssemblyTypes(ass)
-                .Where(p => p.Name.StartsWith("RepositorioDe")) //por convenção
+                .AsClosedTypesOf(typeof(IDomainRepository<>))
                 .AsImplementedInterfaces();
+
             if (this.lifetimeScope != null)
             {
                 this.lifetimeScope(reg, new object[] { });

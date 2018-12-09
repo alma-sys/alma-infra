@@ -17,7 +17,7 @@ namespace Alma.Exemplo.Api
 
             builder.RegisterAssemblyModules(Alma.Common.Config.MappedAssemblies.SelectMany(x => x.Value).ToArray());
 
-            builder.RegisterModule<Alma.Dados.MongoMapping.MongoModule>();
+            builder.RegisterModule<Alma.DataAccess.MongoMapping.MongoModule>();
 
 
             var container = builder.Build();

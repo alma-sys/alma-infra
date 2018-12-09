@@ -1,5 +1,5 @@
-﻿using Alma.Dados;
-using Alma.Dominio;
+﻿using Alma.DataAccess;
+using Alma.Domain;
 using Alma.Exemplo.Dominio.Repositorios;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +9,9 @@ namespace Alma.Exemplo.Dados.Mongo.Repositorios
 {
     class RepositorioDePermissao : IRepositorioDePermissao
     {
-        IRepositorio<Permissao> repositorio;
+        IRepository<Access> repositorio;
 
-        public RepositorioDePermissao(IRepositorio<Permissao> repositorio)
+        public RepositorioDePermissao(IRepository<Access> repositorio)
         {
             this.repositorio = repositorio;
         }
@@ -20,11 +20,11 @@ namespace Alma.Exemplo.Dados.Mongo.Repositorios
         {
             using (var t = new TransactionScope())
             {
-                var lista_banco = repositorio.Where(x => permissoes.Contains(x.Chave)).ToList();
-                var lista_banco_chaves = lista_banco.Select(x => x.Chave).ToList();
+                var lista_banco = repositorio.Where(x => permissoes.Contains(x.Key)).ToList();
+                var lista_banco_chaves = lista_banco.Select(x => x.Key).ToList();
 
                 var lista_nova = permissoes.Except(lista_banco_chaves)
-                    .Select(p => new Permissao(p, null, p, true)).ToList();
+                    .Select(p => new Access(p, null, p, true)).ToList();
                 if (lista_nova.Any())
                     repositorio.Create(lista_nova);
 
@@ -33,7 +33,7 @@ namespace Alma.Exemplo.Dados.Mongo.Repositorios
         }
 
 
-        public IList<Permissao> Listar()
+        public IList<Access> Listar()
         {
             return repositorio.ToList();
         }

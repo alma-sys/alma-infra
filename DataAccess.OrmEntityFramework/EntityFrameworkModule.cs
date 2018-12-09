@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using Autofac;
 
-namespace Alma.Dados.OrmEntityFramework
+namespace Alma.DataAccess.OrmEntityFramework
 {
     public class EntityFrameworkModule : Module
     {
@@ -12,7 +12,7 @@ namespace Alma.Dados.OrmEntityFramework
             SetupLog();
 
 
-            var assemblies = Config.AssembliesMapeadas;
+            var assemblies = Config.MappedAssemblies;
             if (assemblies.Keys.Count > 1)
             {
                 foreach (var key in assemblies.Keys)
@@ -24,7 +24,7 @@ namespace Alma.Dados.OrmEntityFramework
 
                     //.InstancePerLifetimeScope();
                     builder.RegisterGeneric(typeof(Repositorio<>))
-                         .As(typeof(IRepositorio<>))
+                         .As(typeof(IRepository<>))
                          .WithParameter(parameter: new Autofac.Core.ResolvedParameter(
                              (pi, c) => pi.ParameterType == typeof(IContexto),
                              (pi, c) => c.ResolveNamed<IContexto>(
@@ -38,7 +38,7 @@ namespace Alma.Dados.OrmEntityFramework
                 builder.Register(x => new Contexto(key))
                     .As<IContexto>()
                     .SingleInstance();
-                builder.RegisterGeneric(typeof(Repositorio<>)).As(typeof(IRepositorio<>))
+                builder.RegisterGeneric(typeof(Repositorio<>)).As(typeof(IRepository<>))
                                                      .InstancePerRequest();
 
             }

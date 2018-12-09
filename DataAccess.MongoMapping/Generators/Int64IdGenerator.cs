@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Alma.Dados.MongoMapping.Generators
+namespace Alma.DataAccess.MongoMapping.Generators
 {
     public class Int64IdGenerator : MongoDB.Bson.Serialization.IIdGenerator
     {

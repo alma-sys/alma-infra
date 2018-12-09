@@ -7,7 +7,7 @@ using System.Data.Common;
 using System.Linq;
 using System.Reflection;
 
-namespace Alma.Dados.OrmNHibernate.Types
+namespace Alma.DataAccess.OrmNHibernate.Types
 {
     /// <summary>
     /// Conversor de Enum para String

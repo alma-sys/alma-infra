@@ -1,24 +1,24 @@
-﻿using System;
+﻿using Alma.Common;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using Alma.Common;
 
-namespace Alma.Dominio
+namespace Alma.Domain
 {
-    public abstract class UsuarioBase : Entidade, IId
+    public abstract class UserBase : Entity, IId
     {
-        public UsuarioBase() { }
+        public UserBase() { }
 
-        public virtual bool Bloqueado { get; protected set; }
-        public virtual bool Expirado { get; protected set; }
-        public virtual bool Privado { get; protected set; }
-
-
-        protected IList<Perfil> _perfis = new List<Perfil>();
-        public virtual IReadOnlyList<Perfil> Perfis => new ReadOnlyCollection<Perfil>(_perfis);
+        public virtual bool Blocked { get; protected set; }
+        public virtual bool Expired { get; protected set; }
+        public virtual bool Private { get; protected set; }
 
 
-        public virtual void AssociarPerfil(params Perfil[] perfil)
+        protected IList<Role> _perfis = new List<Role>();
+        public virtual IReadOnlyList<Role> Perfis => new ReadOnlyCollection<Role>(_perfis);
+
+
+        public virtual void AssociarPerfil(params Role[] perfil)
         {
             if (perfil == null)
                 throw new ArgumentNullException(nameof(perfil));
@@ -33,7 +33,7 @@ namespace Alma.Dominio
             }
         }
 
-        public virtual void RemoverPerfil(params Perfil[] perfil)
+        public virtual void RemoverPerfil(params Role[] perfil)
         {
             if (perfil == null)
                 throw new ArgumentNullException(nameof(perfil));
@@ -51,22 +51,22 @@ namespace Alma.Dominio
 
         public virtual void Desbloquear()
         {
-            this.Bloqueado = false;
+            this.Blocked = false;
         }
 
         public virtual void Bloquear()
         {
-            this.Bloqueado = true;
+            this.Blocked = true;
         }
 
         public virtual void DefinirExpirado()
         {
-            this.Expirado = true;
+            this.Expired = true;
         }
 
         public virtual void RemoverExpirado()
         {
-            this.Expirado = false;
+            this.Expired = false;
         }
 
     }

@@ -1,34 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Alma.Common;
+﻿using Alma.Common;
 using FluentValidation.Internal;
 using FluentValidation.Results;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
-namespace Alma.Dominio.Validadores
+namespace Alma.Domain.Validators
 {
-    internal sealed class Validador<T> : IValidador<T> where T : class
+    internal sealed class Validator<T> : IValidator<T> where T : class
     {
         private FluentValidation.IValidator<T> validator;
 
 
-        public Validador(FluentValidation.IValidator<T> validator)
+        public Validator(FluentValidation.IValidator<T> validator)
         {
             this.validator = validator;
 
         }
 
+        private const string defaultRuleSet = "default";
 
-
-        public void Validar(T instance)
+        public void Validate(T instance)
         {
-            Validar(instance, false, null);
+            Validate(instance, false, null);
         }
-        public void Validar(T instance, params string[] ruleSet)
+        public void Validate(T instance, params string[] ruleSet)
         {
-            Validar(instance, false, ruleSet);
+            Validate(instance, false, ruleSet);
         }
-        public void Validar(T instance, bool executeCommonRules, params string[] ruleSet)
+        public void Validate(T instance, bool executeCommonRules, params string[] ruleSet)
         {
 
             if (instance == null)
@@ -36,9 +36,9 @@ namespace Alma.Dominio.Validadores
             ValidationResult result = null;
             if (ruleSet != null)
             {
-                ruleSet = ruleSet.Where(x => !string.IsNullOrWhiteSpace(x) && !"default".Equals(x.Trim().ToLower())).Select(x => x.Trim()).ToArray();
+                ruleSet = ruleSet.Where(x => !string.IsNullOrWhiteSpace(x) && !defaultRuleSet.Equals(x.Trim().ToLower())).Select(x => x.Trim()).ToArray();
                 if (executeCommonRules)
-                    ruleSet = new string[] { "default" }.Concat(ruleSet).ToArray();
+                    ruleSet = new string[] { defaultRuleSet }.Concat(ruleSet).ToArray();
             }
 
             if (ruleSet == null || ruleSet.Length == 0)
@@ -57,7 +57,7 @@ namespace Alma.Dominio.Validadores
             {
                 var errors = result.Errors.ToArray();
 
-                throw new ValidacaoException(string.Format("A entidade {0} é inválida.", typeof(T).Name),
+                throw new ValidationException(string.Format("The object '{0}' is invalid.", typeof(T).Name),
                     result.Errors
                         .GroupBy(e => e.PropertyName)
                         .ToDictionary(e => e.Key, e => string.Join("; ", e.ToArray().Select(x => x.ErrorMessage)))
@@ -77,7 +77,7 @@ namespace Alma.Dominio.Validadores
             {
                 var dict = new Dictionary<string, string>();
                 dict.Add(key, message);
-                return new ValidacaoException(message, dict);
+                return new ValidationException(message, dict);
             }
             else if (ex.InnerException != null)
             {

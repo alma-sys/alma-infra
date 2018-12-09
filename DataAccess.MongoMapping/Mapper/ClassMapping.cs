@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 
-namespace Alma.Dados.MongoMapping
+namespace Alma.DataAccess.MongoMapping
 {
     public abstract class ClassMapping<T> where T : class
     {
