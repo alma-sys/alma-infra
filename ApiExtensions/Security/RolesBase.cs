@@ -1,4 +1,4 @@
-﻿namespace Alma.ApiExtensions.Seguranca
+﻿namespace Alma.ApiExtensions.Security
 {
     public abstract class RolesBase
     {

@@ -10,34 +10,35 @@ namespace Alma.ApiExtensions.Controllers
     {
 
         [ActionContext]
-        public ActionContext ActionContext { get; set; }
+        public ActionContext ActionContext { get; internal set; }
 
         private ClaimsIdentity Identity
         {
             get
             {
-                return ActionContext.HttpContext.User.Identity as ClaimsIdentity;
+                return ActionContext?.HttpContext?.User?.Identity as ClaimsIdentity;
             }
         }
-        protected string Usuario { get { return Identity.Name; } }
+        protected string UserName { get { return Identity?.Name; } }
 
-        protected T ObterValorToken<T>(string key)
+        protected T GetUserTokenValue<T>(string key)
         {
+            if (Identity == null)
+                return default(T);
+
             var claim = Identity.Claims.SingleOrDefault(c => c.Type.ToLower() == key);
             if (claim == null || string.IsNullOrWhiteSpace(claim.Value))
                 return default(T);
             else if (typeof(T) == typeof(int) || typeof(T) == typeof(int?))
             {
-                int i = 0;
-                if (int.TryParse(claim.Value, out i))
+                if (int.TryParse(claim.Value, out int i))
                     return (T)(object)i;
                 else
                     return default(T);
             }
             else if (typeof(T) == typeof(long) || typeof(T) == typeof(long?))
             {
-                long i = 0;
-                if (long.TryParse(claim.Value, out i))
+                if (long.TryParse(claim.Value, out long i))
                     return (T)(object)i;
                 else
                     return default(T);

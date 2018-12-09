@@ -5,13 +5,12 @@ using System;
 using System.IO;
 using System.Reflection;
 using System.Text;
-using System.Web;
 
 namespace Alma.ApiExtensions.Log
 {
     static class HtmlLogger
     {
-        public static StringBuilder Montar(Exception exception, HttpContext context)
+        public static StringBuilder CreateHtmlFromException(Exception exception, HttpContext httpContext)
         {
             var sb = new StringBuilder();
             var currentException = exception;
@@ -98,98 +97,7 @@ namespace Alma.ApiExtensions.Log
                 }
                 catch { }
 
-                if (context != null)
-                {
-                    try
-                    {
-                        sb.AppendFormat("<br /><b>Url:</b><br />{0}<br />\r\n", context.Request.GetUri());
-                    }
-                    catch { }
-                    try
-                    {
-                        sb.AppendFormat("<br /><b>User Agent:</b><br />{0}<br />\r\n", context.Request.Headers["User-Agent"]);
-                    }
-                    catch { }
-                    try
-                    {
-                        sb.AppendFormat("<br /><b>User Host Address:</b><br />{0}<br />\r\n", context.Features.Get<IHttpConnectionFeature>()?.RemoteIpAddress);
-                    }
-                    catch { }
-                    try
-                    {
-                        sb.AppendFormat("<br /><b>Server Machine Name:</b><br />{0}<br />\r\n", Environment.MachineName);
-                    }
-                    catch { }
-                    try
-                    {
-                        sb.AppendFormat("<br /><b>Server Base Path:</b><br />{0}<br />\r\n", ApplicationEnvironment.ApplicationBasePath);
-                    }
-                    catch { }
-
-                    try
-                    {
-                        sb.AppendFormat("<br /><b>Url Referrer:</b><br />{0}<br />\r\n", context.Request.Headers["Referer"]);
-                    }
-                    catch { }
-
-                    try
-                    {
-                        if (!context.User.Identity.IsAuthenticated)
-                            sb.AppendFormat("<br /><b>Logged User:</b><br />None<br />\r\n");
-                        else
-                            sb.AppendFormat("<br /><b>Logged User:</b><br />{0}<br />\r\n", context.User.Identity.Name);
-                    }
-                    catch { }
-
-                    try
-                    {
-                        sb.AppendFormat("<br /><b>Request Headers:</b><br />\r\n");
-                        sb.AppendFormat("<ul style=\"background-color: #ffffcc\">\r\n");
-                        foreach (var h in context.Request.Headers.Keys)
-                        {
-                            sb.AppendFormat("<li>{0}: {1}</li>\r\n", h, context.Request.Headers[h]);
-
-                        }
-                        sb.AppendFormat("</ul>\r\n");
-                    }
-                    catch { }
-
-
-                    try
-                    {
-                        if (context.Request.Method == "POST")
-                        {
-                            sb.AppendFormat("<br /><b>Post Data:</b><br />\r\n");
-                            if (context.Request.Form.Keys.Count > 0)
-                            {
-                                sb.AppendFormat("<ul style=\"background-color: #ffffcc\">\r\n");
-                                foreach (string formKey in context.Request.Form.Keys)
-                                {
-                                    if (!formKey.ToLower().Contains("senha") && !formKey.ToLower().Contains("password"))
-                                        sb.AppendFormat("<li>{0}: {1}</li>\r\n", formKey, context.Request.Form[formKey]);
-                                }
-                                sb.AppendFormat("</ul>\r\n");
-                            }
-                            else
-                            {
-                                //json, xml e outros docs 
-                                sb.Append("<code><pre style=\"background-color: #ffffcc; padding: 8px; font-size: 1.1em\">");
-                                try
-                                {
-                                    context.Request.Body.Seek(0, SeekOrigin.Begin);
-                                }
-                                catch { }
-                                sb.Append(HttpUtility.HtmlEncode(new StreamReader(context.Request.Body).ReadToEnd()));
-                                sb.Append("</pre></code><br />");
-
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        sb.AppendFormat("<br /><b>Error Getting Post Data:</b><br />{0}<br />\r\n", ex.Message);
-                    }
-                }
+                GenerateHttpContextDetails(sb, httpContext);
 
                 try
                 {
@@ -218,6 +126,102 @@ namespace Alma.ApiExtensions.Log
             }
 
             return sb;
+        }
+
+        private static void GenerateHttpContextDetails(StringBuilder sb, HttpContext context)
+        {
+            if (context == null)
+                return;
+
+            try
+            {
+                sb.AppendFormat("<br /><b>Url:</b><br />{0}<br />\r\n", context.Request.GetUri());
+            }
+            catch { }
+            try
+            {
+                sb.AppendFormat("<br /><b>User Agent:</b><br />{0}<br />\r\n", context.Request.Headers["User-Agent"]);
+            }
+            catch { }
+            try
+            {
+                sb.AppendFormat("<br /><b>User Host Address:</b><br />{0}<br />\r\n", context.Features.Get<IHttpConnectionFeature>()?.RemoteIpAddress);
+            }
+            catch { }
+            try
+            {
+                sb.AppendFormat("<br /><b>Server Machine Name:</b><br />{0}<br />\r\n", Environment.MachineName);
+            }
+            catch { }
+            try
+            {
+                sb.AppendFormat("<br /><b>Server Base Path:</b><br />{0}<br />\r\n", ApplicationEnvironment.ApplicationBasePath);
+            }
+            catch { }
+
+            try
+            {
+                sb.AppendFormat("<br /><b>Url Referrer:</b><br />{0}<br />\r\n", context.Request.Headers["Referer"]);
+            }
+            catch { }
+
+            try
+            {
+                if (!context.User.Identity.IsAuthenticated)
+                    sb.AppendFormat("<br /><b>Logged User:</b><br />None<br />\r\n");
+                else
+                    sb.AppendFormat("<br /><b>Logged User:</b><br />{0}<br />\r\n", context.User.Identity.Name);
+            }
+            catch { }
+
+            try
+            {
+                sb.AppendFormat("<br /><b>Request Headers:</b><br />\r\n");
+                sb.AppendFormat("<ul style=\"background-color: #ffffcc\">\r\n");
+                foreach (var h in context.Request.Headers.Keys)
+                {
+                    sb.AppendFormat("<li>{0}: {1}</li>\r\n", h, context.Request.Headers[h]);
+
+                }
+                sb.AppendFormat("</ul>\r\n");
+            }
+            catch { }
+
+
+            try
+            {
+                if (context.Request.Method == "POST")
+                {
+                    sb.AppendFormat("<br /><b>Post Data:</b><br />\r\n");
+                    if (context.Request.Form.Keys.Count > 0)
+                    {
+                        sb.AppendFormat("<ul style=\"background-color: #ffffcc\">\r\n");
+                        foreach (string formKey in context.Request.Form.Keys)
+                        {
+                            if (!formKey.ToLower().Contains("senha") && !formKey.ToLower().Contains("password"))
+                                sb.AppendFormat("<li>{0}: {1}</li>\r\n", formKey, context.Request.Form[formKey]);
+                        }
+                        sb.AppendFormat("</ul>\r\n");
+                    }
+                    else
+                    {
+                        //json, xml and other types of docs
+                        sb.Append("<code><pre style=\"background-color: #ffffcc; padding: 8px; font-size: 1.1em\">");
+                        try
+                        {
+                            context.Request.Body.Seek(0, SeekOrigin.Begin);
+                        }
+                        catch { }
+                        sb.Append(System.Web.HttpUtility.HtmlEncode(new StreamReader(context.Request.Body).ReadToEnd()));
+                        sb.Append("</pre></code><br />");
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                sb.AppendFormat("<br /><b>Error Getting Post Data:</b><br />{0}<br />\r\n", ex.Message);
+            }
         }
 
         //private static string FindExceptionName(Exception exception)

@@ -1,17 +1,17 @@
-﻿using System;
+﻿using Alma.Common;
+using Alma.Common.Dto;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using Alma.Common;
-using Alma.Common.Dto;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 
 namespace Alma.ApiExtensions.Serializers
 {
-    public static class SerializadorConstantes
+    public static class ConstantSerializer
     {
         private class StaticPropertyContractResolver : CamelCasePropertyNamesContractResolver
         {
@@ -29,28 +29,30 @@ namespace Alma.ApiExtensions.Serializers
         }
 
 
-        public static string Serializar(Type tipo, bool formatado)
+        public static string Serialize(Type tipo, bool formatted)
         {
             var serializer = new JsonSerializer();
             serializer.ContractResolver = new StaticPropertyContractResolver();
             var sb = new StringBuilder();
             var writer = new StringWriter(sb);
-            serializer.Formatting = formatado ? Formatting.Indented : Formatting.None;
+            serializer.Formatting = formatted ? Formatting.Indented : Formatting.None;
             serializer.Serialize(writer, Activator.CreateInstance(tipo, null), tipo);
 
             return sb.ToString();
         }
-        public static string SerializarEnum<T>(bool formatado, bool orderById = false) where T : struct
+
+        public static string SerializeEnum<T>(bool formatted, bool orderById = false) where T : struct
         {
-            return SerializarEnum(typeof(T), formatado, orderById);
+            return SerializeEnum(typeof(T), formatted, orderById);
         }
-        public static string SerializarEnum(Type enumerador, bool formatado, bool orderById = false)
+
+        public static string SerializeEnum(Type enumerador, bool formatted, bool orderById = false)
         {
             var serializer = new JsonSerializer();
             serializer.ContractResolver = new StaticPropertyContractResolver();
             var sb = new StringBuilder();
             var writer = new StringWriter(sb);
-            serializer.Formatting = formatado ? Formatting.Indented : Formatting.None;
+            serializer.Formatting = formatted ? Formatting.Indented : Formatting.None;
 
             var lista = new List<IIdName>();
 
@@ -68,33 +70,33 @@ namespace Alma.ApiExtensions.Serializers
 
             return sb.ToString();
         }
-        public static string SerializarEnumChar<T>(bool formatado, bool orderByCodigo = false) where T : struct
+
+        public static string SerializeEnumChar<T>(bool formatted, bool orderByCode = false) where T : struct
         {
-            return SerializarEnumChar(typeof(T), formatado, orderByCodigo);
+            return SerializeEnumChar(typeof(T), formatted, orderByCode);
         }
 
-
-        public static string SerializarEnumChar(Type enumerador, bool formatado, bool orderByCodigo = false)
+        public static string SerializeEnumChar(Type enumerador, bool formatted, bool orderByCode = false)
         {
             var serializer = new JsonSerializer();
             serializer.ContractResolver = new StaticPropertyContractResolver();
             var sb = new StringBuilder();
             var writer = new StringWriter(sb);
-            serializer.Formatting = formatado ? Formatting.Indented : Formatting.None;
+            serializer.Formatting = formatted ? Formatting.Indented : Formatting.None;
 
-            var lista = new List<CodeDescription>();
+            var list = new List<CodeDescription>();
 
             foreach (var item in Enum.GetValues(enumerador))
             {
-                lista.Add(((Enum)item).ToCodeDescription());
+                list.Add(((Enum)item).ToCodeDescription());
             }
 
-            if (orderByCodigo)
-                lista = lista.OrderBy(t => t.Code).ToList();
+            if (orderByCode)
+                list = list.OrderBy(t => t.Code).ToList();
             else
-                lista = lista.OrderBy(t => t.Description).ToList();
+                list = list.OrderBy(t => t.Description).ToList();
 
-            serializer.Serialize(writer, lista);
+            serializer.Serialize(writer, list);
 
             return sb.ToString();
         }

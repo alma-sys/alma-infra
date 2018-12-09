@@ -13,17 +13,18 @@ namespace Alma.ApiExtensions
 {
     public static class Config
     {
-        public const string cfgLogErros = Common.Config.cfgRoot + "logerros";
-        public const string cfgSistemaRemetente = Common.Config.cfgRoot + "sistema-remetente";
-        public static string cfgUploads => Common.Config.cfgRoot.Replace(":", "-") + "uploads";
+        public const string cfgLogRoot = Common.Config.cfgRoot + "logs:";
+        public const string cfgLogEmails = cfgLogRoot + "emails";
+        public const string cfgEmailFrom = cfgLogRoot + "from";
+        public static string cfgUploads => Common.Config.cfgRoot + "uploads";
 
-        public static IList<MailAddress> DestinosEmailErro
+        public static IList<MailAddress> LogEmailDestinations
         {
             get
             {
                 try
                 {
-                    var emails = ConfigurationManager.AppSettings[cfgLogErros];
+                    var emails = ConfigurationManager.AppSettings[cfgLogEmails];
                     var enderecos = emails.Split(';').Select(x => new MailAddress(x)).ToArray();
 
                     return enderecos;
@@ -31,18 +32,18 @@ namespace Alma.ApiExtensions
                 catch (Exception ex)
                 {
                     throw new ConfigurationErrorsException(
-                        $"Configuração faltando ou inválida em {cfgLogErros} na App.Config ou Web.Config.", ex);
+                        $"Missing or invalid configuration: {cfgLogEmails}. Check App.Config, Web.Config or appsettings.json.", ex);
                 }
             }
         }
 
-        public static MailAddress EmailSistemaRemetente
+        public static MailAddress LogEmailFrom
         {
             get
             {
                 try
                 {
-                    var emails = ConfigurationManager.AppSettings[cfgSistemaRemetente];
+                    var emails = ConfigurationManager.AppSettings[cfgEmailFrom];
                     var enderecos = emails.Split(';').Select(x => new MailAddress(x)).ToArray();
 
                     return enderecos.FirstOrDefault();
@@ -54,7 +55,7 @@ namespace Alma.ApiExtensions
             }
         }
 
-        public static int EmailsErroPorDia
+        public static int MaxLogEmailsPerDay
         {
             get
             {

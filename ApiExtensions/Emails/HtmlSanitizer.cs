@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Alma.ApiExtensions.Html
 {
-    public static class Sanitizador
+    public static class HtmlSanitizer
     {
         // Original list courtesy of Robert Beal :
         // http://www.robertbeal.com/37/sanitising-html

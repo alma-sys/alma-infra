@@ -14,13 +14,14 @@ namespace Alma.ApiExtensions.Log
     {
         public static IApplicationBuilder UseLogModule(this IApplicationBuilder builder)
         {
-            LogModule.CaminhoErro = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "App_Data", "Erros");
-            LogModule.CaminhoLog = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "App_Data", "Logs");
+            // TODO: Be able to store into a file/blob storage
+            LogModule.ErrorFilePath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "App_Data", "Erros");
+            LogModule.LogFilePath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "App_Data", "Logs");
 
-            if (!Directory.Exists(LogModule.CaminhoErro))
-                Directory.CreateDirectory(LogModule.CaminhoErro);
-            if (!Directory.Exists(LogModule.CaminhoLog))
-                Directory.CreateDirectory(LogModule.CaminhoLog);
+            if (!Directory.Exists(LogModule.ErrorFilePath))
+                Directory.CreateDirectory(LogModule.ErrorFilePath);
+            if (!Directory.Exists(LogModule.LogFilePath))
+                Directory.CreateDirectory(LogModule.LogFilePath);
 
 
             return builder.UseMiddleware<LogModule>();
@@ -62,8 +63,8 @@ namespace Alma.ApiExtensions.Log
 
             //var config = ConfigurationManager.GetSection("system.web/customErrors") as System.Web.Configuration.CustomErrorsSection;
             //if (config != null && config.Mode != System.Web.Configuration.CustomErrorsMode.Off)
-            //    ErrosPersonalizados = true;
-            ErrosPersonalizados = true;
+            //    CustomErrors = true;
+            CustomErrors = true;
 
             //app.Error += App_Error;
             //AppDomain.CurrentDomain.UnhandledException -= CurrentDomain_UnhandledException;
@@ -97,9 +98,9 @@ namespace Alma.ApiExtensions.Log
         //    OnError((Exception)e.ExceptionObject);
         //}
 
-        public static string CaminhoLog { get; internal set; }
-        public static string CaminhoErro { get; internal set; }
-        public static bool ErrosPersonalizados { get; private set; }
+        public static string LogFilePath { get; internal set; }
+        public static string ErrorFilePath { get; internal set; }
+        public static bool CustomErrors { get; private set; }
 
 
         internal static void OnError(HttpContext context, Exception exception)
@@ -109,8 +110,8 @@ namespace Alma.ApiExtensions.Log
 
             if (httpException != null) // && httpException.GetHttpCode() < 500)
             {
-                //filtro de 404
-                //não logar ou configurar?
+                //404 filter
+                // TODO: Ignore or configure?
             }
             else
             {
@@ -123,40 +124,41 @@ namespace Alma.ApiExtensions.Log
                 if (string.IsNullOrWhiteSpace(appType))
                     appType = System.Reflection.Assembly.GetEntryAssembly()?.GetName()?.Name;
 
-                var content = HtmlLogger.Montar(exception, context).ToString();
+                var content = HtmlLogger.CreateHtmlFromException(exception, context).ToString();
 
-                EnviarEmail(content, false, appType);
-                SalvarArquivo(content, false, appType);
+                SendEmail(content, false, appType);
+                SaveFile(content, false, appType);
                 //CriarIncidente();
             }
 
         }
 
 
-        private static DateTime emailUltimaData = DateTime.MinValue;
-        private static int emailEnviados = 0;
-        private static void EnviarEmail(string conteudo, bool erroTratado, string tag)
+        private static DateTime lastEmailDate = DateTime.MinValue;
+        private static int totalEmailSent = 0;
+        private static void SendEmail(string content, bool handled, string tag)
         {
-            if (emailUltimaData != DateTime.Today)
+            if (lastEmailDate != DateTime.Today)
             {
-                emailUltimaData = DateTime.Today;
-                emailEnviados = 0;
+                lastEmailDate = DateTime.Today;
+                totalEmailSent = 0;
             }
-            emailEnviados++;
-            var totalEmails = ApiExtensions.Config.EmailsErroPorDia;
+            totalEmailSent++;
+            var totalEmails = ApiExtensions.Config.MaxLogEmailsPerDay;
 
-            if (emailEnviados <= totalEmails)
+            if (totalEmailSent <= totalEmails)
             {
-                new System.Threading.Thread(delegate ()
+                Task.Run(() =>
                 {
+
                     try
                     {
                         var mail = new MailMessage();
-                        foreach (var email in ApiExtensions.Config.DestinosEmailErro)
+                        foreach (var email in ApiExtensions.Config.LogEmailDestinations)
                             mail.To.Add(email);
-                        mail.IsBodyHtml = conteudo.Contains("<body");
-                        mail.Body = conteudo;
-                        mail.Subject = string.Format("{0} - {1} | {2} de {3} emails por dia", tag, erroTratado ? "Log" : "Exception", emailEnviados, totalEmails);
+                        mail.IsBodyHtml = content.Contains("<body");
+                        mail.Body = content;
+                        mail.Subject = string.Format("{0} - {1} | {2} de {3} emails por dia", tag, handled ? "Log" : "Exception", totalEmailSent, totalEmails);
 
                         var smtp = new SmtpClient();
 
@@ -172,14 +174,14 @@ namespace Alma.ApiExtensions.Log
                     }
                     catch (Exception ex)
                     {
-                        SalvarArquivo(ex.ToString(), true, tag + ".email");
-                        System.Diagnostics.Debug.WriteLine(ex.ToString());
+                        SaveFile(ex.ToString(), true, tag + ".email");
+                        System.Diagnostics.Trace.TraceError(ex.ToString());
                     }
-                }).Start();
+                });
             }
         }
 
-        private static void SalvarArquivo(string text, bool erroTratado, string tag)
+        private static void SaveFile(string text, bool handled, string tag)
         {
             if (string.IsNullOrWhiteSpace(text))
                 return;
@@ -194,17 +196,17 @@ namespace Alma.ApiExtensions.Log
             else
                 fileName += ".log";
 
-            if (erroTratado)
-                fileName = System.IO.Path.Combine(CaminhoLog, fileName);
+            if (handled)
+                fileName = System.IO.Path.Combine(LogFilePath, fileName);
             else
-                fileName = System.IO.Path.Combine(CaminhoErro, fileName);
+                fileName = System.IO.Path.Combine(ErrorFilePath, fileName);
 
             try
             {
-                if (!Directory.Exists(CaminhoLog))
-                    Directory.CreateDirectory(CaminhoLog);
-                if (!Directory.Exists(CaminhoErro))
-                    Directory.CreateDirectory(CaminhoErro);
+                if (!Directory.Exists(LogFilePath))
+                    Directory.CreateDirectory(LogFilePath);
+                if (!Directory.Exists(ErrorFilePath))
+                    Directory.CreateDirectory(ErrorFilePath);
 
 
                 Trace.WriteLine(fileName, "log");
@@ -222,10 +224,6 @@ namespace Alma.ApiExtensions.Log
 
         }
 
-        private static void CriarIncidente()
-        {
-            //throw new NotImplementedException();
-        }
 
         private static string SmtpHost => System.Configuration.ConfigurationManager.AppSettings[Common.Config.cfgRoot + "smtp"];
         private static int SmtpPort => Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings[Common.Config.cfgRoot + "smtp:port"]);

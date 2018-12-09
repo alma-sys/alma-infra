@@ -18,7 +18,7 @@ namespace Alma.ApiExtensions.Serializers.Tests
         public void ShouldSerializeEnumValuesIntoIdName()
         {
 
-            var resultado = SerializadorConstantes.SerializarEnum(typeof(ValuesToTest), true, true);
+            var resultado = ConstantSerializer.SerializeEnum(typeof(ValuesToTest), true, true);
             Assert.Equal(@"[
   {
     ""id"": 1,
@@ -40,7 +40,7 @@ namespace Alma.ApiExtensions.Serializers.Tests
         public void ShouldSerializeEnumValuesIntoCodeDescription()
         {
 
-            var resultado = SerializadorConstantes.SerializarEnumChar(typeof(ValuesToTest), true, true);
+            var resultado = ConstantSerializer.SerializeEnumChar(typeof(ValuesToTest), true, true);
             Assert.Equal(@"[
   {
     ""code"": ""Value1"",

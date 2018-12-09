@@ -5,7 +5,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-namespace Alma.ApiExtensions.Seguranca
+namespace Alma.ApiExtensions.Security
 {
     //public static class SecurityExtension
     //{
