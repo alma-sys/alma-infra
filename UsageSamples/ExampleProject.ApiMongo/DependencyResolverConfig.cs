@@ -3,7 +3,7 @@ using Autofac.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 using System.Linq;
 
-namespace Alma.Exemplo.Api
+namespace Alma.ExampleProject.Api
 {
     internal class DependencyResolverConfig
     {

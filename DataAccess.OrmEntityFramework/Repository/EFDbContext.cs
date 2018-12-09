@@ -12,7 +12,7 @@ namespace Alma.DataAccess.OrmEntityFramework
             //base.Configuration.LazyLoadingEnabled = false;
             //base.Configuration.ValidateOnSaveEnabled = true;
             //base.Database.Log = new Action<string>(str => System.Diagnostics.Trace.Write(str, nameOrConnectionString));
-            //if (!Config.ExecutarMigracoes)
+            //if (!Config.ExecuteMigrations)
             //Database.SetInitializer<Contexto>(null);
         }
 

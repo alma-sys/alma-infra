@@ -254,7 +254,7 @@ namespace Alma.ApiExtensions.TestHelper.SpecFlow
                 var propertyValue = reflectionProp.GetValue(returningObject);
 
                 var listTypeType = SearchType(listType);
-                //executar CompareToSet generica
+                // execute generic CompareToSet
                 var reflectionValidateResponse = typeof(SetComparisonExtensionMethods).GetMethod(nameof(SetComparisonExtensionMethods.CompareToSet), System.Reflection.BindingFlags.Instance | BindingFlags.Static | System.Reflection.BindingFlags.Public).GetGenericMethodDefinition();
                 var genericMethod = reflectionValidateResponse.MakeGenericMethod(listTypeType);
                 genericMethod.Invoke(this, new[] { table, propertyValue });
@@ -282,16 +282,16 @@ namespace Alma.ApiExtensions.TestHelper.SpecFlow
                 var content = response.Content;
                 var returningObject = JsonConvert.DeserializeObject(content, modelTypeType);
 
-                //executar Busca Propriedade
+                // search for property
                 var reflectionProperty = returningObject.GetType().GetProperty(property, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
                 var propertyValue = reflectionProperty.GetValue(returningObject);
                 var propertyType = SearchType(type);
 
-                //executar CompareToSet generica
+                // execute generic CompareToSet
                 var reflectionValidate = typeof(InstanceComparisonExtensionMethods).GetMethod(nameof(InstanceComparisonExtensionMethods.CompareToInstance), System.Reflection.BindingFlags.Instance | BindingFlags.Static | System.Reflection.BindingFlags.Public).GetGenericMethodDefinition();
                 var genericMethod = reflectionValidate.MakeGenericMethod(propertyType);
                 genericMethod.Invoke(this, new[] { table, propertyValue });
-                //The same of: table.CompareToSet<propertyType>(propertyValue);
+                // The same of: table.CompareToSet<propertyType>(propertyValue);
             }
             catch (TargetInvocationException ex)
             {
@@ -360,7 +360,7 @@ namespace Alma.ApiExtensions.TestHelper.SpecFlow
 
             var restClient = new RestClient(url);
 
-            Trace.WriteLine("BDD: Executando request");
+            Trace.WriteLine("BDD: Executing request");
             var response = restClient.Execute(request);
 
             ScenarioContext.Response(response);

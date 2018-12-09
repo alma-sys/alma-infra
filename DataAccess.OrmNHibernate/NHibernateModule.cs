@@ -161,10 +161,5 @@ namespace Alma.DataAccess.OrmNHibernate
                 .OpenSession();
         }
 
-        //public static void SetConnectionStringResolver(Func<string, string> connectionStringResolver)
-        //{
-        //    Repositorio.SetConnectionStringResolver(connectionStringResolver);
-        //}
-
     }
 }

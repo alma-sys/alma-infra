@@ -3,7 +3,7 @@ using Autofac.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 using System.Linq;
 
-namespace Alma.Exemplo.ApiMSSql
+namespace Alma.ExampleProject.ApiMSSql
 {
     internal class DependencyResolverConfig
     {
@@ -17,7 +17,6 @@ namespace Alma.Exemplo.ApiMSSql
 
             builder.RegisterAssemblyModules(Alma.Common.Config.MappedAssemblies.SelectMany(x => x.Value).ToArray());
 
-            //builder.RegisterModule<Alma.Dominio.Events.EventModule>(); // por enquanto só no autofac do hangfire.
             builder.RegisterModule<Alma.DataAccess.OrmNHibernate.NHibernateModule>();
 
             var container = builder.Build();

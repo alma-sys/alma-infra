@@ -25,29 +25,29 @@ namespace Alma.DataAccess
         Task<T> ExecuteCustomSqlScalarAsync<T>(string sql, IDictionary<string, object> parameters = null);
         IList<TEntity> List<TProperty>(Expression<Func<TEntity, TProperty>> orderProperty, bool orderAsc = true);
         //ISession GetSession();
-        void Evict(TEntity entidade);
+        void Evict(TEntity instance);
         void ClearCache();
-        //void Validate(TEntidade entity);
-        //T Mesclar<T>(T entidade, string configuracao);
+        //void Validate(TEntity instance);
+        //T Merge<T>(T instance, string config);
 
-        void Create(TEntity entidade);
-        void Create(IList<TEntity> entidades);
-        void Save(TEntity entidade);
-        void Save(IList<TEntity> entidade);
-        void Delete(TEntity entidade);
-        void Delete(IList<TEntity> entidades);
-        void MergeUpdate(TEntity entidade);
-
-
+        void Create(TEntity instance);
+        void Create(IList<TEntity> instances);
+        void Save(TEntity instance);
+        void Save(IList<TEntity> instances);
+        void Delete(TEntity instance);
+        void Delete(IList<TEntity> instances);
+        void MergeUpdate(TEntity instance);
 
 
-        Task CreateAsync(TEntity entidade);
-        Task CreateAsync(IList<TEntity> entidades);
-        Task SaveAsync(TEntity entidade);
-        Task SaveAsync(IList<TEntity> entidade);
-        Task DeleteAsync(TEntity entidade);
-        Task DeleteAsync(IList<TEntity> entidades);
-        Task MergeUpdateAsync(TEntity entidade);
+
+
+        Task CreateAsync(TEntity instance);
+        Task CreateAsync(IList<TEntity> instances);
+        Task SaveAsync(TEntity instance);
+        Task SaveAsync(IList<TEntity> instances);
+        Task DeleteAsync(TEntity instance);
+        Task DeleteAsync(IList<TEntity> instances);
+        Task MergeUpdateAsync(TEntity instance);
 
 
 

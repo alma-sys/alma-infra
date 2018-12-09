@@ -126,7 +126,7 @@ namespace Alma.DataAccess.Api
                 using (var response = (HttpWebResponse)request.GetResponse())
                 {
                     FixCookies(request, response);
-                    //salvar cookies para a proxima requisição
+                    // Save cookies to the next request
                     if (response.Cookies != null && response.Cookies.Count > 0)
                     {
                         if (this.lastCookies != null)
@@ -247,8 +247,8 @@ namespace Alma.DataAccess.Api
 
             var obj = JToken.Parse(json);
 
-                return obj;
-            }
+            return obj;
+        }
 
         protected virtual XmlDocument GetUrlXml(string rota, object post = null)
         {

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 
-namespace Alma.Exemplo.ApiMSSql
+namespace Alma.ExampleProject.ApiMSSql
 {
     public class Program
     {

@@ -137,7 +137,7 @@ namespace Alma.DataAccess.OrmEntityFramework
             throw new NotImplementedException();
         }
 
-        public void Evict(TEntity entidade)
+        public void Evict(TEntity instance)
         {
             throw new NotImplementedException();
         }
@@ -177,37 +177,37 @@ namespace Alma.DataAccess.OrmEntityFramework
             throw new NotImplementedException();
         }
 
-        public Task CreateAsync(TEntity entidade)
+        public Task CreateAsync(TEntity instance)
         {
             throw new NotImplementedException();
         }
 
-        public Task CreateAsync(IList<TEntity> entidades)
+        public Task CreateAsync(IList<TEntity> instances)
         {
             throw new NotImplementedException();
         }
 
-        public Task SaveAsync(TEntity entidade)
+        public Task SaveAsync(TEntity instance)
         {
             throw new NotImplementedException();
         }
 
-        public Task SaveAsync(IList<TEntity> entidade)
+        public Task SaveAsync(IList<TEntity> instances)
         {
             throw new NotImplementedException();
         }
 
-        public Task DeleteAsync(TEntity entidade)
+        public Task DeleteAsync(TEntity instance)
         {
             throw new NotImplementedException();
         }
 
-        public Task DeleteAsync(IList<TEntity> entidades)
+        public Task DeleteAsync(IList<TEntity> instances)
         {
             throw new NotImplementedException();
         }
 
-        public Task MergeUpdateAsync(TEntity entidade)
+        public Task MergeUpdateAsync(TEntity instance)
         {
             throw new NotImplementedException();
         }

@@ -14,57 +14,57 @@ namespace Alma.Domain
         public virtual bool Private { get; protected set; }
 
 
-        protected IList<Role> _perfis = new List<Role>();
-        public virtual IReadOnlyList<Role> Perfis => new ReadOnlyCollection<Role>(_perfis);
+        protected IList<Role> _roles = new List<Role>();
+        public virtual IReadOnlyList<Role> Roles => new ReadOnlyCollection<Role>(_roles);
 
 
-        public virtual void AssociarPerfil(params Role[] perfil)
+        public virtual void AddRole(params Role[] role)
         {
-            if (perfil == null)
-                throw new ArgumentNullException(nameof(perfil));
+            if (role == null)
+                throw new ArgumentNullException(nameof(role));
 
-            lock (_perfis)
+            lock (_roles)
             {
-                foreach (var p in perfil)
+                foreach (var p in role)
                 {
-                    if (!_perfis.Contains(p))
-                        _perfis.Add(p);
+                    if (!_roles.Contains(p))
+                        _roles.Add(p);
                 }
             }
         }
 
-        public virtual void RemoverPerfil(params Role[] perfil)
+        public virtual void RemoveRole(params Role[] role)
         {
-            if (perfil == null)
-                throw new ArgumentNullException(nameof(perfil));
+            if (role == null)
+                throw new ArgumentNullException(nameof(role));
 
-            lock (_perfis)
+            lock (_roles)
             {
-                foreach (var p in perfil)
+                foreach (var p in role)
                 {
-                    if (_perfis.Contains(p))
-                        _perfis.Remove(p);
+                    if (_roles.Contains(p))
+                        _roles.Remove(p);
                 }
             }
 
         }
 
-        public virtual void Desbloquear()
+        public virtual void Unblock()
         {
             this.Blocked = false;
         }
 
-        public virtual void Bloquear()
+        public virtual void Block()
         {
             this.Blocked = true;
         }
 
-        public virtual void DefinirExpirado()
+        public virtual void SetAsExpired()
         {
             this.Expired = true;
         }
 
-        public virtual void RemoverExpirado()
+        public virtual void UnsetAsExpired()
         {
             this.Expired = false;
         }

@@ -9,7 +9,7 @@ using System;
 using System.Configuration;
 using System.Linq;
 
-namespace Alma.Exemplo.Api
+namespace Alma.ExampleProject.Api
 {
     public class Startup
     {

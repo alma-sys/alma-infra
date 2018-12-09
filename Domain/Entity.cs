@@ -16,7 +16,7 @@ namespace Alma.Domain
     public abstract class Entity<T> : EntityBase, IId<T> where T : struct
     {
         /// <summary>
-        /// Id de referencia da entidade. 
+        /// This is the Id reference of this entity.
         /// </summary>
         public virtual T Id { get; protected set; }
 

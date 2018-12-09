@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
-namespace Alma.Exemplo.Web
+namespace Alma.ExampleProject.Web
 {
     public class Program
     {

@@ -1,7 +1,7 @@
 ﻿using Autofac;
 using System.Reflection;
 
-namespace Alma.Exemplo.Aplicativo
+namespace Alma.ExampleProject.Application
 {
     public class ConfigModule : Autofac.Module
     {

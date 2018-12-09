@@ -6,15 +6,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Mappings\ValueObject\**" />
+    <EmbeddedResource Remove="Mappings\ValueObject\**" />
+    <None Remove="Mappings\ValueObject\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\Common\Common.csproj" />
     <ProjectReference Include="..\..\DataAccess.MongoMapping\DataAccess.MongoMapping.csproj" />
     <ProjectReference Include="..\..\DataAccess\DataAccess.csproj" />
     <ProjectReference Include="..\..\Domain\Domain.csproj" />
     <ProjectReference Include="..\ExampleProject.Domain\ExampleProject.Domain.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Mapeamentos\ValueObject\" />
   </ItemGroup>
 
 </Project>

@@ -135,14 +135,14 @@ namespace Alma.DataAccess.MongoMapping
             collection.InsertMany(instances);
         }
 
-        public async Task CreateAsync(TEntity entidade)
+        public async Task CreateAsync(TEntity instance)
         {
-            await collection.InsertOneAsync(entidade);
+            await collection.InsertOneAsync(instance);
         }
 
-        public async Task CreateAsync(IList<TEntity> entidades)
+        public async Task CreateAsync(IList<TEntity> instances)
         {
-            await collection.InsertManyAsync(entidades);
+            await collection.InsertManyAsync(instances);
         }
 
 

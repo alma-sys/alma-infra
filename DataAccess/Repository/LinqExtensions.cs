@@ -68,33 +68,34 @@ namespace Alma.DataAccess
         /// <param name="currentPage">1-based current page index</param>
         /// <param name="pageSize"></param>
         /// <returns></returns>
-        public static IPagedList<T> ToPagedList<T>(this IQueryable<T> query, int currentPage, int pageSize = PagedList<T>.DefaultPageSize) where T : class
+        public static async Task<IPagedList<T>> ToPagedListAsync<T>(this IQueryable<T> query, int currentPage, int pageSize = PagedList<T>.DefaultPageSize) where T : class
         {
-            var recordCount = query.Count();
-            IList<T> pageRecords;
+            Task<List<T>> pageRecords;
 
-            if (pageSize != 0)
-            {
-                //currentPage starts from 1
-                do
-                {
-                    pageRecords = query
-                        .Skip((currentPage - 1) * pageSize)
-                        .Take(pageSize)
-                        .ToList();
+            if (pageSize > 0 && currentPage >= 1) // currentPage starts from 1
+            {               
+                //do
+                //{
+                pageRecords = query
+                    .Skip((currentPage - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToListAsync();
 
-                    if (pageRecords.Count == 0)
-                        currentPage--;
+                //if (pageRecords.Count == 0)
+                //    currentPage--;
 
-                } while (pageRecords.Count == 0 && currentPage != 0);
+                //} while (pageRecords.Count == 0 && currentPage != 0);
             }
             else
             {
-                pageRecords = new List<T>();
+                pageRecords = Task.FromResult(new List<T>());
             }
+            var totalCount = query.CountAsync();
 
 
-            return new PagedList<T>(currentPage, recordCount, pageRecords, pageSize);
+            await Task.WhenAll(pageRecords, totalCount);
+
+            return new PagedList<T>(currentPage, await totalCount, await pageRecords, pageSize);
         }
 
 

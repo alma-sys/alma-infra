@@ -3,7 +3,7 @@
 namespace Alma.DataAccess.Hooks
 {
     /// <summary>
-    /// Representa um evento de dados para leitura e hidratação de entidade
+    /// Represents a data event after reading and hidrating an entity
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
     public interface ILoadDataHook<TEntity> : IDataHook<TEntity> where TEntity : Entity

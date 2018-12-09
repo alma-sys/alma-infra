@@ -128,7 +128,6 @@ namespace Alma.ApiExtensions.Log
 
                 SendEmail(content, false, appType);
                 SaveFile(content, false, appType);
-                //CriarIncidente();
             }
 
         }
