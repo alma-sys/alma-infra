@@ -4,23 +4,23 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>Alma.Common</AssemblyName>
     <RootNamespace>Alma.Common</RootNamespace>
-    <PackageId>Alma.Core</PackageId>
+    <PackageId>Alma.Common</PackageId>
     
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
     <DisableImplicitAssetTargetFallback>true</DisableImplicitAssetTargetFallback>
     
-    <Description>Implementa uma base para arquitetura comum de aplicações modulares.</Description>
+    <Description>Implements common classes for our modular applications.</Description>
     <Authors>$(Authors)</Authors>
     <Company>$(Company)</Company>
     <Product>$(Product)</Product>
     <Copyright>$(Copyright)</Copyright>
-    <PackageLicenseUrl>https://$(URL)/license</PackageLicenseUrl>
-    <PackageProjectUrl>https://$(URL)</PackageProjectUrl>
-    <PackageIconUrl>https://$(URLICON)</PackageIconUrl>
+    <PackageLicenseUrl>$(LICENSE_URL)</PackageLicenseUrl>
+    <PackageProjectUrl>$(PROJECT_URL)</PackageProjectUrl>
+    <PackageIconUrl>$(ICON_URL)</PackageIconUrl>
     <Configuration>$(Configuration)</Configuration>
-    <RepositoryUrl></RepositoryUrl>
-    <RepositoryType></RepositoryType>
+    <RepositoryUrl>$(REPOSITORY_URL)</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
     
   </PropertyGroup>
 

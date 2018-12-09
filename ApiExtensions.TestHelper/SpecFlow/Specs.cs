@@ -14,7 +14,7 @@ using Xunit;
 namespace Alma.ApiExtensions.TestHelper.SpecFlow
 {
     [Binding]
-    public sealed class Specs
+    sealed class Specs
     {
 
         private ScenarioContext ScenarioContext { get; set; }
@@ -24,54 +24,40 @@ namespace Alma.ApiExtensions.TestHelper.SpecFlow
             this.ScenarioContext = scenarioContext;
         }
 
-        [BeforeScenario("ignore")]
-        public void TesteInconclusivo()
+        [BeforeScenario("ignore", "skip")]
+        public void SkipTest()
         {
             ScenarioContext.Pending();
         }
 
-        [Given(@"o método http é '(.*)'")]
-        public void EOMetodoHttpE(string p0)
+        [Given(i18n.Messages_pt.HttpMethodIs, i18n.Messages_pt.Culture)]
+        [Given(i18n.Messages.HttpMethodIs)]
+        public void AndHttpMethodIs(string p0)
         {
-            var metodo = Method.POST;
-
-            switch (p0.ToUpper())
+            if (!Enum.TryParse(p0?.Trim().ToUpper(), out Method httpMethod))
             {
-                case "POST":
-                    metodo = Method.POST;
-                    break;
-                case "GET":
-                    metodo = Method.GET;
-                    break;
-                case "PUT":
-                    metodo = Method.PUT;
-                    break;
-                case "DELETE":
-                    metodo = Method.DELETE;
-                    break;
-                default:
-                    Assert.True(false, "Método HTTP não esperado"); //indicação da doc xunit para Assert.Fail
-                    break;
+                Assert.True(false, "Http method not supported"); // from xunit docs to use Assert.Fail
             }
 
-            ScenarioContext.HttpMethod(metodo);
+            ScenarioContext.HttpMethod(httpMethod);
         }
 
-        [Given(@"a seguinte lista de argumentos do tipo '(.*)':")]
-        public void DadoASeguinteListaDeArgumentos(string nomeTipo, Table table)
+        [Given(i18n.Messages_pt.TheFollowingListOfArgumentsOfType, i18n.Messages_pt.Culture)]
+        [Given(i18n.Messages.TheFollowingListOfArgumentsOfType)]
+        public void GivenTheFollowingListOfArgumentsOfType(string typeName, Table table)
         {
-            var tipo = LocalizarTipo(nomeTipo);
+            var tipo = SearchType(typeName);
             try
             {
-                var reflValidarResposta = typeof(TableHelperExtensionMethods).GetMethod("CreateSet", new[] { typeof(Table) }).GetGenericMethodDefinition();
+                var reflValidarResposta = typeof(TableHelperExtensionMethods).GetMethod(nameof(TableHelperExtensionMethods.CreateSet), new[] { typeof(Table) }).GetGenericMethodDefinition();
                 var genericMethod = reflValidarResposta.MakeGenericMethod(tipo);
                 var arg = genericMethod.Invoke(null, new[] { table });
 
                 var jsonSerializerSettings = new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() };
                 var json = JsonConvert.SerializeObject(arg, Formatting.Indented, jsonSerializerSettings);
 
-                ScenarioContext.JsonArgumento(json);
-                ScenarioContext.ListaArgumentos(table);
+                ScenarioContext.JsonArgument(json);
+                ScenarioContext.ArgumentList(table);
             }
             catch (TargetInvocationException ex)
             {
@@ -82,58 +68,63 @@ namespace Alma.ApiExtensions.TestHelper.SpecFlow
             }
         }
 
-        [Given(@"que a url do endpoint é '(.*)'")]
-        public void DadoQueAUrlDoEndpointE(string p0)
+        [Given(i18n.Messages_pt.TheEndPointUrlIs, i18n.Messages_pt.Culture)]
+        [Given(i18n.Messages.TheEndPointUrlIs)]
+        public void GivenTheFollowingEndpointUrl(string p0)
         {
             ScenarioContext.Endpoint(p0);
         }
 
-        [Given(@"os seguintes parâmetros de url:")]
-        public void DadoOsSeguintesParametrosDeUrl(Table table)
+        [Given(i18n.Messages_pt.TheFollowingUrlParameters, i18n.Messages_pt.Culture)]
+        [Given(i18n.Messages.TheFollowingUrlParameters)]
+        public void GivenTheFollowingUrlParameters(Table table)
         {
-            ScenarioContext.ParametroUrl(table);
+            ScenarioContext.UrlParameter(table);
         }
 
-        [Given(@"informei o parâmetro de url '(.*)' com o id do cenário")]
-        public void DadoInformeiOParametroDeUrlComOIdDoCenario(string parametro)
+        [Given(i18n.Messages_pt.ThatIInformedTheUrlParameterWithTheScenarioId, i18n.Messages_pt.Culture)]
+        [Given(i18n.Messages.ThatIInformedTheUrlParameterWithTheScenarioId)]
+        public void GivenThatIInformedTheUrlParameterWithTheScenarioId(string parameter)
         {
-            Int64 id = ScenarioContext.IdEntidade();
-            AdicionaParametroUrl(parametro, id.ToString());
+            var id = ScenarioContext.EntityId();
+            AddUrlParameter(parameter, id.ToString());
         }
 
-        [Given(@"informei o parâmetro de url '(.*)' com o valor '(.*)'")]
-        public void DadoInformeiOParametroDeUrlComOValor(string parametro, string valor)
+        [Given(i18n.Messages_pt.ThatIInformedTheUrlParameterWithValue, i18n.Messages_pt.Culture)]
+        [Given(i18n.Messages.ThatIInformedTheUrlParameterWithValue)]
+        public void GivenThatIInformedTheUrlParameterWithValue(string parameter, string value)
         {
-            AdicionaParametroUrl(parametro, valor);
+            AddUrlParameter(parameter, value);
         }
 
-        private void AdicionaParametroUrl(String parametro, String valor)
+        private void AddUrlParameter(string parameter, string value)
         {
-            var table = ScenarioContext.ParametroUrl();
+            var table = ScenarioContext.UrlParameter();
             if (table == null)
                 table = new Table("Field", "Value");
 
-            table.AddRow(parametro, valor);
-            ScenarioContext.ParametroUrl(table);
+            table.AddRow(parameter, value);
+            ScenarioContext.UrlParameter(table);
         }
 
-        [Given(@"o seguinte argumento do tipo '(.*)':")]
-        public void EOsSeguintesValores(string nomeTipo, Table table)
+        [Given(i18n.Messages_pt.TheFollowingValues, i18n.Messages_pt.Culture)]
+        [Given(i18n.Messages.TheFollowingValues)]
+        public void AndTheFollowingValues(string typeName, Table table)
         {
-            var tipo = LocalizarTipo(nomeTipo);
+            var tipo = SearchType(typeName);
 
             try
             {
-                var reflValidarResposta = typeof(TableHelperExtensionMethods).GetMethod("CreateInstance", new[] { typeof(Table) }).GetGenericMethodDefinition();
+                var reflValidarResposta = typeof(TableHelperExtensionMethods).GetMethod(nameof(TableHelperExtensionMethods.CreateInstance), new[] { typeof(Table) }).GetGenericMethodDefinition();
                 var genericMethod = reflValidarResposta.MakeGenericMethod(tipo);
                 var arg = genericMethod.Invoke(null, new[] { table });
 
                 var jsonSerializerSettings = new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() };
                 var json = JsonConvert.SerializeObject(arg, Formatting.Indented, jsonSerializerSettings);
 
-                ScenarioContext.JsonArgumento(json);
-                ScenarioContext.TipoModel(nomeTipo);
-                ScenarioContext.Argumento(table);
+                ScenarioContext.JsonArgument(json);
+                ScenarioContext.ModelType(typeName);
+                ScenarioContext.Argument(table);
 
             }
             catch (TargetInvocationException ex)
@@ -145,17 +136,18 @@ namespace Alma.ApiExtensions.TestHelper.SpecFlow
             }
         }
 
-        [Then(@"statuscode da resposta deverá ser '(.*)'")]
-        public void EntaoStatuscodeDaRespostaDeveraSer(string p0)
+        [Then(i18n.Messages_pt.TheStatusCodeOfTheResponseShouldBe, i18n.Messages_pt.Culture)]
+        [Then(i18n.Messages.TheStatusCodeOfTheResponseShouldBe)]
+        public void ThenTheStatusCodeOfTheResponseShouldBe(string p0)
         {
             var response = ScenarioContext.Response();
 
-            Assert.Equal(p0, response.StatusCode.ToString()); //xunit n tem mensagem
+            Assert.Equal(p0, response.StatusCode.ToString()); //xunit can't show a custom message
                                                               //response.StatusCode == HttpStatusCode.InternalServerError ?
                                                               //response.Content : null);
         }
 
-        private Type LocalizarTipo(string nomeTipo)
+        private Type SearchType(string nomeTipo)
         {
             var assemblies = AppDomain.CurrentDomain.GetAssemblies()
                 .Where(x =>
@@ -180,90 +172,93 @@ namespace Alma.ApiExtensions.TestHelper.SpecFlow
                 return tipos.Single();
         }
 
-        [When(@"chamar o servico")]
-        public void QuandoChamarOServico()
+        [When(i18n.Messages_pt.CallTheService, i18n.Messages_pt.Culture)]
+        [When(i18n.Messages.CallTheService)]
+        public void WhenCallTheService()
         {
-            var url = (String)ScenarioContext.Endpoint();
-            var endpoint = Config.HostBase.ToString();
+            var url = (string)ScenarioContext.Endpoint();
+            var endpoint = LocalServer.WebHostBaseUrl.ToString();
             if (!endpoint.EndsWith("/"))
                 endpoint += "/";
             endpoint += url.Substring(url.StartsWith("/") ? 1 : 0);
 
-            ExecutarRequest(endpoint);
+            ExecuteRequest(endpoint);
         }
 
-        [Then(@"uma resposta do tipo '(.*)' deve ser retornada com os seguintes valores:")]
-        public void EntaoUmaRespostaDoTipoXSerRetornadaComOsSeguintesValores(string tipoModel, Table table)
+        [Then(i18n.Messages_pt.AResponseOfTypeXShouldBeReturnedWithTheFollowingValues, i18n.Messages_pt.Culture)]
+        [Then(i18n.Messages.AResponseOfTypeXShouldBeReturnedWithTheFollowingValues)]
+        public void ThenAResponseOfTypeXShouldBeReturnedWithTheFollowingValues(string modelType, Table table)
         {
-            var tipoModelType = LocalizarTipo(tipoModel);
-            ScenarioContext.TipoModel(tipoModel);
+            var modelTypeType = SearchType(modelType);
+            ScenarioContext.ModelType(modelType);
 
-            ValidarResposta(table, tipoModelType);
+            ValidateResponse(table, modelTypeType);
         }
 
-        [Then(@"uma lista do tipo '(.*)' deve ser retornada com um item com os seguintes valores:")]
-        public void EntaoUmaRespostaDoTipoXSerRetornadaComUmItemComOsSeguintesValores(string tipoModel, Table table)
+        [Then(i18n.Messages_pt.AListOfTypeXShouldBeReturnedWithAnItemWithTheFollowingValues, i18n.Messages_pt.Culture)]
+        [Then(i18n.Messages.AListOfTypeXShouldBeReturnedWithAnItemWithTheFollowingValues)]
+        public void ThenAListOfTypeXShouldBeReturnedWithAnItemWithTheFollowingValues(string modelType, Table table)
         {
-            var tipoModelType = LocalizarTipo(tipoModel);
-            ScenarioContext.TipoModel(tipoModel);
-            ValidarRespostaListaComUmItem(table, tipoModelType);
+            var modelTypeType = SearchType(modelType);
+            ScenarioContext.ModelType(modelType);
+            ValidateResponseListWithOneItem(table, modelTypeType);
         }
 
-        [Then(@"uma lista do tipo '(.*)' deve ser retornada com os seguintes valores:")]
-        public void EntaoUmaListaDoTipoXSerRetornadaComOsSeguintesValores(string tipoModel, Table table)
+        [Then(i18n.Messages_pt.AListOfTypeXShouldBeReturnedWithTheFollowingValues, i18n.Messages_pt.Culture)]
+        [Then(i18n.Messages.AListOfTypeXShouldBeReturnedWithTheFollowingValues)]
+        public void ThenAListOfTypeXShouldBeReturnedWithTheFollowingValues(string tipoModel, Table table)
         {
-            var tipoModelType = LocalizarTipo(tipoModel);
-            ScenarioContext.TipoModel(tipoModel);
-            ValidarRespostaLista(table, tipoModelType);
+            var modelTypeType = SearchType(tipoModel);
+            ScenarioContext.ModelType(tipoModel);
+            ValidateResponseList(table, modelTypeType);
         }
 
-        [Then(@"a propriedade '(.*)' de todos os itens deve ser '(.*)'")]
-        public void EntaoAPropriedadeDeTodosOsItensDeveSer(string propriedade, string valor)
+        [Then(i18n.Messages_pt.ThePropertyXOfAllItemsShouldBe, i18n.Messages_pt.Culture)]
+        [Then(i18n.Messages.ThePropertyXOfAllItemsShouldBe)]
+        public void ThenThePropertyXOfAllItemsShouldBe(string property, string value)
         {
-            var tipoModel = ScenarioContext.TipoModel();
-            if (string.IsNullOrWhiteSpace(tipoModel))
-                throw new InvalidOperationException("Validar se a lista foi retornada com dados antes de validar propriedades.");
-            var tipoModelType = LocalizarTipo(tipoModel);
-            ValidarRespostaListaComTodosOsItensComPropriedade(tipoModelType, propriedade, valor);
+            var modelType = ScenarioContext.ModelType();
+            if (string.IsNullOrWhiteSpace(modelType))
+                throw new InvalidOperationException("Validate if a list was returned before checking for items.");
+            var modelTypeType = SearchType(modelType);
+            ValidateAResponseListHavingAPropertyWithTheSameValue(modelTypeType, property, value);
         }
 
 
-        [Then(@"uma resposta com uma lista do tipo '(.*)' deve ser retornada com dados")]
-        public void EntaoUmaRespostaComUmaListaDoTipoXSerRetornadaComItens(string tipoModel)
+        [Then(i18n.Messages_pt.AResponseWithAListOfTypeXShouldBeReturnedWithData, i18n.Messages_pt.Culture)]
+        [Then(i18n.Messages.AResponseWithAListOfTypeXShouldBeReturnedWithData)]
+        public void ThenAResponseWithAListOfTypeXShouldBeReturnedWithData(string modelType)
         {
-            var tipoModelType = LocalizarTipo(tipoModel);
-            ScenarioContext.TipoModel(tipoModel);
-            ValidarRespostaListaComDados(tipoModelType);
+            var modelTypeType = SearchType(modelType);
+            ScenarioContext.ModelType(modelType);
+            ValidateResponseListWithData(modelTypeType);
         }
 
-        [Then(@"uma propriedade '(.*)' com uma lista de '(.*)' com os seguintes valores:")]
-        public void EntaoUmaPropriedadeXComUmaListaDeY(string propriedade, string tipoLista, Table table)
+        [Then(i18n.Messages_pt.APropertyXWithAListOfYWithTheFollowingValues, i18n.Messages_pt.Culture)]
+        [Then(i18n.Messages.APropertyXWithAListOfYWithTheFollowingValues)]
+        public void ThenAPropertyXWithAListOfYWithTheFollowingValues(string property, string listType, Table table)
         {
             try
             {
 
-                var tipoModel = ScenarioContext.TipoModel();
-                var tipoModelType = LocalizarTipo(tipoModel);
+                var modelType = ScenarioContext.ModelType();
+                var modelTypeType = SearchType(modelType);
 
 
                 var response = ScenarioContext.Response();
                 var content = response.Content;
-                var objetoRetorno = JsonConvert.DeserializeObject(content, tipoModelType);
+                var returningObject = JsonConvert.DeserializeObject(content, modelTypeType);
 
-                //executar Busca Propriedade
-                var reflPropriedade = objetoRetorno.GetType().GetProperty(propriedade, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
-                var propriedadeObj = reflPropriedade.GetValue(objetoRetorno);
-                //equivalenta a: table.CompareToSet<tipoListaType>(propriedadeObj);
+                // Search for property
+                var reflectionProp = returningObject.GetType().GetProperty(property, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
+                var propertyValue = reflectionProp.GetValue(returningObject);
 
-
-                var tipoListaType = LocalizarTipo(tipoLista);
-
-
+                var listTypeType = SearchType(listType);
                 //executar CompareToSet generica
-                var reflValidarResposta = typeof(SetComparisonExtensionMethods).GetMethod(nameof(SetComparisonExtensionMethods.CompareToSet), System.Reflection.BindingFlags.Instance | BindingFlags.Static | System.Reflection.BindingFlags.Public).GetGenericMethodDefinition();
-                var genericMethod = reflValidarResposta.MakeGenericMethod(tipoListaType);
-                genericMethod.Invoke(this, new[] { table, propriedadeObj });
-                //equivalenta a: table.CompareToSet<tipoListaType>(propriedadeObj);
+                var reflectionValidateResponse = typeof(SetComparisonExtensionMethods).GetMethod(nameof(SetComparisonExtensionMethods.CompareToSet), System.Reflection.BindingFlags.Instance | BindingFlags.Static | System.Reflection.BindingFlags.Public).GetGenericMethodDefinition();
+                var genericMethod = reflectionValidateResponse.MakeGenericMethod(listTypeType);
+                genericMethod.Invoke(this, new[] { table, propertyValue });
+                // The same of: table.CompareToSet<listTypeType>(propertyValue);
             }
             catch (TargetInvocationException ex)
             {
@@ -274,30 +269,29 @@ namespace Alma.ApiExtensions.TestHelper.SpecFlow
             }
         }
 
-        [Then(@"uma propriedade '(.*)' do tipo '(.*)' com os seguintes valores:")]
-        public void EntaoUmaPropriedadeDoTipoComOsSeguintesValores(string propriedade, string tipo, Table valores)
+        [Then(i18n.Messages_pt.APropertyXOfTypeYWithTheFollowingValues, i18n.Messages_pt.Culture)]
+        [Then(i18n.Messages.APropertyXOfTypeYWithTheFollowingValues)]
+        public void ThenAPropertyXOfTypeYWithTheFollowingValues(string property, string type, Table table)
         {
             try
             {
-                var tipoModel = ScenarioContext.TipoModel();
-                var tipoModelType = LocalizarTipo(tipoModel);
+                var modelType = ScenarioContext.ModelType();
+                var modelTypeType = SearchType(modelType);
 
                 var response = ScenarioContext.Response();
                 var content = response.Content;
-                var objetoRetorno = JsonConvert.DeserializeObject(content, tipoModelType);
+                var returningObject = JsonConvert.DeserializeObject(content, modelTypeType);
 
                 //executar Busca Propriedade
-                var reflPropriedade = objetoRetorno.GetType().GetProperty(propriedade, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
-                var propriedadeObj = reflPropriedade.GetValue(objetoRetorno);
-                //equivalenta a: table.CompareToSet<tipoListaType>(propriedadeObj);
-
-                var tipoPropriedade = LocalizarTipo(tipo);
+                var reflectionProperty = returningObject.GetType().GetProperty(property, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
+                var propertyValue = reflectionProperty.GetValue(returningObject);
+                var propertyType = SearchType(type);
 
                 //executar CompareToSet generica
-                var reflValidarResposta = typeof(InstanceComparisonExtensionMethods).GetMethod(nameof(InstanceComparisonExtensionMethods.CompareToInstance), System.Reflection.BindingFlags.Instance | BindingFlags.Static | System.Reflection.BindingFlags.Public).GetGenericMethodDefinition();
-                var genericMethod = reflValidarResposta.MakeGenericMethod(tipoPropriedade);
-                genericMethod.Invoke(this, new[] { valores, propriedadeObj });
-                //equivalenta a: table.CompareToSet<tipoListaType>(propriedadeObj);
+                var reflectionValidate = typeof(InstanceComparisonExtensionMethods).GetMethod(nameof(InstanceComparisonExtensionMethods.CompareToInstance), System.Reflection.BindingFlags.Instance | BindingFlags.Static | System.Reflection.BindingFlags.Public).GetGenericMethodDefinition();
+                var genericMethod = reflectionValidate.MakeGenericMethod(propertyType);
+                genericMethod.Invoke(this, new[] { table, propertyValue });
+                //The same of: table.CompareToSet<propertyType>(propertyValue);
             }
             catch (TargetInvocationException ex)
             {
@@ -309,39 +303,43 @@ namespace Alma.ApiExtensions.TestHelper.SpecFlow
         }
 
 
-        [Given(@"que não tenho uma sessão de usuário ativa")]
-        public void DadoQueNaoTenhoUmaSessaoDeUsuarioAtiva()
+        [Given(i18n.Messages_pt.ThatIDontHaveAValidUserSession, i18n.Messages_pt.Culture)]
+        [Given(i18n.Messages.ThatIDontHaveAValidUserSession)]
+        public void GivenThatIDontHaveAValidUserSession()
         {
-            ScenarioContext.ObjetoAcesso(null);
+            ScenarioContext.AccessObject(null);
         }
 
-        [Given(@"que tenho uma sessão de usuário ativa com alguma permissão no sistema")]
-        public void DadoQueTenhoUmaSessaoDeUsuarioAtivaNoCondominioComAlgumaPermissaoNoSistema()
+        [Given(i18n.Messages_pt.ThatIHaveAValidUserSessionWithAnyPermission, i18n.Messages_pt.Culture)]
+        [Given(i18n.Messages.ThatIHaveAValidUserSessionWithAnyPermission)]
+        public void GivenThatIHaveAValidUserSessionWithAnyPermission()
         {
-            DadoOPerfilDeAcessoEContemOObjeto("dummy");
+            GivenThatIHaveAValidUserSessionWithAccessToObject("dummy");
         }
 
-        [Given(@"que tenho uma sessão de usuário ativa com permissão ao objeto '(.*)'")]
-        public void DadoOPerfilDeAcessoEContemOObjeto(string objeto)
+        [Given(i18n.Messages_pt.ThatIHaveAValidUserSessionWithAccessToObject, i18n.Messages_pt.Culture)]
+        [Given(i18n.Messages.ThatIHaveAValidUserSessionWithAccessToObject)]
+        public void GivenThatIHaveAValidUserSessionWithAccessToObject(string objectName)
         {
-            ScenarioContext.ObjetoAcesso(objeto);
+            ScenarioContext.AccessObject(objectName);
         }
 
         /// <summary>
-        /// Executa a mágica
+        /// Do the magic
         /// </summary>
-        /// <param name="endpoint">Url da requisição</param>
-        /// <returns> Objeto IRestResponse do Tipo Y </returns>
-        private IRestResponse ExecutarRequest(String endpoint)
+        /// <param name="endpoint">EndPoint Url</param>
+        /// <returns> IRestResponse object of Type Y </returns>
+        private IRestResponse ExecuteRequest(string endpoint)
         {
-            Trace.WriteLine("BDD: Iniciando request");
+            Trace.WriteLine("BDD: Creating request");
             var url = ScenarioContext.MontaUrl(endpoint);
 
             Trace.WriteLine($"BDD: Url => {url}");
 
-            var request = new RestRequest();
-
-            request.Method = ScenarioContext.HttpMethod();
+            var request = new RestRequest
+            {
+                Method = ScenarioContext.HttpMethod()
+            };
             Trace.WriteLine($"BDD: Method => {request.Method}");
 
             request.Parameters.Clear();
@@ -349,7 +347,7 @@ namespace Alma.ApiExtensions.TestHelper.SpecFlow
             if (request.Method == Method.POST)
             {
                 var contentType = "application/json";
-                var json = ScenarioContext.JsonArgumento();
+                var json = ScenarioContext.JsonArgument();
                 if (!String.IsNullOrWhiteSpace(json))
                     request.AddParameter(contentType, json, ParameterType.RequestBody);
 
@@ -358,7 +356,7 @@ namespace Alma.ApiExtensions.TestHelper.SpecFlow
             }
 
             request.AddHeader("Accept", "application/json");
-            AdicionarAutorizacao(request);
+            AddAuthorization(request);
 
             var restClient = new RestClient(url);
 
@@ -372,20 +370,20 @@ namespace Alma.ApiExtensions.TestHelper.SpecFlow
         }
 
 
-        private String GetJsonArgumento<T>()
+        private string GetJsonArgument<T>()
         {
             object arg = null;
-            if (ScenarioContext.ListaArgumentos() != null)
+            if (ScenarioContext.ArgumentList() != null)
             {
-                arg = ScenarioContext.ListaArgumentos().CreateSet<T>();
+                arg = ScenarioContext.ArgumentList().CreateSet<T>();
             }
-            else if (ScenarioContext.Argumento() != null)
+            else if (ScenarioContext.Argument() != null)
             {
-                arg = ScenarioContext.Argumento().CreateInstance<T>();
+                arg = ScenarioContext.Argument().CreateInstance<T>();
             }
 
             if (arg == null)
-                return String.Empty;
+                return string.Empty;
 
             var jsonSerializerSettings = new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() };
             var json = JsonConvert.SerializeObject(arg, Formatting.Indented, jsonSerializerSettings);
@@ -393,7 +391,7 @@ namespace Alma.ApiExtensions.TestHelper.SpecFlow
             return json;
         }
 
-        private void ValidarResposta(Table expectedTable, Type typeOfActualModel)
+        private void ValidateResponse(Table expectedTable, Type typeOfActualModel)
         {
             var response = ScenarioContext.Response();
             var content = response.Content;
@@ -403,7 +401,7 @@ namespace Alma.ApiExtensions.TestHelper.SpecFlow
             expectedTable.CompareToInstance(actual);
         }
 
-        private void ValidarRespostaLista(Table expectedTable, Type typeOfActualModel)
+        private void ValidateResponseList(Table expectedTable, Type typeOfActualModel)
         {
             try
             {
@@ -427,7 +425,7 @@ namespace Alma.ApiExtensions.TestHelper.SpecFlow
 
         }
 
-        private void ValidarRespostaListaComDados(Type typeOfActualModel)
+        private void ValidateResponseListWithData(Type typeOfActualModel)
         {
             var response = ScenarioContext.Response();
             var content = response.Content;
@@ -445,7 +443,7 @@ namespace Alma.ApiExtensions.TestHelper.SpecFlow
             });
         }
 
-        private void ValidarRespostaListaComUmItem(Table expectedTable, Type typeOfActualModel)
+        private void ValidateResponseListWithOneItem(Table expectedTable, Type typeOfActualModel)
         {
             var response = ScenarioContext.Response();
             var content = response.Content;
@@ -463,12 +461,12 @@ namespace Alma.ApiExtensions.TestHelper.SpecFlow
 
             expectedTable.CompareToInstance(model[0]);
         }
-        private void ValidarRespostaListaComTodosOsItensComPropriedade(Type tipoItem, string propriedade, string valor)
+        private void ValidateAResponseListHavingAPropertyWithTheSameValue(Type itemType, string property, string value)
         {
             var response = ScenarioContext.Response();
             var content = response.Content;
 
-            var type = typeof(List<>).MakeGenericType(tipoItem);
+            var type = typeof(List<>).MakeGenericType(itemType);
             var model = JsonConvert.DeserializeObject(content, type) as IList;
 
             Assert.NotNull(model);
@@ -476,34 +474,34 @@ namespace Alma.ApiExtensions.TestHelper.SpecFlow
             Assert.All(model.Cast<object>(), x =>
             {
                 Assert.NotNull(x);
-                Assert.IsType(tipoItem, x);
+                Assert.IsType(itemType, x);
             });
 
-            var reflPropriedade = type.GetProperty(propriedade, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
-            if (reflPropriedade == null)
-                throw new InvalidOperationException(string.Format("Propriedade {0} não encontrada no objeto {1}", propriedade, type.Name));
+            var reflectionProperty = type.GetProperty(property, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
+            if (reflectionProperty == null)
+                throw new InvalidOperationException(string.Format("Could not find property {0} in the object {1}", property, type.Name));
             foreach (var item in model)
             {
-                //executar Busca Propriedade
-                var propriedadeObj = reflPropriedade.GetValue(item);
+                //Search for property
+                var propertyValue = reflectionProperty.GetValue(item);
 
-                if (valor == null)
-                    Assert.Null(propriedadeObj);
+                if (value == null)
+                    Assert.Null(propertyValue);
                 else
-                    Assert.Equal(valor, propriedadeObj.ToString());
+                    Assert.Equal(value, propertyValue.ToString());
             }
         }
 
 
 
-        private void AdicionarAutorizacao(RestRequest request)
+        private void AddAuthorization(RestRequest request)
         {
-            var objeto = ScenarioContext.ObjetoAcesso();
+            var objeto = ScenarioContext.AccessObject();
             if (!string.IsNullOrWhiteSpace(objeto))
             {
-                if (TokenAutorizacao == null)
-                    throw new InvalidOperationException("Defina a função de token de autorização.");
-                var token = TokenAutorizacao(ScenarioContext, new string[] { objeto });
+                if (AuthorizationTokenFunc == null)
+                    throw new InvalidOperationException($"Please set the {nameof(AuthorizationTokenFunc)}.");
+                var token = AuthorizationTokenFunc(ScenarioContext, new string[] { objeto });
                 if (!string.IsNullOrWhiteSpace(token))
                     request.AddHeader("Authorization", "Bearer " + token);
             }
@@ -512,7 +510,7 @@ namespace Alma.ApiExtensions.TestHelper.SpecFlow
         /// <summary>
         /// Defina a função para obter token de autorização
         /// </summary>
-        public static Func<ScenarioContext, string[], string> TokenAutorizacao { get; set; }
+        public static Func<ScenarioContext, string[], string> AuthorizationTokenFunc { get; set; }
 
     }
 }

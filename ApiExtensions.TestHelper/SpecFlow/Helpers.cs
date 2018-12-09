@@ -1,153 +1,153 @@
-﻿using System;
+﻿using RestSharp;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using RestSharp;
 using TechTalk.SpecFlow;
 
 namespace Alma.ApiExtensions.TestHelper.SpecFlow
 {
     public static class Helpers
     {
-        #region IdEntidade
-        public static Int64 IdEntidade(this ScenarioContext context)
+        #region Entity Id
+        public static Int64 EntityId(this ScenarioContext context)
         {
-            return context.Get<Int64>("idEntidade");
+            return context.Get<Int64>(nameof(EntityId));
         }
 
-        public static void IdEntidade(this ScenarioContext context, Int64 valor)
+        public static void EntityId(this ScenarioContext context, long value)
         {
-            context.Set(valor, "idEntidade");
+            context.Set(value, nameof(EntityId));
         }
 
-        public static T IdEntidade<T>(this FeatureContext context)
+        public static T EntityId<T>(this FeatureContext context)
         {
-            if (!context.Keys.Contains("idEntidade"))
+            if (!context.Keys.Contains(nameof(EntityId)))
                 return default(T);
-            return context.Get<T>("idEntidade");
+            return context.Get<T>(nameof(EntityId));
         }
 
-        public static void IdEntidade<T>(this FeatureContext context, T valor)
+        public static void EntityId<T>(this FeatureContext context, T value)
         {
-            context.Set(valor, "idEntidade");
+            context.Set(value, nameof(EntityId));
         }
-        #endregion IdEntidade
+        #endregion Entity Id
 
         #region Endpoint
-        public static String Endpoint(this ScenarioContext context)
+        public static string Endpoint(this ScenarioContext context)
         {
-            return context.Get<String>("endpoint");
+            return context.Get<string>(nameof(Endpoint));
         }
 
-        public static void Endpoint(this ScenarioContext context, String valor)
+        public static void Endpoint(this ScenarioContext context, string value)
         {
-            context.Set(valor, "endpoint");
+            context.Set(value, nameof(Endpoint));
         }
 
         #endregion Endpoint
 
-        #region Lista Argumentos
-        public static Table ListaArgumentos(this ScenarioContext context)
+        #region Argument List
+        public static Table ArgumentList(this ScenarioContext context)
         {
-            if (!context.Keys.Contains("listaArgumentos"))
+            if (!context.Keys.Contains(nameof(ArgumentList)))
                 return null;
 
-            return context.Get<Table>("listaArgumentos");
+            return context.Get<Table>(nameof(ArgumentList));
         }
 
-        public static void ListaArgumentos(this ScenarioContext context, Table valor)
+        public static void ArgumentList(this ScenarioContext context, Table table)
         {
-            context.Set(valor, "listaArgumentos");
+            context.Set(table, nameof(ArgumentList));
         }
         #endregion
 
         #region HttpMethod
         public static Method HttpMethod(this ScenarioContext context)
         {
-            return context.Get<Method>("httpMethod");
+            return context.Get<Method>(nameof(HttpMethod));
         }
 
         public static void HttpMethod(this ScenarioContext context, Method valor)
         {
-            context.Set(valor, "httpMethod");
+            context.Set(valor, nameof(HttpMethod));
         }
 
         #endregion HttpMethod
 
-        #region Argumento
-        public static Table Argumento(this ScenarioContext context)
+        #region Argument
+        public static Table Argument(this ScenarioContext context)
         {
-            if (!context.Keys.Contains("argumento"))
+            if (!context.Keys.Contains(nameof(Argument)))
                 return null;
-            return context.Get<Table>("argumento");
+            return context.Get<Table>(nameof(Argument));
         }
 
-        public static void Argumento(this ScenarioContext context, Table valor)
+        public static void Argument(this ScenarioContext context, Table table)
         {
-            context.Set(valor, "argumento");
+            context.Set(table, nameof(Argument));
         }
 
-        public static String JsonArgumento(this ScenarioContext context)
+        public static string JsonArgument(this ScenarioContext context)
         {
-            if (!context.Keys.Contains("jsonArgumento"))
+            if (!context.Keys.Contains(nameof(JsonArgument)))
                 return null;
-            return context.Get<String>("jsonArgumento");
+            return context.Get<string>(nameof(JsonArgument));
         }
 
-        public static void JsonArgumento(this ScenarioContext context, String valor)
+        public static void JsonArgument(this ScenarioContext context, string value)
         {
-            context.Set(valor, "jsonArgumento");
+            context.Set(value, nameof(JsonArgument));
         }
 
-        public static string TipoModel(this ScenarioContext context)
+        public static string ModelType(this ScenarioContext context)
         {
-            if (context.ContainsKey("tipoModel"))
-                return context.Get<string>("tipoModel");
+            if (context.ContainsKey(nameof(ModelType)))
+                return context.Get<string>(nameof(ModelType));
 
             return null;
         }
 
-        public static void TipoModel(this ScenarioContext context, string valor)
+        public static void ModelType(this ScenarioContext context, string valor)
         {
-            context.Set(valor, "tipoModel");
+            context.Set(valor, nameof(ModelType));
         }
 
-        #endregion Argumento
+        #endregion Argument
 
         #region Response
         public static IRestResponse Response(this ScenarioContext context)
         {
-            return context.Get<object>("response") as IRestResponse;
+            return context.Get<object>(nameof(Response)) as IRestResponse;
         }
 
         public static IRestResponse<T> Response<T>(this ScenarioContext context)
         {
-            return context.Get<object>("response") as IRestResponse<T>;
+            return context.Get<object>(nameof(Response)) as IRestResponse<T>;
         }
 
-        public static void Response(this ScenarioContext context, IRestResponse valor)
+        public static void Response(this ScenarioContext context, IRestResponse value)
         {
-            context.Set((object)valor, "response");
+            context.Set((object)value, nameof(Response));
         }
 
         public static T ResponseData<T>(this ScenarioContext context) where T : new()
         {
-            return ((IRestResponse<T>)context.Get<object>("response")).Data;
+            return ((IRestResponse<T>)context.Get<object>(nameof(Response))).Data;
         }
         #endregion Response
 
-        #region ParametroUrl
+        #region Url Parameter
 
-        public static Table ParametroUrl(this ScenarioContext context)
+        public static Table UrlParameter(this ScenarioContext context)
         {
-            if (!context.Keys.Contains("parametroUrl"))
+            if (!context.Keys.Contains(nameof(UrlParameter)))
                 return null;
-            return context.Get<Table>("parametroUrl");
+            return context.Get<Table>(nameof(UrlParameter));
         }
 
-        public static void ParametroUrl(this ScenarioContext context, Table valor)
+        public static void UrlParameter(this ScenarioContext context, Table table)
         {
-            context.Set(valor, "parametroUrl");
+            context.Set(table, nameof(UrlParameter));
         }
 
         #endregion
@@ -156,12 +156,12 @@ namespace Alma.ApiExtensions.TestHelper.SpecFlow
 
         public static string MontaUrl(this ScenarioContext context, string url)
         {
-            List<String> queryString = new List<String>();
-            var parametros = context.ParametroUrl();
-            if (parametros == null || parametros.RowCount == 0)
+            var queryString = new List<string>();
+            var parameters = context.UrlParameter();
+            if (parameters == null || parameters.RowCount == 0)
                 return url;
 
-            foreach (var item in parametros.Rows)
+            foreach (var item in parameters.Rows)
             {
                 var placeholder = "{" + string.Format("{0}", item["Field"]) + "}";
                 if (url.IndexOf(placeholder) >= 0)
@@ -178,18 +178,18 @@ namespace Alma.ApiExtensions.TestHelper.SpecFlow
         #endregion
 
 
-        #region Perfil Acesso
+        #region Access Object
 
-        public static string ObjetoAcesso(this ScenarioContext context)
+        public static string AccessObject(this ScenarioContext context)
         {
-            if (!context.Keys.Contains("objetoAcesso"))
+            if (!context.Keys.Contains(nameof(AccessObject)))
                 return null;
-            return context.Get<string>("objetoAcesso");
+            return context.Get<string>(nameof(AccessObject));
         }
 
-        public static void ObjetoAcesso(this ScenarioContext context, string valor)
+        public static void AccessObject(this ScenarioContext context, string value)
         {
-            context.Set(valor, "objetoAcesso");
+            context.Set(value, nameof(AccessObject));
         }
 
         #endregion

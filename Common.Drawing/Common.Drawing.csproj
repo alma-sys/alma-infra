@@ -2,26 +2,26 @@
 
   <PropertyGroup>
     <TargetFramework>net461</TargetFramework>
-    <AssemblyName>Alma.Core.Drawing</AssemblyName>
-    <RootNamespace>Alma.Core.Drawing</RootNamespace>
-    <PackageId>Alma.Core.Drawing</PackageId>
+    <AssemblyName>Alma.Common.Drawing</AssemblyName>
+    <RootNamespace>Alma.Common.Drawing</RootNamespace>
+    <PackageId>Alma.Common.Drawing</PackageId>
     
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
     <DisableImplicitAssetTargetFallback>true</DisableImplicitAssetTargetFallback>
 
     
-    <Description>Extende a base comum com funções para manipulação de imagens.</Description>
+    <Description>Extends the common base to provide functions to manipulate images.</Description>
     <Authors>$(Authors)</Authors>
     <Company>$(Company)</Company>
     <Product>$(Product)</Product>
     <Copyright>$(Copyright)</Copyright>
-    <PackageLicenseUrl>https://$(URL)/license</PackageLicenseUrl>
-    <PackageProjectUrl>https://$(URL)</PackageProjectUrl>
-    <PackageIconUrl>https://$(URLICON)</PackageIconUrl>
+    <PackageLicenseUrl>$(LICENSE_URL)</PackageLicenseUrl>
+    <PackageProjectUrl>$(PROJECT_URL)</PackageProjectUrl>
+    <PackageIconUrl>$(ICON_URL)</PackageIconUrl>
     <Configuration>$(Configuration)</Configuration>
-    <RepositoryUrl></RepositoryUrl>
-    <RepositoryType></RepositoryType>
+    <RepositoryUrl>$(REPOSITORY_URL)</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
 
   </PropertyGroup>
 </Project>

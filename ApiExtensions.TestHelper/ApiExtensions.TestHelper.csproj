@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net461</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>Alma.ApiExtensions.TestHelper</AssemblyName>
     <RootNamespace>Alma.ApiExtensions.TestHelper</RootNamespace>
     <PackageId>Alma.ApiExtensions.TestHelper</PackageId>
@@ -12,24 +12,25 @@
     <DisableImplicitAssetTargetFallback>true</DisableImplicitAssetTargetFallback>
 
     
-    <Description>Implementa ferramentas para auxiliar em testes de unidade e bdd.</Description>
+    <Description>Implements tools to help in unit and BDD tests.</Description>
     <Authors>$(Authors)</Authors>
     <Company>$(Company)</Company>
     <Product>$(Product)</Product>
     <Copyright>$(Copyright)</Copyright>
-    <PackageLicenseUrl>https://$(URL)/license</PackageLicenseUrl>
-    <PackageProjectUrl>https://$(URL)</PackageProjectUrl>
-    <PackageIconUrl>https://$(URLICON)</PackageIconUrl>
+    <PackageLicenseUrl>$(LICENSE_URL)</PackageLicenseUrl>
+    <PackageProjectUrl>$(PROJECT_URL)</PackageProjectUrl>
+    <PackageIconUrl>$(ICON_URL)</PackageIconUrl>
     <Configuration>$(Configuration)</Configuration>
-    <RepositoryUrl></RepositoryUrl>
-    <RepositoryType></RepositoryType>
+    <RepositoryUrl>$(REPOSITORY_URL)</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
 
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Owin.SelfHost" Version="3.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.2.0" />
     <PackageReference Include="RestSharp" Version="106.3.1" />
-    <PackageReference Include="SpecFlow" Version="2.3.2" />
+    <PackageReference Include="SpecFlow" Version="3.0.154-beta" />
     <PackageReference Include="xunit" Version="2.3.1" />
   </ItemGroup>
   

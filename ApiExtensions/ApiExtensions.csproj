@@ -11,17 +11,17 @@
     <DisableImplicitAssetTargetFallback>true</DisableImplicitAssetTargetFallback>
 
     
-    <Description>Implementa uma base para projetos Web Api e MVC em AspNetCore.</Description>
+    <Description>Implements a base for Web Api and MVC Projects in AspNetCore.</Description>
     <Authors>$(Authors)</Authors>
     <Company>$(Company)</Company>
     <Product>$(Product)</Product>
     <Copyright>$(Copyright)</Copyright>
-    <PackageLicenseUrl>https://$(URL)/license</PackageLicenseUrl>
-    <PackageProjectUrl>https://$(URL)</PackageProjectUrl>
-    <PackageIconUrl>https://$(URLICON)</PackageIconUrl>
+    <PackageLicenseUrl>$(LICENSE_URL)</PackageLicenseUrl>
+    <PackageProjectUrl>$(PROJECT_URL)</PackageProjectUrl>
+    <PackageIconUrl>$(ICON_URL)</PackageIconUrl>
     <Configuration>$(Configuration)</Configuration>
-    <RepositoryUrl></RepositoryUrl>
-    <RepositoryType></RepositoryType>
+    <RepositoryUrl>$(REPOSITORY_URL)</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
 
   </PropertyGroup>
 
