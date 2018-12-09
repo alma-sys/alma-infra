@@ -8,16 +8,16 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace Alma.DataAccess.MongoMapping.Dados
+namespace Alma.DataAccess.MongoMapping
 {
-    sealed class Repositorio<TEntity> : IQueryable<TEntity>, IRepository<TEntity> where TEntity : class
+    sealed class Repository<TEntity> : IQueryable<TEntity>, IRepository<TEntity> where TEntity : class
     {
-        private IMongoDatabase db;
+        private readonly IMongoDatabase db;
         private IMongoCollection<TEntity> collection;
-        private BsonClassMap map;
+        private readonly BsonClassMap map;
         private BsonMemberMap idMember;
 
-        public Repositorio(IMongoDatabase db)
+        public Repository(IMongoDatabase db)
         {
             this.db = db;
             this.collection = db.GetCollection<TEntity>(ClassMappingExtensions.GetCollectionForType<TEntity>());

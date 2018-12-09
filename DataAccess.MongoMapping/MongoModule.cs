@@ -1,6 +1,5 @@
 ﻿using Alma.DataAccess.Hooks;
 using Alma.DataAccess.MongoMapping.Conventions;
-using Alma.DataAccess.MongoMapping.Dados;
 using Autofac;
 using MongoDB.Bson.Serialization.Conventions;
 using MongoDB.Driver;
@@ -35,7 +34,7 @@ namespace Alma.DataAccess.MongoMapping
                         .Named<IMongoDatabase>(key)
                         .InstancePerLifetimeScope();
 
-                    builder.RegisterGeneric(typeof(Repositorio<>))
+                    builder.RegisterGeneric(typeof(Repository<>))
                          .AsImplementedInterfaces()
                          .WithParameter(new Autofac.Core.ResolvedParameter(
                              (pi, c) => pi.ParameterType == typeof(IMongoDatabase),
@@ -64,7 +63,7 @@ namespace Alma.DataAccess.MongoMapping
                     .As<IMongoDatabase>()
                     .InstancePerLifetimeScope();
 
-                builder.RegisterGeneric(typeof(Repositorio<>))
+                builder.RegisterGeneric(typeof(Repository<>))
                     .As(typeof(IQueryable<>), typeof(IRepository<>))
                      .InstancePerLifetimeScope();
 
@@ -91,21 +90,16 @@ namespace Alma.DataAccess.MongoMapping
                 //Events.SavedDataEventHandler.Container = container;
             });
 
-            //builder.RegisterBuildCallback(container =>
-            //{
-            //    NHibernate.Cfg.Environment.BytecodeProvider =
-            //        new AutofacBytecodeProvider(container, new DefaultProxyFactoryFactory(), new DefaultCollectionTypeFactory());
-            //});
         }
 
         private void SetupConventions()
         {
-            var cp = new ConventionPack
+            var namingPack = new ConventionPack
              {
               new SeperateWordsNamingConvention(),
               new LowerCaseElementNameConvetion()
              };
-            ConventionRegistry.Register("nomenclatura", cp, type => true /*pack para todos */);
+            ConventionRegistry.Register(nameof(namingPack), namingPack, type => true /*pack for all */);
         }
 
         private static void SetupLinq()
@@ -121,30 +115,7 @@ namespace Alma.DataAccess.MongoMapping
         {
             if (Config.EnableLog)
             {
-                //var hierarchy = (log4net.Repository.Hierarchy.Hierarchy)log4net.LogManager.GetRepository();
-                //// Remove any other appenders
-                //hierarchy.Root.RemoveAllAppenders();
-                //// define some basic settings for the root
-                //var rootLogger = hierarchy.Root;
-                //rootLogger.Level = log4net.Core.Level.Error;
 
-                //// declare a TraceAppender with 5MB per file and max. 10 files
-                //var pattern = new log4net.Layout.PatternLayout("%message%newline");
-                //pattern.Header = "";
-                //var appender = new log4net.Appender.TraceAppender();
-                //appender.Layout = pattern;
-                //rootLogger.AddAppender(appender);
-
-                //// This is required, so that we can access the Logger by using 
-                //// LogManager.GetLogger("NHibernate.SQL") and it can used by NHibernate
-                //var loggerNH = hierarchy.GetLogger("NHibernate.SQL") as log4net.Repository.Hierarchy.Logger;
-                //loggerNH.Level = log4net.Core.Level.Debug;
-
-
-                //// this is required to tell log4net that we're done 
-                //// with the configuration, so the logging can start
-                //hierarchy.Configured = true;
-                //log4net.Config.BasicConfigurator.Configure(hierarchy);
             }
         }
 
@@ -190,11 +161,6 @@ namespace Alma.DataAccess.MongoMapping
 
             return db_name;
         }
-
-        //public static void SetConnectionStringResolver(Func<string, string> connectionStringResolver)
-        //{
-        //    Repositorio.SetConnectionStringResolver(connectionStringResolver);
-        //}
 
     }
 }
