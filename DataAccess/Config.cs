@@ -80,7 +80,7 @@ namespace Alma.DataAccess
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public static DBMS DeterminarDBMS(string key)
+        public static DBMS DetectDBMS(string key)
         {
             var cn = ConfigurationManager.ConnectionStrings[key];
             if (cn == null)
@@ -146,7 +146,7 @@ namespace Alma.DataAccess
         /// <returns></returns>
         public static bool IsManagedOracle(string key)
         {
-            return DeterminarDBMS(key) == DBMS.Oracle &&
+            return DetectDBMS(key) == DBMS.Oracle &&
                 ConfigurationManager.ConnectionStrings[key].ProviderName.ToLower().Contains("managed");
 
         }

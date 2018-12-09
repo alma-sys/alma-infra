@@ -15,7 +15,14 @@ namespace Alma.DataAccess.OrmNHibernate.Types
 
             : base(typeof(T))
 
-        { }
+        {
+            var type = typeof(T);
+            if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>))
+                type = type.GetGenericArguments()[0];
+            if (!type.IsEnum)
+                throw new InvalidOperationException("This type only supports enums and nullable enums");
+
+        }
 
         public override void Set(DbCommand cmd, object value, int index, ISessionImplementor session)
         {

@@ -32,7 +32,7 @@ namespace Alma.DataAccess.OrmNHibernate
                         .InstancePerLifetimeScope();
 
                     //.InstancePerLifetimeScope();
-                    builder.RegisterGeneric(typeof(Repositorio<>))
+                    builder.RegisterGeneric(typeof(Repository<>))
                          .AsImplementedInterfaces()
                          .WithParameter(new Autofac.Core.ResolvedParameter(
                              (pi, c) => pi.ParameterType == typeof(ISession),
@@ -57,7 +57,7 @@ namespace Alma.DataAccess.OrmNHibernate
                     .InstancePerLifetimeScope();
 
 
-                builder.RegisterGeneric(typeof(Repositorio<>))
+                builder.RegisterGeneric(typeof(Repository<>))
                     .As(typeof(IQueryable<>), typeof(IRepository<>))
                     .InstancePerLifetimeScope();
             }

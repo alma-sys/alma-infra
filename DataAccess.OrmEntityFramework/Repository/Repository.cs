@@ -10,8 +10,8 @@ namespace Alma.DataAccess.OrmEntityFramework
 {
     sealed class Repository<TEntity> : IRepository<TEntity> where TEntity : class
     {
-        private IContext context;
-        public Repository(IContext context)
+        private EFDbContext context;
+        public Repository(EFDbContext context)
         {
             this.context = context;
         }

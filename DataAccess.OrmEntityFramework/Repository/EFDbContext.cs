@@ -4,9 +4,9 @@ using System.Linq;
 
 namespace Alma.DataAccess.OrmEntityFramework
 {
-    class DbContext : Microsoft.EntityFrameworkCore.DbContext
+    class EFDbContext : Microsoft.EntityFrameworkCore.DbContext
     {
-        public DbContext(string nameOrConnectionString) : base()
+        public EFDbContext(string nameOrConnectionString) : base()
         {
 
             //base.Configuration.LazyLoadingEnabled = false;

@@ -13,7 +13,7 @@ namespace Alma.DataAccess.OrmNHibernate.Events
 {
     internal class SavedDataEventHandler : IPostUpdateEventListener, IPostInsertEventListener, IPostDeleteEventListener, IPostLoadEventListener
     {
-        //TODO: Tentar fazer com que isso seja via SCOPE.
+        //TODO: Try to do it by scope
 
         public static IContainer Container { get; internal set; }
 
@@ -74,7 +74,7 @@ namespace Alma.DataAccess.OrmNHibernate.Events
             foreach (var item in handlers)
             {
                 if (Config.EnableLog)
-                    Trace.WriteLine($"Executado handler {item} para {interfaceType.Name}...", nameof(SavedDataEventHandler));
+                    Trace.WriteLine($"Executing handler {item} to {interfaceType.Name}...", nameof(SavedDataEventHandler));
                 handle.Invoke(item, new object[] { entity }); //devo tratar exceptions?
             }
         }

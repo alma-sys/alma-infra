@@ -29,7 +29,7 @@ namespace Alma.DataAccess.OrmNHibernate
         public static ISessionFactory GetSessionFactory(string connectionKey, params Assembly[] assemblies)
         {
             var cfg = new NHibernate.Cfg.Configuration();
-            switch (Config.DeterminarDBMS(connectionKey))
+            switch (Config.DetectDBMS(connectionKey))
             {
                 case DBMS.MsSql:
 
@@ -130,7 +130,7 @@ namespace Alma.DataAccess.OrmNHibernate
 
                     break;
                 default:
-                    throw new NotImplementedException("Not implemented provider: " + Config.DeterminarDBMS(connectionKey));
+                    throw new NotImplementedException("Not implemented provider: " + Config.DetectDBMS(connectionKey));
             }
 
             if (Config.EnableLog)
@@ -156,34 +156,13 @@ namespace Alma.DataAccess.OrmNHibernate
             }
             catch (HibernateException ex)
             {
-                if (ex.Message.Contains("NHibernate.Driver") && (Config.DeterminarDBMS(connectionKey) == DBMS.Oracle))
+                if (ex.Message.Contains("NHibernate.Driver") && (Config.DetectDBMS(connectionKey) == DBMS.Oracle))
                 {
                     throw new System.Configuration.ConfigurationErrorsException(
-@"Não foi possível localizar o binário no gac do Oracle.DataAccess ou Oracle.ManagedDataAccess. 
-Você deve instalar uma versão do oracle client de 64 e/ou 32 bits, ou configurar o ManagedDataAccess adequadamente. 
+@"Cannot find Oracle.DataAcces or Oracle.ManagedDataAccess binaries in GAC or working directory. 
 
-Versão mínima do Unmanaged: Oracle Client 11.2 com ODP.NET. 
-Versões anteriores a 11.2 não possuem o Oracle.DataAccess para o framework 4.0/4.5.
-Caso não tenha essa versão, remova todas as versões do client instaladas e instale a
-mínima ou superior.
-
-Acrescente a seguinte configuração na Web.Config do Service, caso possua mais de um client:
-
-  <runtime>
-    <assemblyBinding xmlns=""urn:schemas-microsoft-com:asm.v1"">
-      <qualifyAssembly 
-        partialName=""Oracle.DataAccess""
-        fullName=""Oracle.DataAccess, Version=4.112.2.0, Culture=neutral, PublicKeyToken=89b483f429c47342, processorArchitecture=AMD64"" />
-      <dependentAssembly>
-        <assemblyIdentity name=""Oracle.DataAccess"" publicKeyToken=""89b483f429c47342"" culture=""neutral"" />
-        <bindingRedirect oldVersion=""0.0.0.0-4.112.1.0"" newVersion=""4.112.2.0"" />
-      </dependentAssembly>
-    </assemblyBinding>
-  </runtime>
-
-Confira a versão e a arquitetura com o assembly instalado no GAC pelo Oracle Universal installer.
-O GAC do framework 4.0/4.5 fica em C:\Windows\Microsoft.NET\assembly
-", ex);
+Minimum Unmanaged Version: Oracle Client 11.2 with ODP.NET if using Full Framework 4.0/4.5. 
+Remove all installed versions and install the required version and try again.", ex);
                 }
                 else
                 {
@@ -191,61 +170,6 @@ O GAC do framework 4.0/4.5 fica em C:\Windows\Microsoft.NET\assembly
                 }
             }
 
-            #region Castle ActiveRecord - Disabled
-
-            //    Configure.ActiveRecord
-            //        .ForWeb()
-            //        .MakeLazyByDefault()
-            //        .VerifyModels()
-            //        .RegisterSearch();
-
-            //    DatabaseType db = 0;
-            //    if (Core.Config.ConnectionString.ProviderName.Contains("SqlClient"))
-            //        db = DatabaseType.MsSqlServer2008;
-            //    if (Core.Config.ConnectionString.ProviderName.Contains("Oracle"))
-            //        db = DatabaseType.Oracle10g;
-
-
-            //    if (db == 0)
-            //        throw new NotImplementedException("Not implemented provider: " + Core.Config.ConnectionString.ProviderName);
-
-            //    Configure.Storage
-            //        .ConnectionStringName(Core.Config.ConnectionString.Name)
-            //        .ConnectionProvider<NHibernate.Connection.DriverConnectionProvider>()
-            //        .ShowSql();
-
-            //    if (db == DatabaseType.MsSqlServer2008)
-            //    {
-            //        Configure.Storage
-            //            .Driver<NHibernate.Driver.SqlClientDriver>()
-            //            .Dialect<NHibernate.Dialect.MsSql2008Dialect>();
-            //    }
-            //    else if (db == DatabaseType.Oracle10g)
-            //    {
-            //        Configure.Storage
-            //            .Driver<NHibernate.Driver.OracleDataClientDriver>()
-            //            .Dialect<NHibernate.Dialect.Oracle10gDialect>();
-            //    }
-
-            //    ActiveRecordStarter.RegisterAssemblies(assemblies);
-
-            //    var sessionFac = ActiveRecordMediator.GetSessionFactoryHolder();
-            //    var configs = sessionFac.GetAllConfigurations();
-
-            //    foreach (var config in configs)
-            //    {
-            //        //config.EventListeners.PostUpdateEventListeners =
-            //        //    new IPostUpdateEventListener[] { AuditEventListener.Current };
-            //        //config.EventListeners.PostDeleteEventListeners =
-            //        //    new IPostDeleteEventListener[] { AuditEventListener.Current };
-            //        //config.EventListeners.PostInsertEventListeners =
-            //        //    new IPostInsertEventListener[] { AuditEventListener.Current };
-            //    }
-
-            //    var sessionsFacs = sessionFac.GetSessionFactories();
-            //    return sessionsFacs.SingleOrDefault();
-
-            #endregion
         }
 
         public static ISessionFactory GetSessionFactory(string connectionKey, params Type[] type)
@@ -312,7 +236,7 @@ O GAC do framework 4.0/4.5 fica em C:\Windows\Microsoft.NET\assembly
             {
                 update.Execute(updateExport, true);
                 if (update.Exceptions != null && update.Exceptions.Count > 0)
-                    throw new AggregateException("Ocorreram um ou mais erros ao executar a migração da base de dados. Verifique a lista de exceptions.", update.Exceptions.ToArray());
+                    throw new AggregateException("Multiple exceptions occurred while executing database migrations. Check the inner list of exceptions.", update.Exceptions.ToArray());
             }
             catch (Exception)
             {
@@ -328,7 +252,7 @@ O GAC do framework 4.0/4.5 fica em C:\Windows\Microsoft.NET\assembly
             var logger = Config.EnableLog ? (Action<string>)((string text) => Trace.WriteLine(text, nameof(AddFilters))) : null;
 
             var filters = types.Where(x => typeof(Mapper.GlobalFilterMapping).IsAssignableFrom(x)).ToArray();
-            logger?.Invoke($"Registrando {filters.Length} filtros globais de repositório.");
+            logger?.Invoke($"Registering {filters.Length} repository global filters.");
             foreach (var fmapType in filters)
             {
                 var map = (Mapper.GlobalFilterMapping)Activator.CreateInstance(fmapType);
@@ -340,7 +264,7 @@ O GAC do framework 4.0/4.5 fica em C:\Windows\Microsoft.NET\assembly
         {
             var logger = Config.EnableLog ? (Action<string>)((string text) => Trace.WriteLine(text, nameof(AddEvents))) : null;
 
-            logger?.Invoke($"Registrando SavedDataEventHandler para listeners.");
+            logger?.Invoke($"Registering {nameof(SavedDataEventHandler)} for listeners.");
 
             cfg.SetListeners(ListenerType.PostCommitInsert, new[] { typeof(SavedDataEventHandler).AssemblyQualifiedName });
             cfg.SetListeners(ListenerType.PostCommitUpdate, new[] { typeof(SavedDataEventHandler).AssemblyQualifiedName });
@@ -363,56 +287,6 @@ O GAC do framework 4.0/4.5 fica em C:\Windows\Microsoft.NET\assembly
                 cfg.AddSchemaValidationAndMigration();
         }
 
-        #region Drivers
-        /*
-        private static DbCommand CheckProfiled(DbCommand command)
-        {
-            if (Config.AtivarMiniProfiler && MiniProfiler.Current != null)
-                return new ProfiledDbCommand(command, command.Connection, MiniProfiler.Current);
-            else
-                return command;
-        }
-
-
-
-        private class DriverOracleManaged : NHibernate.Driver.OracleManagedDataClientDriver
-        {
-            public override DbCommand CreateCommand()
-            {
-                return CheckProfiled(base.CreateCommand());
-            }
-        }
-        private class DriverSqlClient : NHibernate.Driver.SqlClientDriver
-        {
-            public override DbCommand CreateCommand()
-            {
-                return CheckProfiled(base.CreateCommand());
-            }
-        }
-        private class DriverSQLite20 : NHibernate.Driver.SQLite20Driver
-        {
-            public override DbCommand CreateCommand()
-            {
-                return CheckProfiled(base.CreateCommand());
-            }
-        }
-        private class DriverOracle : NHibernate.Driver.OracleDataClientDriver
-        {
-            public override DbCommand CreateCommand()
-            {
-                return CheckProfiled(base.CreateCommand());
-            }
-        }
-
-        private class DriverMySql : NHibernate.Driver.MySqlDataDriver
-        {
-            public override DbCommand CreateCommand()
-            {
-                return CheckProfiled(base.CreateCommand());
-            }
-        }
-        */
-        #endregion
 
         #region Oracle Profiler 
         class OracleLoggingBatchingBatcherFactory : NHibernate.AdoNet.OracleDataClientBatchingBatcherFactory

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Alma.DataAccess.OrmNHibernate
 {
-    sealed class Repositorio<TEntity> : IQueryable<TEntity>, IRepository<TEntity> where TEntity : class
+    sealed class Repository<TEntity> : IQueryable<TEntity>, IRepository<TEntity> where TEntity : class
     {
 
 
@@ -66,7 +66,7 @@ namespace Alma.DataAccess.OrmNHibernate
 
 
         private ISession Session { get; set; }
-        public Repositorio(ISession session)
+        public Repository(ISession session)
         {
             Session = session;
             var c = session.SessionFactory.GetClassMetadata(typeof(TEntity));
@@ -101,7 +101,7 @@ namespace Alma.DataAccess.OrmNHibernate
             {
                 Type type = typeof(TEntity);
 
-                // Identificando a propriedade id
+                // Getting the id property
                 string idName = GetIdName(type);
 
                 var criteria = statelessSesssion.CreateCriteria<TEntity>();
@@ -458,7 +458,7 @@ namespace Alma.DataAccess.OrmNHibernate
             var session = GetSession();
             if (session.Connection != null && session.Connection.State == ConnectionState.Open)
             {
-                var dmbs = Config.DeterminarDBMS(Config.ResolveConnectionName(typeof(TEntity)));
+                var dmbs = Config.DetectDBMS(Config.ResolveConnectionName(typeof(TEntity)));
 
                 var pmark = ":";
                 var queryFormat = "";
