@@ -1,5 +1,5 @@
-﻿using System.Linq;
-using Autofac;
+﻿using Autofac;
+using System.Linq;
 
 namespace Alma.DataAccess.OrmEntityFramework
 {
@@ -18,16 +18,16 @@ namespace Alma.DataAccess.OrmEntityFramework
                 foreach (var key in assemblies.Keys)
                 {
                     builder.Register
-                        (x => new Contexto(key))
-                        .Named<IContexto>(key)
+                        (x => new DbContext(key))
+                        .Named<DbContext>(key)
                         .SingleInstance();
 
                     //.InstancePerLifetimeScope();
-                    builder.RegisterGeneric(typeof(Repositorio<>))
+                    builder.RegisterGeneric(typeof(Repository<>))
                          .As(typeof(IRepository<>))
                          .WithParameter(parameter: new Autofac.Core.ResolvedParameter(
-                             (pi, c) => pi.ParameterType == typeof(IContexto),
-                             (pi, c) => c.ResolveNamed<IContexto>(
+                             (pi, c) => pi.ParameterType == typeof(DbContext),
+                             (pi, c) => c.ResolveNamed<DbContext>(
                                  Config.ResolveConnectionName(pi.Member.DeclaringType.GetGenericArguments()[0]))))
                                  .InstancePerRequest();
                 }
@@ -35,10 +35,10 @@ namespace Alma.DataAccess.OrmEntityFramework
             else
             {
                 var key = assemblies.Keys.First();
-                builder.Register(x => new Contexto(key))
-                    .As<IContexto>()
+                builder.Register(x => new DbContext(key))
+                    .As<DbContext>()
                     .SingleInstance();
-                builder.RegisterGeneric(typeof(Repositorio<>)).As(typeof(IRepository<>))
+                builder.RegisterGeneric(typeof(Repository<>)).As(typeof(IRepository<>))
                                                      .InstancePerRequest();
 
             }

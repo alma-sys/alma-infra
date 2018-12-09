@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace Alma.DataAccess.OrmEntityFramework
 {
-    sealed class Repositorio<TEntity> : IRepository<TEntity> where TEntity : class
+    sealed class Repository<TEntity> : IRepository<TEntity> where TEntity : class
     {
-        private IContexto contexto;
-        public Repositorio(IContexto contexto)
+        private IContext context;
+        public Repository(IContext context)
         {
-            this.contexto = contexto;
+            this.context = context;
         }
 
 
@@ -21,7 +21,7 @@ namespace Alma.DataAccess.OrmEntityFramework
 
         public IEnumerator<TEntity> GetEnumerator()
         {
-            return contexto.Query<TEntity>().GetEnumerator();
+            return context.Query<TEntity>().GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -35,17 +35,17 @@ namespace Alma.DataAccess.OrmEntityFramework
 
         public Expression Expression
         {
-            get { return contexto.Query<TEntity>().Expression; }
+            get { return context.Query<TEntity>().Expression; }
         }
 
         public Type ElementType
         {
-            get { return contexto.Query<TEntity>().ElementType; }
+            get { return context.Query<TEntity>().ElementType; }
         }
 
         public IQueryProvider Provider
         {
-            get { return contexto.Query<TEntity>().Provider; }
+            get { return context.Query<TEntity>().Provider; }
         }
 
         #endregion
@@ -56,8 +56,8 @@ namespace Alma.DataAccess.OrmEntityFramework
         //[Transacao]
         public void Create(TEntity instance)
         {
-            contexto.Save(instance);
-            contexto.Flush();
+            context.Save(instance);
+            context.Flush();
         }
 
         //[Transacao]
@@ -65,16 +65,16 @@ namespace Alma.DataAccess.OrmEntityFramework
         {
             foreach (var instance in instances)
             {
-                contexto.Save(instance);
+                context.Save(instance);
             }
-            contexto.Flush();
+            context.Flush();
         }
 
         //[Transacao]
         public void Save(TEntity instance)
         {
-            contexto.Update(instance);
-            contexto.Flush();
+            context.Update(instance);
+            context.Flush();
         }
 
         //[Transacao]
@@ -82,16 +82,16 @@ namespace Alma.DataAccess.OrmEntityFramework
         {
             foreach (var instance in instances)
             {
-                contexto.Update(instance);
+                context.Update(instance);
             }
-            contexto.Flush();
+            context.Flush();
         }
 
         //[Transacao]
         public void Delete(TEntity instance)
         {
-            contexto.Delete(instance);
-            contexto.Flush();
+            context.Delete(instance);
+            context.Flush();
         }
 
         //[Transacao]
@@ -99,16 +99,16 @@ namespace Alma.DataAccess.OrmEntityFramework
         {
             foreach (var instance in instances)
             {
-                contexto.Delete(instance);
+                context.Delete(instance);
             }
-            contexto.Flush();
+            context.Flush();
         }
 
         //[Transacao]
         public void MergeUpdate(TEntity instance)
         {
-            contexto.Merge(instance);
-            contexto.Flush();
+            context.Merge(instance);
+            context.Flush();
         }
         #endregion
 

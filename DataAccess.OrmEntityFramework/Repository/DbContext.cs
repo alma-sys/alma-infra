@@ -4,9 +4,9 @@ using System.Linq;
 
 namespace Alma.DataAccess.OrmEntityFramework
 {
-    class Contexto : DbContext, IContexto
+    class DbContext : Microsoft.EntityFrameworkCore.DbContext
     {
-        public Contexto(string nameOrConnectionString) : base()
+        public DbContext(string nameOrConnectionString) : base()
         {
 
             //base.Configuration.LazyLoadingEnabled = false;
@@ -66,19 +66,9 @@ namespace Alma.DataAccess.OrmEntityFramework
             //foreach (var a in Config.AssembliesMapeadas.Values.SelectMany(x => x))
             //    modelBuilder.Configurations.AddFromAssembly(a);
 
-            throw new NotImplementedException("Implementação não concluída.");
+            throw new NotImplementedException("This component is not yet implemented.");
         }
 
 
-    }
-
-    interface IContexto
-    {
-        void Flush();
-        void Merge(object instance);
-        void Delete(object instance);
-        void Update(object instance);
-        void Save(object instance);
-        IQueryable<T> Query<T>() where T : class;
     }
 }
