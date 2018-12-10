@@ -30,10 +30,15 @@ cache:
         - "*/*/obj"
         - "*/*/*/obj"
         - "*/*/*/*/obj"
+        - "*/bin"
+        - "*/*/bin"
+        - "*/*/*/bin"
+        - "*/*/*/*/bin"
 
 before_script:
   - export PACKVERSION=3.`date -u +%y.%m%d.%H%M`;echo $PACKVERSION
-  - msbuild "$SOLUTION" -t:restore -tv:$MSBUILD -verbosity:$VERBOSITY -p:Configuration=$CONFIGURATION -p:VisualStudioVersion=$VISUALSTUDIO -p:GeneratePackageOnBuild=false
+  - if [[ $CI_COMMIT_REF_NAME == *"beta"* ]]; then export $VERSIONINFO="-beta"; fi
+  - echo "Version=$PACKVERSION$VERSIONINFO"
 
 stages:
   - build
@@ -45,16 +50,16 @@ Build:
   variables:
     BUILDACTION: "Clean,Build"
   script:
-    - msbuild "$SOLUTION" -t:$BUILDACTION -tv:$MSBUILD -verbosity:$VERBOSITY -p:Configuration=$CONFIGURATION -p:VisualStudioVersion=$VISUALSTUDIO -p:GeneratePackageOnBuild=false
+    - msbuild "$SOLUTION" -t:$BUILDACTION -tv:$MSBUILD -verbosity:$VERBOSITY -p:Configuration=$CONFIGURATION -p:VisualStudioVersion=$VISUALSTUDIO -p:Version=$PACKVERSION$VERSIONINFO -p:AssemblyVersion=$PACKVERSION -property:Authors="$AUTHORS" -property:Company="$COMPANY" -property:Product="$PRODUCT" -property:Copyright="$COPYRIGHT" -property:PROJECT_URL="$PROJECT_URL" -property:LICENSE_URL="$LICENSE_URL" -property:ICON_URL="$ICON_URL" -property:GeneratePackageOnBuild=true
   tags:
     - windows
 
 Test:
   stage: test
   variables:
+    GIT_STRATEGY: none
     BUILDACTION: "Clean,Build"
   script:
-    - msbuild "$SOLUTION" -t:$BUILDACTION -tv:$MSBUILD -verbosity:$VERBOSITY -p:Configuration=$CONFIGURATION -p:VisualStudioVersion=$VISUALSTUDIO -p:GeneratePackageOnBuild=false
     - gitlab-mstest.sh
   tags:
     - windows
@@ -64,36 +69,18 @@ Test:
       - TestResults/*.trx
       - TestResults/*.html
 
-ProGet:
+Deploy:
   stage: deploy
-  environment: Producao
+  environment: PRODUCTION
   variables:
+    GIT_STRATEGY: none
     BUILDACTION: "Clean,Restore,Build"
-    VERSIONINFO: ""
   script:
-    - msbuild "$SOLUTION" -t:$BUILDACTION -tv:$MSBUILD -verbosity:$VERBOSITY -p:Configuration=$CONFIGURATION -p:VisualStudioVersion=$VISUALSTUDIO -p:Version=$PACKVERSION$VERSIONINFO -p:AssemblyVersion=$PACKVERSION -property:Authors="$AUTHORS" -property:Company="$COMPANY" -property:Product="$PRODUCT" -property:Copyright="$COPYRIGHT" -property:URL="$URL" -property:URLICON="$URLICON" -property:GeneratePackageOnBuild=true
     - shopt -s globstar
     - for i in **/bin/$CONFIGURATION/**/*.nupkg; do # Whitespace-safe and recursive
     -     nuget push -ApiKey $NUGETAPIKEY -Source $NUGETREPOSITORY "$i"
     - done
   only:
     - master
-  tags:
-    - windows
-
-ProGet:
-  stage: deploy
-  environment: Beta
-  variables:
-    BUILDACTION: "Clean,Restore,Build"
-    VERSIONINFO: "-beta"
-  script:
-    - msbuild "$SOLUTION" -t:$BUILDACTION -tv:$MSBUILD -verbosity:$VERBOSITY -p:Configuration=$CONFIGURATION -p:VisualStudioVersion=$VISUALSTUDIO -p:Version=$PACKVERSION$VERSIONINFO -p:AssemblyVersion=$PACKVERSION -property:Authors="$AUTHORS" -property:Company="$COMPANY" -property:Product="$PRODUCT" -property:Copyright="$COPYRIGHT" -property:URL=$URL -property:URLICON="$URLICON" -property:GeneratePackageOnBuild=true
-    - shopt -s globstar
-    - for i in **/bin/$CONFIGURATION/**/*.nupkg; do # Whitespace-safe and recursive
-    -     nuget push -ApiKey $NUGETAPIKEY -Source $NUGETREPOSITORY "$i"
-    - done
-  only:
-    - beta
   tags:
     - windows

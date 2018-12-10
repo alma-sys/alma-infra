@@ -4,24 +4,24 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>Alma.DataAccess</AssemblyName>
     <RootNamespace>Alma.DataAccess</RootNamespace>
-    <PackageId>Alma.Dados</PackageId>
+    <PackageId>Alma.DataAccess</PackageId>
 
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
     <DisableImplicitAssetTargetFallback>true</DisableImplicitAssetTargetFallback>
 
     
-    <Description>Implementa uma base para a camada de acesso a dados, no padrão Repositório.</Description>
+    <Description>Implements a base for the data access layer, using the Repository pattern.</Description>
     <Authors>$(Authors)</Authors>
     <Company>$(Company)</Company>
     <Product>$(Product)</Product>
     <Copyright>$(Copyright)</Copyright>
-    <PackageLicenseUrl>https://$(URL)/license</PackageLicenseUrl>
-    <PackageProjectUrl>https://$(URL)</PackageProjectUrl>
-    <PackageIconUrl>https://$(URLICON)</PackageIconUrl>
+    <PackageLicenseUrl>$(LICENSE_URL)</PackageLicenseUrl>
+    <PackageProjectUrl>$(PROJECT_URL)</PackageProjectUrl>
+    <PackageIconUrl>$(ICON_URL)</PackageIconUrl>
     <Configuration>$(Configuration)</Configuration>
-    <RepositoryUrl></RepositoryUrl>
-    <RepositoryType></RepositoryType>
+    <RepositoryUrl>$(REPOSITORY_URL)</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
 
   </PropertyGroup>
 

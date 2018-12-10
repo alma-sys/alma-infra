@@ -2,26 +2,26 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <AssemblyName>Alma.Dados.OrmEntityFramework</AssemblyName>
-    <RootNamespace>Alma.Dados.OrmEntityFramework</RootNamespace>
-    <PackageId>Alma.Dados.OrmEntityFramework</PackageId>
+    <AssemblyName>Alma.DataAccess.OrmEntityFramework</AssemblyName>
+    <RootNamespace>Alma.DataAccess.OrmEntityFramework</RootNamespace>
+    <PackageId>Alma.DataAccess.OrmEntityFramework</PackageId>
 
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
     <DisableImplicitAssetTargetFallback>true</DisableImplicitAssetTargetFallback>
 
     
-    <Description>Implementa acesso a dados via base relacional e ORM EntityFramework.</Description>
+    <Description>Implements the data access layer for EntityFramework ORM.</Description>
     <Authors>$(Authors)</Authors>
     <Company>$(Company)</Company>
     <Product>$(Product)</Product>
     <Copyright>$(Copyright)</Copyright>
-    <PackageLicenseUrl>https://$(URL)/license</PackageLicenseUrl>
-    <PackageProjectUrl>https://$(URL)</PackageProjectUrl>
-    <PackageIconUrl>https://$(URLICON)</PackageIconUrl>
+    <PackageLicenseUrl>$(LICENSE_URL)</PackageLicenseUrl>
+    <PackageProjectUrl>$(PROJECT_URL)</PackageProjectUrl>
+    <PackageIconUrl>$(ICON_URL)</PackageIconUrl>
     <Configuration>$(Configuration)</Configuration>
-    <RepositoryUrl></RepositoryUrl>
-    <RepositoryType></RepositoryType>
+    <RepositoryUrl>$(REPOSITORY_URL)</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
   </PropertyGroup>
 
   <ItemGroup>

@@ -2,26 +2,26 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <AssemblyName>Alma.Dados.OrmNHibernate</AssemblyName>
-    <RootNamespace>Alma.Dados.OrmNHibernate</RootNamespace>
-    <PackageId>Alma.Dados.OrmNHibernate</PackageId>
+    <AssemblyName>Alma.DataAccess.OrmNHibernate</AssemblyName>
+    <RootNamespace>Alma.DataAccess.OrmNHibernate</RootNamespace>
+    <PackageId>Alma.DataAccess.OrmNHibernate</PackageId>
 
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
     <DisableImplicitAssetTargetFallback>true</DisableImplicitAssetTargetFallback>
 
     
-    <Description>Implementa acesso a dados via base relacional e ORM NHibernate.</Description>
+    <Description>Implements the data access layer for NHibernate ORM.</Description>
     <Authors>$(Authors)</Authors>
     <Company>$(Company)</Company>
     <Product>$(Product)</Product>
     <Copyright>$(Copyright)</Copyright>
-    <PackageLicenseUrl>https://$(URL)/license</PackageLicenseUrl>
-    <PackageProjectUrl>https://$(URL)</PackageProjectUrl>
-    <PackageIconUrl>https://$(URLICON)</PackageIconUrl>
+    <PackageLicenseUrl>$(LICENSE_URL)</PackageLicenseUrl>
+    <PackageProjectUrl>$(PROJECT_URL)</PackageProjectUrl>
+    <PackageIconUrl>$(ICON_URL)</PackageIconUrl>
     <Configuration>$(Configuration)</Configuration>
-    <RepositoryUrl></RepositoryUrl>
-    <RepositoryType></RepositoryType>
+    <RepositoryUrl>$(REPOSITORY_URL)</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
   </PropertyGroup>
 
   <ItemGroup>
