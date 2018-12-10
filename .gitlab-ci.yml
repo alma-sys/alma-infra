@@ -19,8 +19,10 @@ variables:
   COMPANY: "Marcos Junior and Alex Duraes"
   PRODUCT: "Common Infrastructure"
   COPYRIGHT: "Copyright (c) Marcos Junior and Alex Duraes"
-  URL: "dev.almasistemas.com.br"
-  URLICON: "dev.almasistemas.com.br/gitlab/uploads/appearance/header_logo/1/ghost-icon.png"
+  ICON_URL: "https://dev.almasistemas.com.br/gitlab/uploads/appearance/header_logo/1/ghost-icon.png"
+  PROJECT_URL: "https://dev.almasistemas.com.br/gitlab/almatec/alma-infra"
+  REPOSITORY_URL: "https://dev.almasistemas.com.br/gitlab/almatec/alma-infra"
+  LICENSE_URL: "https://dev.almasistemas.com.br/gitlab/almatec/alma-infra/blob/master/LICENSE.md"
 
 cache:
     key: "$CI_PROJECT_PATH_$CI_BUILD_REF_NAME"
@@ -36,11 +38,11 @@ cache:
         - "*/*/*/*/bin"
 
 before_script:
-  - export PACKVERSION=3.`date -u +%y.%m%d.%H%M`;echo $PACKVERSION
-  - if [[ $CI_COMMIT_REF_NAME == *"beta"* ]]; then 
+  - export PACKVERSION=3.`date -u +%y.%m%d.%H%M`;
+  - if [[ $CI_COMMIT_REF_SLUG == *"beta"* ]]; then 
   -     export $VERSIONINFO="-beta"; 
   - fi
-  - echo "Version=$PACKVERSION$VERSIONINFO"
+  - echo "Version=$PACKVERSION$VERSIONINFO";
 
 stages:
   - build
@@ -55,6 +57,9 @@ Build:
     - msbuild "$SOLUTION" -t:$BUILDACTION -tv:$MSBUILD -verbosity:$VERBOSITY -p:Configuration=$CONFIGURATION -p:VisualStudioVersion=$VISUALSTUDIO -p:Version=$PACKVERSION$VERSIONINFO -p:AssemblyVersion=$PACKVERSION -property:Authors="$AUTHORS" -property:Company="$COMPANY" -property:Product="$PRODUCT" -property:Copyright="$COPYRIGHT" -property:PROJECT_URL="$PROJECT_URL" -property:LICENSE_URL="$LICENSE_URL" -property:ICON_URL="$ICON_URL" -property:GeneratePackageOnBuild=true
   tags:
     - windows
+  only:
+    - branches
+    - merge_requests
 
 Test:
   stage: test
@@ -65,6 +70,9 @@ Test:
     - gitlab-mstest.sh
   tags:
     - windows
+  only:
+    - branches
+    - merge_requests
   artifacts:
     when: always
     paths: 

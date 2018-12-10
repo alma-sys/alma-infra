@@ -10,6 +10,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{77367E95-703A-4F40-A564-697A833A375A}"
 	ProjectSection(SolutionItems) = preProject
 		.gitlab-ci.yml = .gitlab-ci.yml
+		LICENSE.md = LICENSE.md
+		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccess", "DataAccess\DataAccess.csproj", "{36722228-B90A-4FA5-BD18-30BA8D700A45}"
@@ -72,7 +74,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExampleProject.DataAccess.M
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiExtensions.Tests", "ApiExtensions.Tests\ApiExtensions.Tests.csproj", "{FBED9569-F51F-4C91-B1D7-5FFEB735620F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Tests", "Common.Tests\Common.Tests.csproj", "{D66D4F40-2A2B-42CF-BDC0-F8AB65729283}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Tests", "Common.Tests\Common.Tests.csproj", "{D66D4F40-2A2B-42CF-BDC0-F8AB65729283}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
