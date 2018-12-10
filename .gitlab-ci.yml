@@ -24,7 +24,7 @@ variables:
   REPOSITORY_URL: "https://dev.almasistemas.com.br/gitlab/almatec/alma-infra"
 
 cache:
-    key: "$CI_PROJECT_PATH_$CI_BUILD_REF_NAME"
+    key: "$CI_PROJECT_PATH_$CI_BUILD_REF_NAME_$CI_PIPELINE_ID"
     paths:
         - "packages"
         - "*/obj"
