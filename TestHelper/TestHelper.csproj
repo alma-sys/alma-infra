@@ -17,13 +17,17 @@
     <Company>$(Company)</Company>
     <Product>$(Product)</Product>
     <Copyright>$(Copyright)</Copyright>
-    <PackageLicenseFile>../LICENSE.md</PackageLicenseFile>
+    <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
     <PackageProjectUrl>$(PROJECT_URL)</PackageProjectUrl>
     <PackageIconUrl>$(ICON_URL)</PackageIconUrl>
     <Configuration>$(Configuration)</Configuration>
     <RepositoryUrl>$(REPOSITORY_URL)</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
   </PropertyGroup>
+  
+  <ItemGroup>
+    <None Include="..\LICENSE.md" Pack="true" PackagePath="$(PackageLicenseFile)"/>
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="xunit" Version="2.3.1" />
