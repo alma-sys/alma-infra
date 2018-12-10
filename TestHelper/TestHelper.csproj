@@ -17,7 +17,7 @@
     <Company>$(Company)</Company>
     <Product>$(Product)</Product>
     <Copyright>$(Copyright)</Copyright>
-    <PackageLicenseUrl>$(LICENSE_URL)</PackageLicenseUrl>
+    <PackageLicenseFile>../LICENSE.md</PackageLicenseFile>
     <PackageProjectUrl>$(PROJECT_URL)</PackageProjectUrl>
     <PackageIconUrl>$(ICON_URL)</PackageIconUrl>
     <Configuration>$(Configuration)</Configuration>

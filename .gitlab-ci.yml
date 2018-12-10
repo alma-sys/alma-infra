@@ -22,7 +22,6 @@ variables:
   ICON_URL: "https://dev.almasistemas.com.br/gitlab/uploads/appearance/header_logo/1/ghost-icon.png"
   PROJECT_URL: "https://dev.almasistemas.com.br/gitlab/almatec/alma-infra"
   REPOSITORY_URL: "https://dev.almasistemas.com.br/gitlab/almatec/alma-infra"
-  LICENSE_URL: "https://dev.almasistemas.com.br/gitlab/almatec/alma-infra/blob/master/LICENSE.md"
 
 cache:
     key: "$CI_PROJECT_PATH_$CI_BUILD_REF_NAME"
@@ -54,7 +53,7 @@ Build:
   variables:
     BUILDACTION: "Clean,Build"
   script:
-    - msbuild "$SOLUTION" -t:$BUILDACTION -tv:$MSBUILD -verbosity:$VERBOSITY -p:Configuration=$CONFIGURATION -p:VisualStudioVersion=$VISUALSTUDIO -p:Version=$PACKVERSION$VERSIONINFO -p:AssemblyVersion=$PACKVERSION -property:Authors="$AUTHORS" -property:Company="$COMPANY" -property:Product="$PRODUCT" -property:Copyright="$COPYRIGHT" -property:PROJECT_URL="$PROJECT_URL" -property:LICENSE_URL="$LICENSE_URL" -property:ICON_URL="$ICON_URL" -property:GeneratePackageOnBuild=true
+    - msbuild "$SOLUTION" -t:$BUILDACTION -tv:$MSBUILD -verbosity:$VERBOSITY -p:Configuration=$CONFIGURATION -p:VisualStudioVersion=$VISUALSTUDIO -p:Version=$PACKVERSION$VERSIONINFO -p:AssemblyVersion=$PACKVERSION -property:Authors="$AUTHORS" -property:Company="$COMPANY" -property:Product="$PRODUCT" -property:Copyright="$COPYRIGHT" -property:PROJECT_URL="$PROJECT_URL" -property:ICON_URL="$ICON_URL" -property:GeneratePackageOnBuild=true
   tags:
     - windows
   only:
