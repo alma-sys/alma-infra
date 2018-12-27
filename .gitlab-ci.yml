@@ -37,6 +37,7 @@ cache:
         - "*/*/*/*/bin"
 
 before_script:
+  - set -x
   - export PACKVERSION=3.`date -u +%y.%m%d.%H%M`;
   - if [[ $CI_COMMIT_REF_SLUG == *"beta"* ]]; then 
   -     export VERSIONINFO="-beta"; 
