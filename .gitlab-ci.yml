@@ -87,8 +87,7 @@ Deploy:
     GIT_STRATEGY: none
   script:
     - pwd
-    - shopt -s globstar
-    - for i in **/bin/$CONFIGURATION/**/*.nupkg; do # Whitespace-safe and recursive
+    - shopt -s globstar && for i in **/bin/$CONFIGURATION/**/*.nupkg; do # Whitespace-safe and recursive
     -     echo "Uploading $i"
     -     nuget push -ApiKey $NUGETAPIKEY -Source $NUGETREPOSITORY "$i"
     - done
@@ -104,8 +103,7 @@ Deploy:
     GIT_STRATEGY: none
   script:
     - pwd
-    - shopt -s globstar
-    - for i in **/bin/$CONFIGURATION/**/*.nupkg; do # Whitespace-safe and recursive
+    - shopt -s globstar && for i in **/bin/$CONFIGURATION/**/*.nupkg; do # Whitespace-safe and recursive
     -     echo "Uploading $i"
     -     nuget push -ApiKey $NUGETAPIKEY -Source $NUGETREPOSITORY "$i"
     - done
