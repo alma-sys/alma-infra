@@ -39,7 +39,7 @@ cache:
 before_script:
   - export PACKVERSION=3.`date -u +%y.%m%d.%H%M`;
   - if [[ $CI_COMMIT_REF_SLUG == *"beta"* ]]; then 
-  -     export $VERSIONINFO="\-beta"; 
+  -     export VERSIONINFO="-beta"; 
   - fi
   - echo "Version=$PACKVERSION$VERSIONINFO";
 
