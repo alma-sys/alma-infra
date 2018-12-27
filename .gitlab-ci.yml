@@ -84,10 +84,11 @@ Deploy:
   environment: PRODUCTION
   variables:
     GIT_STRATEGY: none
-    BUILDACTION: "Clean,Restore,Build"
   script:
+    - pwd
     - shopt -s globstar
     - for i in **/bin/$CONFIGURATION/**/*.nupkg; do # Whitespace-safe and recursive
+    -     echo "Uploading $i"
     -     nuget push -ApiKey $NUGETAPIKEY -Source $NUGETREPOSITORY "$i"
     - done
   only:
@@ -100,10 +101,11 @@ Deploy:
   environment: BETA
   variables:
     GIT_STRATEGY: none
-    BUILDACTION: "Clean,Restore,Build"
   script:
+    - pwd
     - shopt -s globstar
     - for i in **/bin/$CONFIGURATION/**/*.nupkg; do # Whitespace-safe and recursive
+    -     echo "Uploading $i"
     -     nuget push -ApiKey $NUGETAPIKEY -Source $NUGETREPOSITORY "$i"
     - done
   only:
