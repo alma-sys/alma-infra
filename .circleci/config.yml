@@ -3,35 +3,37 @@ variables: &variables
     docker:
       - image: microsoft/dotnet:2.2-sdk
     environment: 
-        - SOLUTION:"alma-infrastructure.sln"
-        - CONFIGURATION:"Release"
+        - SOLUTION: "alma-infrastructure.sln"
+        - CONFIGURATION: "Release"
 
-        - MSBUILD:"15.0"
-        - VISUALSTUDIO:"15.0"
-        - VERBOSITY:"minimal"
+        - MSBUILD: "15.0"
+        - VISUALSTUDIO: "15.0"
+        - VERBOSITY: "minimal"
 
-        - PUBLISHDBPROJ:""
-        - PUBLISHPROJ:""
-        - DEVELOPMENTPROFILE:""
-        - STAGINGPROFILE:""
-        - STAGINGPASSWORD:""
-        - PRODUCTIONPROFILE:""
+        - PUBLISHDBPROJ: ""
+        - PUBLISHPROJ: ""
+        - DEVELOPMENTPROFILE: ""
+        - STAGINGPROFILE: ""
+        - STAGINGPASSWORD: ""
+        - PRODUCTIONPROFILE: ""
 
-        - NUGETREPOSITORY:"https://dev.almasistemas.com.br/nuget/alma"
+        - NUGETREPOSITORY: "https://dev.almasistemas.com.br/nuget/alma"
 
-        - AUTHORS:"Marcos Junior and Alex Duraes"
-        - COMPANY:"Marcos Junior and Alex Duraes"
-        - PRODUCT:"Common Infrastructure"
-        - COPYRIGHT:"Copyright (c) Marcos Junior and Alex Duraes"
+        - AUTHORS: "Marcos Junior and Alex Duraes"
+        - COMPANY: "Marcos Junior and Alex Duraes"
+        - PRODUCT: "Common Infrastructure"
+        - COPYRIGHT: "Copyright (c) Marcos Junior and Alex Duraes"
 
-        - ICON_URL:"https://avatars2.githubusercontent.com/u/46223903?s:200&v:4"
-        - PROJECT_URL:"https://github.com/alma-sys"
-        - REPOSITORY_URL:"https://github.com/alma-sys/alma-infra"
+        - ICON_URL: "https://avatars2.githubusercontent.com/u/46223903?s:200&v:4"
+        - PROJECT_URL: "https://github.com/alma-sys"
+        - REPOSITORY_URL: "https://github.com/alma-sys/alma-infra"
 
                
 jobs:
   build:
     <<: *variables
+    environment: 
+        - BUILDACTION: "Clean,Build"
     steps:
       - checkout
       - restore_cache:
@@ -47,6 +49,9 @@ jobs:
                   export VERSIONINFO="-beta"; 
               fi
               echo "Version=$PACKVERSION$VERSIONINFO";
+      - run:
+          name: Dry Build
+          command: echo "$SOLUTION" -t:$BUILDACTION -tv:$MSBUILD -verbosity:$VERBOSITY -p:Configuration=$CONFIGURATION -p:VisualStudioVersion=$VISUALSTUDIO -p:Version=$PACKVERSION$VERSIONINFO -p:AssemblyVersion=$PACKVERSION -property:Authors="$AUTHORS" -property:Company="$COMPANY" -property:Product="$PRODUCT" -property:Copyright="$COPYRIGHT" -property:PROJECT_URL="$PROJECT_URL" -property:ICON_URL="$ICON_URL" -property:GeneratePackageOnBuild=true
       - run:
           name: Build
           command: dotnet msbuild "$SOLUTION" -t:$BUILDACTION -tv:$MSBUILD -verbosity:$VERBOSITY -p:Configuration=$CONFIGURATION -p:VisualStudioVersion=$VISUALSTUDIO -p:Version=$PACKVERSION$VERSIONINFO -p:AssemblyVersion=$PACKVERSION -property:Authors="$AUTHORS" -property:Company="$COMPANY" -property:Product="$PRODUCT" -property:Copyright="$COPYRIGHT" -property:PROJECT_URL="$PROJECT_URL" -property:ICON_URL="$ICON_URL" -property:GeneratePackageOnBuild=true
