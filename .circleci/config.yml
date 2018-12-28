@@ -1,0 +1,100 @@
+version: 2.1
+commands: 
+    variables: 
+        description: "Global variables for builds"
+        steps:
+            - run: |
+                SOLUTION="alma-Infrastructure.sln"
+                CONFIGURATION="Release"
+                |
+                MSBUILD="15.0"
+                VISUALSTUDIO="15.0"
+                VERBOSITY="minimal"
+                |
+                PUBLISHDBPROJ=""
+                PUBLISHPROJ=""
+                DEVELOPMENTPROFILE=""
+                STAGINGPROFILE=""
+                STAGINGPASSWORD=""
+                PRODUCTIONPROFILE=""
+                |
+                NUGETREPOSITORY="https://dev.almasistemas.com.br/nuget/alma"
+                |
+                AUTHORS="Marcos Junior and Alex Duraes"
+                COMPANY="Marcos Junior and Alex Duraes"
+                PRODUCT="Common Infrastructure"
+                COPYRIGHT="Copyright (c) Marcos Junior and Alex Duraes"
+                |
+                ICON_URL="https://avatars2.githubusercontent.com/u/46223903?s=200&v=4"
+                PROJECT_URL="https://github.com/alma-sys"
+                REPOSITORY_URL="https://github.com/alma-sys/alma-infra"
+
+               
+jobs:
+  build:
+    docker:
+      - image: microsoft/aspnetcore-build
+    steps:
+      - checkout
+      - variables
+      - restore_cache:
+          key: cache-$CIRCLE_WORKFLOW_ID
+      - run:
+          name: Nuget Restore
+          command: nuget restore
+      - run:
+          name: Build
+          command: msbuild "$SOLUTION" -t:$BUILDACTION -tv:$MSBUILD -verbosity:$VERBOSITY -p:Configuration=$CONFIGURATION -p:VisualStudioVersion=$VISUALSTUDIO -p:Version=$PACKVERSION$VERSIONINFO -p:AssemblyVersion=$PACKVERSION -property:Authors="$AUTHORS" -property:Company="$COMPANY" -property:Product="$PRODUCT" -property:Copyright="$COPYRIGHT" -property:PROJECT_URL="$PROJECT_URL" -property:ICON_URL="$ICON_URL" -property:GeneratePackageOnBuild=true
+      - save_cache:
+          key: cache-$CIRCLE_WORKFLOW_ID
+          paths:
+            - **/node_modules
+            - **/bin
+            - **/obj
+  test:
+    docker:
+      - image: microsoft/aspnetcore-build
+    steps:
+      - restore_cache:
+          key: cache-$CIRCLE_WORKFLOW_ID
+      - run:
+          name: Test
+          command: dotnet test
+      - store_test_results:
+          paths: 
+            - **/*.trx
+            - **/*.html
+          prefix: tests
+
+  test:
+    docker:
+      - image: microsoft/aspnetcore-build
+    steps:
+      - restore_cache:
+          key: cache-$CIRCLE_WORKFLOW_ID
+      - deploy:
+          name: Deploy
+          command: |
+            shopt -s globstar && for i in **/bin/$CONFIGURATION/**/*.nupkg; do # Whitespace-safe and recursive
+                nuget push -ApiKey $NUGETAPIKEY -Source $NUGETREPOSITORY "$i"
+            done
+
+      - store_artifacts:
+          paths: 
+            - **/*.nupkg
+          prefix: packages
+
+workflows:
+  version: 2
+  Build:
+    jobs:
+      - build
+      - test:
+          requires:
+            - build
+      - deploy:
+            requires:
+                - test
+            filters:
+                branches:
+                    only: master
