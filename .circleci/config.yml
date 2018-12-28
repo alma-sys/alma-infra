@@ -1,7 +1,7 @@
 version: 2.1
 variables: &variables
     docker:
-      - image: microsoft/dotnet@2.2-sdk
+      - image: microsoft/dotnet:2.2-sdk
     environment: 
         - SOLUTION:"alma-Infrastructure.sln"
         - CONFIGURATION:"Release"
