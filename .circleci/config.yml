@@ -62,7 +62,11 @@ jobs:
           key: cache-{{ .Environment.CIRCLE_WORKFLOW_ID }}
       - run:
           name: Test
-          command: dotnet test
+          command: |
+            shopt -s globstar && for i in **/bin/$CONFIGURATION/**/*Tests*.dll; do # Whitespace-safe and recursive
+                echo "Testing '$i'..."
+                dotnet vstest "$i"
+            done
       - store_test_results:
           path: ./**/*.trx
           prefix: tests
