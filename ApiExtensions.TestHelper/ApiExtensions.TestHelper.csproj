@@ -24,6 +24,7 @@
     <RepositoryUrl>$(REPOSITORY_URL)</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
 
+    <IsTestProject>false</IsTestProject>
   </PropertyGroup>
   
   <ItemGroup>

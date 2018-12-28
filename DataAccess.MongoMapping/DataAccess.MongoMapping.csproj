@@ -9,8 +9,9 @@
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
     <DisableImplicitAssetTargetFallback>true</DisableImplicitAssetTargetFallback>
+    <IsTestProject>false</IsTestProject>
 
-    
+
     <Description>Implements the data access layer for DocumentDB MongoDB.</Description>
     <Authors>$(Authors)</Authors>
     <Company>$(Company)</Company>

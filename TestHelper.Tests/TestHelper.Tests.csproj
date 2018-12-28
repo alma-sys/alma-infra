@@ -9,6 +9,7 @@
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <DisableImplicitAssetTargetFallback>true</DisableImplicitAssetTargetFallback>
+    <IsTestProject>true</IsTestProject>
 
   </PropertyGroup>
 
