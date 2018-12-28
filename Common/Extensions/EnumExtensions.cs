@@ -47,7 +47,7 @@ namespace Alma.Common
                 .GetCustomAttributes(typeof(AmbientValueAttribute), false);
 
             return (attributes.Length > 0)
-                ? attributes[0].Value?.ToString()
+                ? attributes[0].Value?.ToString() ?? enumeration.ToString()
                 : enumeration.ToString();
         }
 
@@ -67,7 +67,7 @@ namespace Alma.Common
                 .GetCustomAttributes(typeof(DescriptionAttribute), false);
 
             return (attributes.Length > 0)
-                ? attributes[0].Description
+                ? attributes[0].Description ?? enumeration.ToString()
                 : enumeration.ToString();
         }
 
