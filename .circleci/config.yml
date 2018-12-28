@@ -60,9 +60,10 @@ jobs:
           name: Test
           command: dotnet test
       - store_test_results:
-          paths: 
-            - ./**/*.trx
-            - ./**/*.html
+          path: ./**/*.trx
+          prefix: tests
+      - store_test_results:
+          path: ./**/*.htm*
           prefix: tests
 
   deploy:
@@ -78,10 +79,8 @@ jobs:
             shopt -s globstar && for i in **/bin/$CONFIGURATION/**/*.nupkg; do # Whitespace-safe and recursive
                 nuget push -ApiKey $NUGETAPIKEY -Source $NUGETREPOSITORY "$i"
             done
-
       - store_artifacts:
-          paths: 
-            - ./**/*.nupkg
+          path: ./**/*.nupkg
           prefix: packages
 
 workflows:
