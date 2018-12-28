@@ -55,6 +55,10 @@ jobs:
             - ./**/node_modules
             - ./**/bin
             - ./**/obj
+      - store_artifacts:
+          path: ./**/bin/**
+          prefix: binaries
+
   test:
     <<: *variables
     steps:
