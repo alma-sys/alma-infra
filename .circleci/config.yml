@@ -1,42 +1,40 @@
 version: 2.1
-commands: 
-    variables: 
-        description: "Global variables for builds"
-        steps:
-            - run: |
-                SOLUTION="alma-Infrastructure.sln"
-                CONFIGURATION="Release"
-                |
-                MSBUILD="15.0"
-                VISUALSTUDIO="15.0"
-                VERBOSITY="minimal"
-                |
-                PUBLISHDBPROJ=""
-                PUBLISHPROJ=""
-                DEVELOPMENTPROFILE=""
-                STAGINGPROFILE=""
-                STAGINGPASSWORD=""
-                PRODUCTIONPROFILE=""
-                |
-                NUGETREPOSITORY="https://dev.almasistemas.com.br/nuget/alma"
-                |
-                AUTHORS="Marcos Junior and Alex Duraes"
-                COMPANY="Marcos Junior and Alex Duraes"
-                PRODUCT="Common Infrastructure"
-                COPYRIGHT="Copyright (c) Marcos Junior and Alex Duraes"
-                |
-                ICON_URL="https://avatars2.githubusercontent.com/u/46223903?s=200&v=4"
-                PROJECT_URL="https://github.com/alma-sys"
-                REPOSITORY_URL="https://github.com/alma-sys/alma-infra"
+variables: &variables
+    environment: 
+        - SOLUTION:"alma-Infrastructure.sln"
+        - CONFIGURATION:"Release"
+
+        - MSBUILD:"15.0"
+        - VISUALSTUDIO:"15.0"
+        - VERBOSITY:"minimal"
+
+        - PUBLISHDBPROJ:""
+        - PUBLISHPROJ:""
+        - DEVELOPMENTPROFILE:""
+        - STAGINGPROFILE:""
+        - STAGINGPASSWORD:""
+        - PRODUCTIONPROFILE:""
+
+        - NUGETREPOSITORY:"https://dev.almasistemas.com.br/nuget/alma"
+
+        - AUTHORS:"Marcos Junior and Alex Duraes"
+        - COMPANY:"Marcos Junior and Alex Duraes"
+        - PRODUCT:"Common Infrastructure"
+        - COPYRIGHT:"Copyright (c) Marcos Junior and Alex Duraes"
+
+        - ICON_URL:"https://avatars2.githubusercontent.com/u/46223903?s:200&v:4"
+        - PROJECT_URL:"https://github.com/alma-sys"
+        - REPOSITORY_URL:"https://github.com/alma-sys/alma-infra"
+
 
                
 jobs:
   build:
+    <<: *variables
     docker:
       - image: microsoft/aspnetcore-build
     steps:
       - checkout
-      - variables
       - restore_cache:
           key: cache-$CIRCLE_WORKFLOW_ID
       - run:
@@ -48,10 +46,11 @@ jobs:
       - save_cache:
           key: cache-$CIRCLE_WORKFLOW_ID
           paths:
-            - **/node_modules
-            - **/bin
-            - **/obj
+            - ./**/node_modules
+            - ./**/bin
+            - ./**/obj
   test:
+    <<: *variables
     docker:
       - image: microsoft/aspnetcore-build
     steps:
@@ -62,11 +61,12 @@ jobs:
           command: dotnet test
       - store_test_results:
           paths: 
-            - **/*.trx
-            - **/*.html
+            - ./**/*.trx
+            - ./**/*.html
           prefix: tests
 
   test:
+    <<: *variables
     docker:
       - image: microsoft/aspnetcore-build
     steps:
@@ -81,7 +81,7 @@ jobs:
 
       - store_artifacts:
           paths: 
-            - **/*.nupkg
+            - ./**/*.nupkg
           prefix: packages
 
 workflows:
