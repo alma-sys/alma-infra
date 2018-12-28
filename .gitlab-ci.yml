@@ -19,9 +19,9 @@ variables:
   COMPANY: "Marcos Junior and Alex Duraes"
   PRODUCT: "Common Infrastructure"
   COPYRIGHT: "Copyright (c) Marcos Junior and Alex Duraes"
-  ICON_URL: "https://dev.almasistemas.com.br/gitlab/uploads/appearance/header_logo/1/ghost-icon.png"
-  PROJECT_URL: "https://dev.almasistemas.com.br/gitlab/almatec/alma-infra"
-  REPOSITORY_URL: "https://dev.almasistemas.com.br/gitlab/almatec/alma-infra"
+  ICON_URL: "https://avatars2.githubusercontent.com/u/46223903?s=200&v=4"
+  PROJECT_URL: "https://github.com/alma-sys"
+  REPOSITORY_URL: "https://github.com/alma-sys/alma-infra"
 
 cache:
     key: "$CI_PROJECT_PATH_$CI_BUILD_REF_NAME_$CI_PIPELINE_ID"
@@ -88,7 +88,6 @@ Deploy:
   script:
     - pwd
     - shopt -s globstar && for i in **/bin/$CONFIGURATION/**/*.nupkg; do # Whitespace-safe and recursive
-    -     echo "Uploading $i"
     -     nuget push -ApiKey $NUGETAPIKEY -Source $NUGETREPOSITORY "$i"
     - done
   only:
@@ -104,7 +103,6 @@ Deploy:
   script:
     - pwd
     - shopt -s globstar && for i in **/bin/$CONFIGURATION/**/*.nupkg; do # Whitespace-safe and recursive
-    -     echo "Uploading $i"
     -     nuget push -ApiKey $NUGETAPIKEY -Source $NUGETREPOSITORY "$i"
     - done
   only:
