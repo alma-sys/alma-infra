@@ -41,20 +41,14 @@ jobs:
           name: Nuget Restore
           command: dotnet restore
       - run:
-          name: Set version
+          name: Build
           command: |
-              export PACKVERSION=3.`date -u +%y.%m%d.%H%M`;
-              if [[ $CI_COMMIT_REF_SLUG == *"beta"* ]]; then 
-                  export VERSIONINFO="-beta"; 
+              PACKVERSION=3.`date -u +%y.%m%d.%H%M`;
+              if [[ $CIRCLE_BRANCH == *"beta"* ]]; then 
+                  VERSIONINFO="-beta"; 
               fi
               echo "Version=$PACKVERSION$VERSIONINFO";
-              echo 'export PACKVERSION="$PACKVERSION"; export VERSIONINFO="$VERSIONINFO"' >> $BASH_ENV
-      - run:
-          name: Dry Build
-          command: echo "$SOLUTION" -t:$BUILDACTION -tv:$MSBUILD -verbosity:$VERBOSITY -p:Configuration=$CONFIGURATION -p:VisualStudioVersion=$VISUALSTUDIO -p:Version=$PACKVERSION$VERSIONINFO -p:AssemblyVersion=$PACKVERSION -property:Authors="$AUTHORS" -property:Company="$COMPANY" -property:Product="$PRODUCT" -property:Copyright="$COPYRIGHT" -property:PROJECT_URL="$PROJECT_URL" -property:ICON_URL="$ICON_URL" -property:GeneratePackageOnBuild=true
-      - run:
-          name: Build
-          command: dotnet msbuild "$SOLUTION" -t:$BUILDACTION -tv:$MSBUILD -verbosity:$VERBOSITY -p:Configuration=$CONFIGURATION -p:VisualStudioVersion=$VISUALSTUDIO -p:Version=$PACKVERSION$VERSIONINFO -p:AssemblyVersion=$PACKVERSION -property:Authors="$AUTHORS" -property:Company="$COMPANY" -property:Product="$PRODUCT" -property:Copyright="$COPYRIGHT" -property:PROJECT_URL="$PROJECT_URL" -property:ICON_URL="$ICON_URL" -property:GeneratePackageOnBuild=true
+              dotnet msbuild "$SOLUTION" -t:$BUILDACTION -tv:$MSBUILD -verbosity:$VERBOSITY -p:Configuration=$CONFIGURATION -p:VisualStudioVersion=$VISUALSTUDIO -p:Version=$PACKVERSION$VERSIONINFO -p:AssemblyVersion=$PACKVERSION -property:Authors="$AUTHORS" -property:Company="$COMPANY" -property:Product="$PRODUCT" -property:Copyright="$COPYRIGHT" -property:PROJECT_URL="$PROJECT_URL" -property:ICON_URL="$ICON_URL" -property:GeneratePackageOnBuild=true
       - save_cache:
           key: cache-{{ .Environment.CIRCLE_WORKFLOW_ID }}
           paths:
