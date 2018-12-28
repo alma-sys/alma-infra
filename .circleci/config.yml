@@ -62,10 +62,11 @@ jobs:
       - run:
           name: Test
           command: |
+            TESTFILES=""
             shopt -s globstar && for i in **/bin/$CONFIGURATION/**/*Tests*.dll; do # Whitespace-safe and recursive
-                echo "Testing '$i'..."
-                dotnet vstest "$i" --ResultsDirectory:./test-results
+                TESTFILES='$TESTFILES "$i"'
             done
+            dotnet vstest $TESTFILES --ResultsDirectory:./test-results
       - store_test_results:
           path: ./test-results
           prefix: tests
