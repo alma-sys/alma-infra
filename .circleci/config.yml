@@ -57,7 +57,7 @@ jobs:
           name: Test
           command: |
             export TESTFILES=$(circleci tests glob "**/bin/$CONFIGURATION/**/*Tests*.dll" | circleci tests split --split-by=timings)
-            dotnet test ${SOLUTION} --logger trx --output ./test-results
+            dotnet vstest ${TESTFILES} --logger:trx --ResultsDirectory:./test-results
       - store_test_results:
           path: ./test-results
           prefix: tests
