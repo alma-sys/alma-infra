@@ -86,15 +86,15 @@ namespace Alma.ApiExtensions.Serializers
 
             var list = new List<CodeDescription>();
 
-            foreach (var item in Enum.GetValues(enumerador).OfType<Enum>().OrderBy(x => x.ToString()))
+            foreach (var item in Enum.GetValues(enumerador))
             {
                 list.Add(((Enum)item).ToCodeDescription());
             }
 
             if (orderByCode)
-                list = list.OrderBy(t => t.Code).ToList();
+                list = list.OrderBy(t => t.Code.ToLower()).ToList();
             else
-                list = list.OrderBy(t => t.Description).ToList();
+                list = list.OrderBy(t => t.Description.ToLower()).ToList();
 
             serializer.Serialize(writer, list);
 
