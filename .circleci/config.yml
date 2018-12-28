@@ -3,7 +3,7 @@ variables: &variables
     docker:
       - image: microsoft/dotnet:2.2-sdk
     environment: 
-        - SOLUTION:"alma-Infrastructure.sln"
+        - SOLUTION:"alma-infrastructure.sln"
         - CONFIGURATION:"Release"
 
         - MSBUILD:"15.0"
@@ -28,7 +28,6 @@ variables: &variables
         - PROJECT_URL:"https://github.com/alma-sys"
         - REPOSITORY_URL:"https://github.com/alma-sys/alma-infra"
 
-
                
 jobs:
   build:
@@ -36,15 +35,23 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          key: cache-{{ echo $CIRCLE_WORKFLOW_ID }}
+          key: cache-{{ .Environment.CIRCLE_WORKFLOW_ID }}
       - run:
           name: Nuget Restore
           command: dotnet restore
       - run:
+          name: Set version
+          command: |
+              export PACKVERSION=3.`date -u +%y.%m%d.%H%M`;
+              if [[ $CI_COMMIT_REF_SLUG == *"beta"* ]]; then 
+                  export VERSIONINFO="-beta"; 
+              fi
+              echo "Version=$PACKVERSION$VERSIONINFO";
+      - run:
           name: Build
           command: dotnet msbuild "$SOLUTION" -t:$BUILDACTION -tv:$MSBUILD -verbosity:$VERBOSITY -p:Configuration=$CONFIGURATION -p:VisualStudioVersion=$VISUALSTUDIO -p:Version=$PACKVERSION$VERSIONINFO -p:AssemblyVersion=$PACKVERSION -property:Authors="$AUTHORS" -property:Company="$COMPANY" -property:Product="$PRODUCT" -property:Copyright="$COPYRIGHT" -property:PROJECT_URL="$PROJECT_URL" -property:ICON_URL="$ICON_URL" -property:GeneratePackageOnBuild=true
       - save_cache:
-          key: cache-{{ echo $CIRCLE_WORKFLOW_ID }}
+          key: cache-{{ .Environment.CIRCLE_WORKFLOW_ID }}
           paths:
             - ./**/node_modules
             - ./**/bin
@@ -53,7 +60,7 @@ jobs:
     <<: *variables
     steps:
       - restore_cache:
-          key: cache-{{ echo $CIRCLE_WORKFLOW_ID }}
+          key: cache-{{ .Environment.CIRCLE_WORKFLOW_ID }}
       - run:
           name: Test
           command: dotnet test
@@ -68,7 +75,7 @@ jobs:
     <<: *variables
     steps:
       - restore_cache:
-          key: cache-{{ echo $CIRCLE_WORKFLOW_ID }}
+          key: cache-{{ .Environment.CIRCLE_WORKFLOW_ID }}
       - deploy:
           name: Deploy
           command: |
