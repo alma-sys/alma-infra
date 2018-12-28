@@ -57,8 +57,8 @@ jobs:
   test:
     <<: *variables
     steps:
-      - restore_cache:
-          key: cache-{{ .Environment.CIRCLE_WORKFLOW_ID }}
+      - attach_workspace:
+          at: ./
       - run:
           name: Test
           command: |
@@ -73,8 +73,8 @@ jobs:
   deploy:
     <<: *variables
     steps:
-      - restore_cache:
-          key: cache-{{ .Environment.CIRCLE_WORKFLOW_ID }}
+      - attach_workspace:
+          at: ./
       - deploy:
           name: Deploy
           command: |
