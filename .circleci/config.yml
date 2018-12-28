@@ -35,8 +35,6 @@ jobs:
     <<: *variables
     steps:
       - checkout
-      - restore_cache:
-          key: cache-{{ .Environment.CIRCLE_WORKFLOW_ID }}
       - run:
           name: Nuget Restore
           command: dotnet restore
@@ -49,21 +47,11 @@ jobs:
               fi
               echo "Version=$PACKVERSION$VERSIONINFO";
               dotnet msbuild "$SOLUTION" -t:$BUILDACTION -tv:$MSBUILD -verbosity:$VERBOSITY -p:Configuration=$CONFIGURATION -p:VisualStudioVersion=$VISUALSTUDIO -p:Version=$PACKVERSION$VERSIONINFO -p:AssemblyVersion=$PACKVERSION -property:Authors="$AUTHORS" -property:Company="$COMPANY" -property:Product="$PRODUCT" -property:Copyright="$COPYRIGHT" -property:PROJECT_URL="$PROJECT_URL" -property:ICON_URL="$ICON_URL" -property:GeneratePackageOnBuild=true
-      - save_cache:
-          key: cache-{{ .Environment.CIRCLE_WORKFLOW_ID }}
+      - persist_to_workspace:
           paths:
-            - ./*/node_modules/
-            - ./*/*/node_modules/
-            - ./*/*/*/node_modules/
-            - ./*/bin/
-            - ./*/*/bin/
-            - ./*/*/*/bin/
-            - ./*/obj/
-            - ./*/*/obj/
-            - ./*/*/*/obj/
-      - store_artifacts:
-          path: ./**/bin/
-          prefix: binaries
+            - ./**/node_modules/
+            - ./**/bin/
+            - ./**/obj/
 
   test:
     <<: *variables
