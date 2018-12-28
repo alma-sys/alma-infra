@@ -52,11 +52,11 @@ jobs:
       - save_cache:
           key: cache-{{ .Environment.CIRCLE_WORKFLOW_ID }}
           paths:
-            - ./**/node_modules
-            - ./**/bin
-            - ./**/obj
+            - ./**/node_modules/
+            - ./**/bin/
+            - ./**/obj/
       - store_artifacts:
-          path: ./**/bin/**
+          path: ./**/bin/
           prefix: binaries
 
   test:
