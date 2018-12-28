@@ -52,9 +52,15 @@ jobs:
       - save_cache:
           key: cache-{{ .Environment.CIRCLE_WORKFLOW_ID }}
           paths:
-            - ./**/node_modules/
-            - ./**/bin/
-            - ./**/obj/
+            - ./*/node_modules/
+            - ./*/*/node_modules/
+            - ./*/*/*/node_modules/
+            - ./*/bin/
+            - ./*/*/bin/
+            - ./*/*/*/bin/
+            - ./*/obj/
+            - ./*/*/obj/
+            - ./*/*/*/obj/
       - store_artifacts:
           path: ./**/bin/
           prefix: binaries
@@ -69,13 +75,10 @@ jobs:
           command: |
             shopt -s globstar && for i in **/bin/$CONFIGURATION/**/*Tests*.dll; do # Whitespace-safe and recursive
                 echo "Testing '$i'..."
-                dotnet vstest "$i"
+                dotnet vstest "$i" --ResultsDirectory:./test-results
             done
       - store_test_results:
-          path: ./**/*.trx
-          prefix: tests
-      - store_test_results:
-          path: ./**/*.htm*
+          path: ./test-results
           prefix: tests
 
   deploy:
@@ -86,11 +89,13 @@ jobs:
       - deploy:
           name: Deploy
           command: |
+            mkdir ./packages
             shopt -s globstar && for i in **/bin/$CONFIGURATION/**/*.nupkg; do # Whitespace-safe and recursive
                 nuget push -ApiKey $NUGETAPIKEY -Source $NUGETREPOSITORY "$i"
+                cp "$i" ./packages
             done
       - store_artifacts:
-          path: ./**/*.nupkg
+          path: ./packages
           prefix: packages
 
 workflows:
