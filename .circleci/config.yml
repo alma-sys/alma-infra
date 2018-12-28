@@ -3,19 +3,13 @@ variables: &variables
     docker:
       - image: microsoft/dotnet:2.2-sdk
     environment: 
+        - LANG: "en_US.UTF-8"
         - SOLUTION: "alma-infrastructure.sln"
         - CONFIGURATION: "Release"
 
         - MSBUILD: "15.0"
         - VISUALSTUDIO: "15.0"
         - VERBOSITY: "minimal"
-
-        - PUBLISHDBPROJ: ""
-        - PUBLISHPROJ: ""
-        - DEVELOPMENTPROFILE: ""
-        - STAGINGPROFILE: ""
-        - STAGINGPASSWORD: ""
-        - PRODUCTIONPROFILE: ""
 
         - NUGETREPOSITORY: "https://dev.almasistemas.com.br/nuget/alma"
 
@@ -63,8 +57,7 @@ jobs:
           name: Test
           command: |
             export TESTFILES=$(circleci tests glob "**/bin/$CONFIGURATION/**/*Tests*.dll" | circleci tests split --split-by=timings)
-            echo ${TESTFILES}
-            dotnet vstest ${TESTFILES} --ResultsDirectory:./test-results
+            dotnet vstest ${TESTFILES} --logger:trx --ResultsDirectory:./test-results
       - store_test_results:
           path: ./test-results
           prefix: tests
