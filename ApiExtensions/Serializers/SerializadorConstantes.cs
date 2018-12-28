@@ -86,7 +86,7 @@ namespace Alma.ApiExtensions.Serializers
 
             var list = new List<CodeDescription>();
 
-            foreach (var item in Enum.GetValues(enumerador))
+            foreach (var item in Enum.GetValues(enumerador).OfType<Enum>().OrderBy(x => x.ToString()))
             {
                 list.Add(((Enum)item).ToCodeDescription());
             }

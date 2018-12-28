@@ -1,5 +1,4 @@
-using Xunit;
-using Alma.Common;
+Ôªøusing Xunit;
 
 namespace Alma.Common.Tests.Extensions
 {
@@ -8,7 +7,7 @@ namespace Alma.Common.Tests.Extensions
         [Fact]
         public void ShouldRemoveAccentuation()
         {
-            var accentedPhrase = "Se hoje È o dia das crianÁas... Ontem eu disse: o dia da crianÁa È o dia da m„e, dos pais, das professoras, mas tambÈm È o dia dos animais, sempre que vocÍ olha uma crianÁa, h· sempre uma figura oculta, que È um cachorro atr·s. O que È algo muito importante!";
+            var accentedPhrase = "Se hoje √© o dia das crian√ßas... Ontem eu disse: o dia da crian√ßa √© o dia da m√£e, dos pais, das professoras, mas tamb√©m √© o dia dos animais, sempre que voc√™ olha uma crian√ßa, h√° sempre uma figura oculta, que √© um cachorro atr√°s. O que √© algo muito importante!";
             var expectedPhrase = "Se hoje e o dia das criancas... Ontem eu disse: o dia da crianca e o dia da mae, dos pais, das professoras, mas tambem e o dia dos animais, sempre que voce olha uma crianca, ha sempre uma figura oculta, que e um cachorro atras. O que e algo muito importante!";
 
             var actual = accentedPhrase.RemoveAccentuation();
