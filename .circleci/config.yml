@@ -36,7 +36,7 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          key: cache-$CIRCLE_WORKFLOW_ID
+          key: cache-{{ echo $CIRCLE_WORKFLOW_ID }}
       - run:
           name: Nuget Restore
           command: dotnet restore
@@ -72,7 +72,7 @@ jobs:
       - image: microsoft/aspnetcore-build
     steps:
       - restore_cache:
-          key: cache-$CIRCLE_WORKFLOW_ID
+          key: cache-{{ echo $CIRCLE_WORKFLOW_ID }}
       - deploy:
           name: Deploy
           command: |
