@@ -62,11 +62,9 @@ jobs:
       - run:
           name: Test
           command: |
-            TESTFILES=""
-            shopt -s globstar && for i in **/bin/$CONFIGURATION/**/*Tests*.dll; do # Whitespace-safe and recursive
-                TESTFILES='$TESTFILES "$i"'
-            done
-            dotnet vstest $TESTFILES --ResultsDirectory:./test-results
+            export TESTFILES=$(circleci tests glob "**/bin/$CONFIGURATION/**/*Tests*.dll" | circleci tests split --split-by=timings)
+            echo ${TESTFILES}
+            dotnet vstest ${TESTFILES} --ResultsDirectory:./test-results
       - store_test_results:
           path: ./test-results
           prefix: tests
