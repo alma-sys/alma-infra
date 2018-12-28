@@ -1,5 +1,7 @@
 version: 2.1
 variables: &variables
+    docker:
+      - image: microsoft/dotnet@2.2-sdk
     environment: 
         - SOLUTION:"alma-Infrastructure.sln"
         - CONFIGURATION:"Release"
@@ -31,8 +33,6 @@ variables: &variables
 jobs:
   build:
     <<: *variables
-    docker:
-      - image: microsoft/aspnetcore-build
     steps:
       - checkout
       - restore_cache:
@@ -51,8 +51,6 @@ jobs:
             - ./**/obj
   test:
     <<: *variables
-    docker:
-      - image: microsoft/aspnetcore-build
     steps:
       - restore_cache:
           key: cache-{{ echo $CIRCLE_WORKFLOW_ID }}
@@ -68,8 +66,6 @@ jobs:
 
   deploy:
     <<: *variables
-    docker:
-      - image: microsoft/aspnetcore-build
     steps:
       - restore_cache:
           key: cache-{{ echo $CIRCLE_WORKFLOW_ID }}
