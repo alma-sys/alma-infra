@@ -65,7 +65,7 @@ jobs:
             - ./**/*.html
           prefix: tests
 
-  test:
+  deploy:
     <<: *variables
     docker:
       - image: microsoft/aspnetcore-build
