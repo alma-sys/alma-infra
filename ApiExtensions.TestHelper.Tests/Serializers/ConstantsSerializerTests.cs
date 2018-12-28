@@ -41,6 +41,7 @@ namespace Alma.ApiExtensions.Serializers.Tests
         {
 
             var resultado = ConstantSerializer.SerializeEnumChar(typeof(ValuesToTest), true, true);
+            System.Console.WriteLine(resultado);
             Assert.Equal(@"[
   {
     ""code"": ""Value1"",
