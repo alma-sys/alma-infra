@@ -48,6 +48,7 @@ jobs:
               echo "Version=$PACKVERSION$VERSIONINFO";
               dotnet msbuild "$SOLUTION" -t:$BUILDACTION -tv:$MSBUILD -verbosity:$VERBOSITY -p:Configuration=$CONFIGURATION -p:VisualStudioVersion=$VISUALSTUDIO -p:Version=$PACKVERSION$VERSIONINFO -p:AssemblyVersion=$PACKVERSION -property:Authors="$AUTHORS" -property:Company="$COMPANY" -property:Product="$PRODUCT" -property:Copyright="$COPYRIGHT" -property:PROJECT_URL="$PROJECT_URL" -property:ICON_URL="$ICON_URL" -property:GeneratePackageOnBuild=true
       - persist_to_workspace:
+          root: ./
           paths:
             - ./**/node_modules/
             - ./**/bin/
