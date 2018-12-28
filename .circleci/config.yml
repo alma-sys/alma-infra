@@ -44,7 +44,7 @@ jobs:
           name: Build
           command: msbuild "$SOLUTION" -t:$BUILDACTION -tv:$MSBUILD -verbosity:$VERBOSITY -p:Configuration=$CONFIGURATION -p:VisualStudioVersion=$VISUALSTUDIO -p:Version=$PACKVERSION$VERSIONINFO -p:AssemblyVersion=$PACKVERSION -property:Authors="$AUTHORS" -property:Company="$COMPANY" -property:Product="$PRODUCT" -property:Copyright="$COPYRIGHT" -property:PROJECT_URL="$PROJECT_URL" -property:ICON_URL="$ICON_URL" -property:GeneratePackageOnBuild=true
       - save_cache:
-          key: cache-$CIRCLE_WORKFLOW_ID
+          key: cache-{{ echo $CIRCLE_WORKFLOW_ID }}
           paths:
             - ./**/node_modules
             - ./**/bin
@@ -55,7 +55,7 @@ jobs:
       - image: microsoft/aspnetcore-build
     steps:
       - restore_cache:
-          key: cache-$CIRCLE_WORKFLOW_ID
+          key: cache-{{ echo $CIRCLE_WORKFLOW_ID }}
       - run:
           name: Test
           command: dotnet test
