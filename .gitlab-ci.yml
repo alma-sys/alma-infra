@@ -24,7 +24,7 @@ variables:
   REPOSITORY_URL: "https://github.com/alma-sys/alma-infra"
 
 cache:
-    key: "$CI_PROJECT_PATH_$CI_BUILD_REF_NAME_$CI_PIPELINE_ID"
+    key: "${CI_PROJECT_PATH}_${CI_BUILD_REF_NAME}_${CI_PIPELINE_ID}"
     paths:
         - "packages"
         - "*/obj"
