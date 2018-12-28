@@ -27,13 +27,12 @@ variables: &variables
         - ICON_URL: "https://avatars2.githubusercontent.com/u/46223903?s:200&v:4"
         - PROJECT_URL: "https://github.com/alma-sys"
         - REPOSITORY_URL: "https://github.com/alma-sys/alma-infra"
+        - BUILDACTION: "Clean,Build"
 
                
 jobs:
   build:
     <<: *variables
-    environment: 
-        - BUILDACTION: "Clean,Build"
     steps:
       - checkout
       - restore_cache:
