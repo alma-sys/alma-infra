@@ -71,12 +71,12 @@ namespace Alma.ApiExtensions.Serializers
             return sb.ToString();
         }
 
-        public static string SerializeEnumChar<T>(bool formatted, bool orderByCode = false) where T : struct
+        public static string SerializeEnumToCode<T>(bool formatted, bool orderByCode = false) where T : struct
         {
-            return SerializeEnumChar(typeof(T), formatted, orderByCode);
+            return SerializeEnumToCode(typeof(T), formatted, orderByCode);
         }
 
-        public static string SerializeEnumChar(Type enumerador, bool formatted, bool orderByCode = false)
+        public static string SerializeEnumToCode(Type enumerador, bool formatted, bool orderByCode = false)
         {
             var serializer = new JsonSerializer();
             serializer.ContractResolver = new StaticPropertyContractResolver();

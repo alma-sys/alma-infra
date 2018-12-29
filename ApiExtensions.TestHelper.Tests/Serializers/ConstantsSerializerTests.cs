@@ -1,4 +1,9 @@
-﻿using Xunit;
+﻿using Alma.Common;
+using Alma.Common.Dto;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Xunit;
 
 namespace Alma.ApiExtensions.Serializers.Tests
 {
@@ -40,7 +45,21 @@ namespace Alma.ApiExtensions.Serializers.Tests
         public void ShouldSerializeEnumValuesIntoCodeDescription()
         {
 
-            var resultado = ConstantSerializer.SerializeEnumChar(typeof(ValuesToTest), true, true);
+            var list = new List<CodeDescription>();
+
+            foreach (var item in Enum.GetValues(typeof(ValuesToTest)))
+            {
+                list.Add(((Enum)item).ToCodeDescription());
+            }
+
+            list = list.OrderBy(t => t.Code.ToLower()).ToList();
+            foreach (var l in list)
+            {
+                Console.WriteLine(l.Code);
+            }
+
+
+            var resultado = ConstantSerializer.SerializeEnumToCode(typeof(ValuesToTest), true, true);
             System.Console.WriteLine(resultado);
             Assert.Equal(@"[
   {
