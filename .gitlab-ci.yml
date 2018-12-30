@@ -78,33 +78,35 @@ Test:
     paths: 
       - TestResults/*.trx
       - TestResults/*.html
+# Disabled to set push using circleci. 
 
-Deploy:
-  stage: deploy
-  environment: PRODUCTION
-  variables:
-    GIT_STRATEGY: none
-  script:
-    - pwd
-    - shopt -s globstar && for i in **/bin/$CONFIGURATION/**/*.nupkg; do # Whitespace-safe and recursive
-    -     nuget push -ApiKey $NUGETAPIKEY -Source $NUGETREPOSITORY "$i"
-    - done
-  only:
-    - master
-  tags:
-    - windows
-
-Deploy:
-  stage: deploy
-  environment: BETA
-  variables:
-    GIT_STRATEGY: none
-  script:
-    - pwd
-    - shopt -s globstar && for i in **/bin/$CONFIGURATION/**/*.nupkg; do # Whitespace-safe and recursive
-    -     nuget push -ApiKey $NUGETAPIKEY -Source $NUGETREPOSITORY "$i"
-    - done
-  only:
-    - /^release\/.*beta.*/
-  tags:
-    - windows
+#Deploy:
+#  stage: deploy
+#  environment: PRODUCTION
+#  variables:
+#    GIT_STRATEGY: none
+#  script:
+#    - pwd
+#    - shopt -s globstar && for i in **/bin/$CONFIGURATION/**/*.nupkg; do # Whitespace-safe and recursive
+#    -     nuget push -ApiKey $NUGETAPIKEY -Source $NUGETREPOSITORY "$i"
+#    - done
+#  only:
+#    - master
+#  tags:
+#    - windows
+#
+#Deploy:
+#  stage: deploy
+#  environment: BETA
+#  variables:
+#    GIT_STRATEGY: none
+#  script:
+#    - pwd
+#    - shopt -s globstar && for i in **/bin/$CONFIGURATION/**/*.nupkg; do # Whitespace-safe and recursive
+#    -     nuget push -ApiKey $NUGETAPIKEY -Source $NUGETREPOSITORY "$i"
+#    - done
+#  only:
+#    - /^release\/.*beta.*/
+#  tags:
+#    - windows
+#

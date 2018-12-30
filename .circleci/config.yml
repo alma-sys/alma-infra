@@ -1,4 +1,4 @@
-version: 2.1
+version: 2
 variables: &variables
     docker:
       - image: microsoft/dotnet:2.2-sdk
@@ -85,7 +85,7 @@ jobs:
           command: |
             mkdir ./packages
             shopt -s globstar && for i in **/bin/$CONFIGURATION/**/*.nupkg; do # Whitespace-safe and recursive
-                nuget push -ApiKey $NUGETAPIKEY -Source $NUGETREPOSITORY "$i"
+                dotnet nuget push -ApiKey $NUGETAPIKEY -Source $NUGETREPOSITORY "$i"
                 cp "$i" ./packages
             done
       - store_artifacts:
@@ -105,4 +105,6 @@ workflows:
                 - test
             filters:
                 branches:
-                    only: master
+                    only: 
+                        - master
+                        - /^release\/.*beta.*/
