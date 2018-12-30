@@ -85,7 +85,7 @@ jobs:
           command: |
             mkdir ./packages
             shopt -s globstar && for i in **/bin/$CONFIGURATION/**/*.nupkg; do # Whitespace-safe and recursive
-                dotnet nuget push -ApiKey $NUGETAPIKEY -Source $NUGETREPOSITORY "$i"
+                dotnet nuget push --api-key $NUGETAPIKEY --source $NUGETREPOSITORY "$i"
                 cp "$i" ./packages
             done
       - store_artifacts:
