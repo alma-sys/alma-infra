@@ -11,7 +11,7 @@ variables: &variables
         - VISUALSTUDIO: "15.0"
         - VERBOSITY: "minimal"
 
-        - NUGETREPOSITORY: "https://dev.almasistemas.com.br/nuget/alma"
+        - NUGETREPOSITORY: "https://api.nuget.org/v3/index.json"
 
         - AUTHORS: "Marcos Junior and Alex Duraes"
         - COMPANY: "Marcos Junior and Alex Duraes"
