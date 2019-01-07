@@ -16,7 +16,7 @@ namespace Alma.ExampleProject.ApiMSSql
             var builder = new ConfigurationBuilder()
                  .SetBasePath(env.ContentRootPath)
                  .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
+                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true)
                  .AddEnvironmentVariables();
 
 
@@ -34,7 +34,7 @@ namespace Alma.ExampleProject.ApiMSSql
             services.AddLogging();
 
 
-            this.ApplicationContainer = DependencyResolverConfig.SetDependencyResolver(services);
+            this.ApplicationContainer = DependencyResolverConfig.SetDependencyResolver(services, Configuration);
 
             // Create the IServiceProvider based on the container.
             return new AutofacServiceProvider(this.ApplicationContainer);

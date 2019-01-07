@@ -42,7 +42,7 @@ namespace Alma.DataAccess.OrmNHibernate
                         db.Dialect<NHibernate.Dialect.MsSql2008Dialect>();
                         //db.Driver<DriverSqlClient>();
                         db.Driver<NHibernate.Driver.SqlClientDriver>();
-                        db.ConnectionStringName = connectionKey;
+                        db.ConnectionString = conn.ConnectionString;
                         db.ConnectionProvider<ConnectionProvider>();
                         db.PrepareCommands = sett.PrepareCommands;
 
@@ -61,7 +61,7 @@ namespace Alma.DataAccess.OrmNHibernate
                         db.Dialect<NHibernate.Dialect.SQLiteDialect>();
                         //db.Driver<DriverSQLite20>();
                         db.Driver<NHibernate.Driver.SQLite20Driver>();
-                        db.ConnectionStringName = connectionKey;
+                        db.ConnectionString = conn.ConnectionString;
                         db.ConnectionProvider<ConnectionProvider>();
                         db.PrepareCommands = sett.PrepareCommands;
                         db.LogFormattedSql = true;
@@ -80,7 +80,7 @@ namespace Alma.DataAccess.OrmNHibernate
                             db.Driver<NHibernate.Driver.OracleManagedDataClientDriver>();
                         else
                             db.Driver<NHibernate.Driver.OracleDataClientDriver>();
-                        db.ConnectionStringName = connectionKey;
+                        db.ConnectionString = conn.ConnectionString;
                         db.ConnectionProvider<ConnectionProvider>();
                         db.PrepareCommands = sett.PrepareCommands;
                         db.LogFormattedSql = true;
@@ -99,7 +99,7 @@ namespace Alma.DataAccess.OrmNHibernate
                         db.Dialect<NHibernate.Dialect.MySQL55Dialect>();
                         //db.Driver<DriverMySql>();
                         db.Driver<NHibernate.Driver.MySqlDataDriver>();
-                        db.ConnectionStringName = connectionKey;
+                        db.ConnectionString = conn.ConnectionString;
                         db.ConnectionProvider<ConnectionProvider>();
                         db.PrepareCommands = sett.PrepareCommands;
                         db.LogFormattedSql = true;
@@ -236,6 +236,8 @@ Remove all installed versions and install the required version and try again.", 
             logger?.Invoke($"Registering {filters.Length} repository global filters.");
             foreach (var fmapType in filters)
             {
+                if (fmapType.IsAbstract)
+                    continue;
                 var map = (Mapper.GlobalFilterMapping)Activator.CreateInstance(fmapType);
                 foreach (var fd in map.filters)
                     cfg.FilterDefinitions.Add(fd);

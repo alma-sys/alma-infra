@@ -12,25 +12,27 @@ namespace Alma.Common
             //Default values
             PrepareCommands = true;
             EnableLazyLoad = true;
+
+            ConnectionStrings = new List<ConnectionSetting>();
         }
 
 
-        public ORM ORM { get; private set; }
+        public ORM ORM { get; set; }
 
-        public IReadOnlyList<ConnectionSetting> ConnectionStrings { get; private set; }
+        public List<ConnectionSetting> ConnectionStrings { get; set; }
 
-        public bool ExecuteMigrations { get; private set; }
-        public bool PrepareCommands { get; private set; }
-        public bool EnableLazyLoad { get; private set; }
-        public IsolationLevel? IsolationLevel { get; private set; }
-        public bool EnableProfiling { get; private set; }
+        public bool ExecuteMigrations { get; set; }
+        public bool PrepareCommands { get; set; }
+        public bool EnableLazyLoad { get; set; }
+        public IsolationLevel? IsolationLevel { get; set; }
+        public bool EnableProfiling { get; set; }
 
-        public bool Https { get; private set; }
+        public bool Https { get; set; }
 
 
-        public LogSetting Logging { get; private set; }
-        public JwtSetting Jwt { get; private set; }
-        public SmtpSetting Smtp { get; private set; }
+        public LogSetting Logging { get; set; }
+        public JwtSetting Jwt { get; set; }
+        public SmtpSetting Smtp { get; set; }
 
 
         internal void Validate()
@@ -95,35 +97,35 @@ namespace Alma.Common
 
     public sealed class ConnectionSetting
     {
-        public string Name { get; private set; }
-        public string ConnectionString { get; private set; }
-        public DBMS Provider { get; private set; }
-        public IReadOnlyList<string> Assemblies { get; private set; }
+        public string Name { get; set; }
+        public string ConnectionString { get; set; }
+        public DBMS Provider { get; set; }
+        public IReadOnlyList<string> Assemblies { get; set; }
     }
 
     public struct JwtSetting
     {
-        public string Base64Key { get; private set; }
-        public string Issuer { get; private set; }
-        public int ExpiryInMintures { get; private set; }
-        public IList<string> Audiences { get; private set; }
+        public string Base64Key { get; set; }
+        public string Issuer { get; set; }
+        public int ExpiryInMintures { get; set; }
+        public IList<string> Audiences { get; set; }
     }
 
     public struct SmtpSetting
     {
-        public string Host { get; private set; }
-        public int Port { get; private set; }
-        public bool Ssl { get; private set; }
-        public string UserName { get; private set; }
-        public string Password { get; private set; }
+        public string Host { get; set; }
+        public int Port { get; set; }
+        public bool Ssl { get; set; }
+        public string UserName { get; set; }
+        public string Password { get; set; }
     }
 
     public struct LogSetting
     {
-        public System.Net.Mail.MailAddressCollection MailDestinations { get; private set; }
-        public System.Net.Mail.MailAddress MailFrom { get; private set; }
+        public System.Net.Mail.MailAddressCollection MailDestinations { get; set; }
+        public System.Net.Mail.MailAddress MailFrom { get; set; }
         public int MaxEmailsPerDay => 65;
-        public bool Enable { get; private set; }
+        public bool Enable { get; set; }
 
     }
 

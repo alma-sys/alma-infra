@@ -15,17 +15,13 @@ namespace Alma.Common
 
         private static Dictionary<string, Assembly[]> ListMappedAssemblies()
         {
-            var assemblies = new List<string>();
-            var connections = new List<string>();
-
-
             var dict = new Dictionary<string, Assembly[]>();
             foreach (var cnn in Settings.ConnectionStrings)
             {
                 var list = new List<Assembly>();
                 var stringList = new List<string>(cnn.Assemblies);
 
-                foreach (var basicAssembly in new[] { commonAssembly, dataAssembly, $"{dataAssembly}.Orm{cnn.Provider.ToString()}" })
+                foreach (var basicAssembly in new[] { commonAssembly, dataAssembly, $"{dataAssembly}.Orm{ Settings.ORM.ToString() }" })
                 {
                     if (!stringList.Contains($"{basicAssembly}")) // Injecting basic assemblies. 
                         stringList.Add(basicAssembly);
@@ -102,7 +98,7 @@ namespace Alma.Common
             if (builder == null)
                 throw new ArgumentNullException(nameof(builder));
 
-            Settings = configuration.GetSection("Alma").Get<Settings>();
+            Settings = configuration.GetSection(nameof(Settings)).Get<Settings>();
             Settings.Validate();
             builder.RegisterInstance<Settings>(Settings).AsSelf();
 
