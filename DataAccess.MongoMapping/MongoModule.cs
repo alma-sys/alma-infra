@@ -3,7 +3,6 @@ using Alma.DataAccess.MongoMapping.Conventions;
 using Autofac;
 using MongoDB.Bson.Serialization.Conventions;
 using MongoDB.Driver;
-using System.Configuration;
 using System.Linq;
 
 namespace Alma.DataAccess.MongoMapping
@@ -121,9 +120,9 @@ namespace Alma.DataAccess.MongoMapping
 
         private static IMongoClient GetClient(string connectionKey)
         {
-            var connectionString = ConfigurationManager.ConnectionStrings[connectionKey];
+            var connectionString = Alma.Common.Config.ConnectionStrings[connectionKey];
             if (connectionString == null || string.IsNullOrWhiteSpace(connectionString.ConnectionString))
-                throw new ConfigurationErrorsException($"Cannot find connection string setting for {connectionKey}");
+                throw new System.Configuration.ConfigurationErrorsException($"Cannot find connection string setting for {connectionKey}");
 
             var session = new MongoClient(connectionString.ConnectionString);
 
@@ -141,9 +140,9 @@ namespace Alma.DataAccess.MongoMapping
 
         private static string GetConnectionString(string connectionKey)
         {
-            var connectionString = ConfigurationManager.ConnectionStrings[connectionKey];
+            var connectionString = Alma.Common.Config.ConnectionStrings[connectionKey];
             if (connectionString == null || string.IsNullOrWhiteSpace(connectionString.ConnectionString))
-                throw new ConfigurationErrorsException($"Cannot find connection string setting for {connectionKey}");
+                throw new System.Configuration.ConfigurationErrorsException($"Cannot find connection string setting for {connectionKey}");
             return connectionString.ConnectionString;
         }
 
@@ -152,7 +151,7 @@ namespace Alma.DataAccess.MongoMapping
             var connectionString = GetConnectionString(connectionKey);
             var str = connectionString.Split('/');
             if (str.Length < 2)
-                throw new ConfigurationErrorsException($"Cannot find database on connection string setting for {connectionKey}");
+                throw new System.Configuration.ConfigurationErrorsException($"Cannot find database on connection string setting for {connectionKey}");
 
             var db_name = str.Last();
 

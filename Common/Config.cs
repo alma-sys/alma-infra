@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyModel;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Reflection;
 
@@ -24,8 +24,8 @@ namespace Alma.Common
             var connections = new List<string>();
             for (int i = 0; i <= 5; i++)
             {
-                var ass = ConfigurationManager.AppSettings[cfgAssemblies + (i == 0 ? "" : i.ToString())];
-                var cnn = ConfigurationManager.AppSettings[cfgConnection + (i == 0 ? "" : i.ToString())];
+                var ass = Config.AppSettings[cfgAssemblies + (i == 0 ? "" : i.ToString())];
+                var cnn = Config.AppSettings[cfgConnection + (i == 0 ? "" : i.ToString())];
                 if (string.IsNullOrWhiteSpace(ass) || string.IsNullOrWhiteSpace(cnn))
                     continue;
                 assemblies.Add(ass);
@@ -35,7 +35,7 @@ namespace Alma.Common
             var exMessage = $"Missing or invalid {cfgAssemblies} App Setting. Check your .config file. Valid values: semi-colon (;) separated assembly names that contains entities and mapping.";
             exMessage += $"Each {cfgAssemblies} must have a corresponding {cfgConnection}. Eg.: <add name=\"{cfgAssemblies}2\">, <add name=\"{cfgConnection}2\">";
             if (assemblies.Count == 0)
-                throw new ConfigurationErrorsException(exMessage);
+                throw new System.Configuration.ConfigurationErrorsException(exMessage);
 
             var dict = new Dictionary<string, Assembly[]>();
 
@@ -62,7 +62,7 @@ namespace Alma.Common
                         }
                         catch (Exception ex)
                         {
-                            throw new ConfigurationErrorsException(exMessage + " Could not load '" + a + "'.", ex);
+                            throw new System.Configuration.ConfigurationErrorsException(exMessage + " Could not load '" + a + "'.", ex);
                         }
                     }
                 }
@@ -76,7 +76,7 @@ namespace Alma.Common
 
         private static IDictionary<string, Assembly[]> _AssembliesCached = null;
         /// <summary>
-        /// Lista de assemblies que foram mapeadas para a plataforma.
+        /// List all mapped assemblies that represents dependencies
         /// </summary>
         public static IDictionary<string, Assembly[]> MappedAssemblies
         {
@@ -109,5 +109,23 @@ namespace Alma.Common
             return library.Name == (assemblyName)
                 || library.Dependencies.Any(d => d.Name.StartsWith(assemblyName));
         }
+
+
+        public static NameValueCollection AppSettings
+        {
+            get
+            {
+                return System.Configuration.ConfigurationManager.AppSettings;
+            }
+        }
+
+        public static System.Configuration.ConnectionStringSettingsCollection ConnectionStrings
+        {
+            get
+            {
+                return System.Configuration.ConfigurationManager.ConnectionStrings;
+            }
+        }
     }
+
 }

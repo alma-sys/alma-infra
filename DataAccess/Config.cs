@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Data;
 using System.Diagnostics;
 using System.Linq;
@@ -59,7 +58,7 @@ namespace Alma.DataAccess
             {
                 try
                 {
-                    var orm = (ORM)Enum.Parse(typeof(ORM), ConfigurationManager.AppSettings[cfgOrm]);
+                    var orm = (ORM)Enum.Parse(typeof(ORM), Alma.Common.Config.AppSettings[cfgOrm]);
                     return orm;
                 }
                 catch (Exception ex)
@@ -68,7 +67,7 @@ namespace Alma.DataAccess
                         string.Join(", ", (from ORM e in Enum.GetValues(typeof(ORM))
                                            select e.ToString()));
 
-                    throw new ConfigurationErrorsException(
+                    throw new System.Configuration.ConfigurationErrorsException(
                         $"Missing or invalid {cfgOrm} App Setting. Check your .config or appsettings.json file. Valid values: " +
                         possibleValues, ex);
                 }
@@ -82,9 +81,9 @@ namespace Alma.DataAccess
         /// <returns></returns>
         public static DBMS DetectDBMS(string key)
         {
-            var cn = ConfigurationManager.ConnectionStrings[key];
+            var cn = Alma.Common.Config.ConnectionStrings[key];
             if (cn == null)
-                throw new ConfigurationErrorsException("Cannot find connection string: " + key);
+                throw new System.Configuration.ConfigurationErrorsException("Cannot find connection string: " + key);
             if (cn.ProviderName.ToLower().Contains("sqlclient"))
                 return DBMS.MsSql;
             else if (cn.ProviderName.ToLower().Contains("oracle"))
@@ -108,7 +107,7 @@ namespace Alma.DataAccess
                 bool valor = true;
                 try
                 {
-                    var opt = ConfigurationManager.AppSettings[cfgExecuteMigrations];
+                    var opt = Alma.Common.Config.AppSettings[cfgExecuteMigrations];
                     if (!string.IsNullOrWhiteSpace(opt))
                         valor = Convert.ToBoolean(opt);
                 }
@@ -129,7 +128,7 @@ namespace Alma.DataAccess
                 bool valor = false;
                 try
                 {
-                    var opt = ConfigurationManager.AppSettings[cfgPrepareCommands];
+                    var opt = Alma.Common.Config.AppSettings[cfgPrepareCommands];
                     if (!string.IsNullOrWhiteSpace(opt))
                         valor = Convert.ToBoolean(opt);
                 }
@@ -147,7 +146,7 @@ namespace Alma.DataAccess
         public static bool IsManagedOracle(string key)
         {
             return DetectDBMS(key) == DBMS.Oracle &&
-                ConfigurationManager.ConnectionStrings[key].ProviderName.ToLower().Contains("managed");
+                Alma.Common.Config.ConnectionStrings[key].ProviderName.ToLower().Contains("managed");
 
         }
 
@@ -166,7 +165,7 @@ namespace Alma.DataAccess
                 bool valor = true;
                 try
                 {
-                    var opt = ConfigurationManager.AppSettings[cfgLazy];
+                    var opt = Alma.Common.Config.AppSettings[cfgLazy];
                     if (!string.IsNullOrWhiteSpace(opt))
                         valor = Convert.ToBoolean(opt);
                 }
@@ -187,11 +186,11 @@ namespace Alma.DataAccess
                 IsolationLevel? valor = null;
                 try
                 {
-                    var opt = ConfigurationManager.AppSettings[cfgIsolationLevel];
+                    var opt = Alma.Common.Config.AppSettings[cfgIsolationLevel];
                     if (!string.IsNullOrWhiteSpace(opt))
                         valor = (IsolationLevel)Enum.Parse(typeof(IsolationLevel), opt);
                 }
-                catch { throw new ConfigurationErrorsException($"Invalid value for {cfgIsolationLevel}"); }
+                catch { throw new System.Configuration.ConfigurationErrorsException($"Invalid value for {cfgIsolationLevel}"); }
                 Trace.WriteLine(valor, nameof(IsolationLevel));
                 return valor;
             }
@@ -207,7 +206,7 @@ namespace Alma.DataAccess
                 bool valor = false;
                 try
                 {
-                    var opt = ConfigurationManager.AppSettings[cfgLog];
+                    var opt = Alma.Common.Config.AppSettings[cfgLog];
                     if (!string.IsNullOrWhiteSpace(opt))
                         valor = Convert.ToBoolean(opt);
                 }
@@ -224,7 +223,7 @@ namespace Alma.DataAccess
                 bool valor = false;
                 try
                 {
-                    var opt = ConfigurationManager.AppSettings[cfgMiniProfiler];
+                    var opt = Alma.Common.Config.AppSettings[cfgMiniProfiler];
                     if (!string.IsNullOrWhiteSpace(opt))
                         valor = Convert.ToBoolean(opt);
                 }
