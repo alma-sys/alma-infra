@@ -1,4 +1,5 @@
-﻿using NHibernate;
+﻿using Alma.Common;
+using NHibernate;
 using NHibernate.Proxy;
 using System;
 using System.Collections;
@@ -458,7 +459,7 @@ namespace Alma.DataAccess.OrmNHibernate
             var session = GetSession();
             if (session.Connection != null && session.Connection.State == ConnectionState.Open)
             {
-                var dmbs = Config.DetectDBMS(Config.ResolveConnectionName(typeof(TEntity)));
+                var dmbs = Alma.Common.Config.Settings.GetConnectionString(typeof(TEntity)).Provider;
 
                 var pmark = ":";
                 var queryFormat = "";

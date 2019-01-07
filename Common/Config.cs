@@ -1,7 +1,8 @@
-﻿using Microsoft.Extensions.DependencyModel;
+﻿using Autofac;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyModel;
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Linq;
 using System.Reflection;
 
@@ -9,12 +10,6 @@ namespace Alma.Common
 {
     public static class Config
     {
-#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
-        public const string cfgRoot = "alma:";
-        public const string cfgAssemblies = cfgRoot + "assemblies";
-        public const string cfgConnection = cfgRoot + "connection";
-#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
-
         private const string commonAssembly = "Alma.Common";
         private const string dataAssembly = "Alma.DataAccess";
 
@@ -22,55 +17,38 @@ namespace Alma.Common
         {
             var assemblies = new List<string>();
             var connections = new List<string>();
-            for (int i = 0; i <= 5; i++)
-            {
-                var ass = Config.AppSettings[cfgAssemblies + (i == 0 ? "" : i.ToString())];
-                var cnn = Config.AppSettings[cfgConnection + (i == 0 ? "" : i.ToString())];
-                if (string.IsNullOrWhiteSpace(ass) || string.IsNullOrWhiteSpace(cnn))
-                    continue;
-                assemblies.Add(ass);
-                connections.Add(cnn);
-            }
 
-            var exMessage = $"Missing or invalid {cfgAssemblies} App Setting. Check your .config file. Valid values: semi-colon (;) separated assembly names that contains entities and mapping.";
-            exMessage += $"Each {cfgAssemblies} must have a corresponding {cfgConnection}. Eg.: <add name=\"{cfgAssemblies}2\">, <add name=\"{cfgConnection}2\">";
-            if (assemblies.Count == 0)
-                throw new System.Configuration.ConfigurationErrorsException(exMessage);
 
             var dict = new Dictionary<string, Assembly[]>();
-
-            for (var i = 0; i < connections.Count; i++)
+            foreach (var cnn in Settings.ConnectionStrings)
             {
-                var ass = assemblies[i];
-
-                foreach (var basicAssembly in new[] { commonAssembly, dataAssembly })
-                {
-                    if (!ass.Contains($"{basicAssembly};")) // Injecting basic assemblies. 
-                        ass += $";{basicAssembly};";
-                }
-                //TODO: Find a way to automatically inject ORM assembly.
-
                 var list = new List<Assembly>();
-                foreach (var a in ass.Split(';'))
+                var stringList = new List<string>(cnn.Assemblies);
+
+                foreach (var basicAssembly in new[] { commonAssembly, dataAssembly, $"{dataAssembly}.Orm{cnn.Provider.ToString()}" })
                 {
-                    if (!string.IsNullOrWhiteSpace(a))
+                    if (!stringList.Contains($"{basicAssembly}")) // Injecting basic assemblies. 
+                        stringList.Add(basicAssembly);
+                }
+
+                foreach (var a in stringList)
+                {
+                    try
                     {
-                        try
-                        {
-                            var assembly = Assembly.Load(new AssemblyName(a.Trim()));
-                            list.Add(assembly);
-                        }
-                        catch (Exception ex)
-                        {
-                            throw new System.Configuration.ConfigurationErrorsException(exMessage + " Could not load '" + a + "'.", ex);
-                        }
+                        var assembly = Assembly.Load(new AssemblyName(a.Trim()));
+                        list.Add(assembly);
+                    }
+                    catch (Exception ex)
+                    {
+                        var exMessage = $"Missing or invalid {nameof(cnn.Assemblies)} App Setting. Check your appsettings.json file. Valid values: array of assembly names that contains entities and mapping.";
+
+                        throw new System.Configuration.ConfigurationErrorsException(exMessage + " Could not load '" + a + "'.", ex);
                     }
                 }
-                dict.Add(connections[i], list.ToArray());
+                dict.Add(cnn.Name, list.ToArray());
             }
 
             return dict;
-
         }
 
 
@@ -111,21 +89,49 @@ namespace Alma.Common
         }
 
 
-        public static NameValueCollection AppSettings
+        /// <summary>
+        /// Must be called by the Startup class of an ASPNET application.
+        /// </summary>
+        /// <param name="settings"></param>
+        /// <param name="builder"></param>
+        /// <param name="dataAccessModule"></param>
+        public static void Boot(IConfiguration configuration, ContainerBuilder builder)
         {
-            get
-            {
-                return System.Configuration.ConfigurationManager.AppSettings;
-            }
+            if (configuration == null)
+                throw new ArgumentNullException(nameof(configuration));
+            if (builder == null)
+                throw new ArgumentNullException(nameof(builder));
+
+            Settings = configuration.GetSection("Alma").Get<Settings>();
+            Settings.Validate();
+            builder.RegisterInstance<Settings>(Settings).AsSelf();
+
+
+            builder.RegisterAssemblyModules(MappedAssemblies.SelectMany(x => x.Value).ToArray());
+
         }
 
-        public static System.Configuration.ConnectionStringSettingsCollection ConnectionStrings
+
+        public static Settings Settings { get; private set; }
+
+
+        /// <summary>
+        /// Resolve the connection name by assembly type.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public static string ResolveConnectionName(Type type)
         {
-            get
+            var assemblies = Alma.Common.Config.MappedAssemblies;
+            var assembly = type.Assembly;
+            foreach (var key in assemblies.Keys)
             {
-                return System.Configuration.ConfigurationManager.ConnectionStrings;
+                if (assemblies[key].Contains(assembly))
+                    return key;
             }
+            return null;
         }
+
     }
 
 }

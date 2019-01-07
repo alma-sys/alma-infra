@@ -18,7 +18,7 @@ namespace Alma.DataAccess.MongoMapping
             SetupLog();
 
 
-            var assemblies = Config.MappedAssemblies;
+            var assemblies = Alma.Common.Config.MappedAssemblies;
             var mappingType = typeof(ClassMapping<>);
 
             if (assemblies.Keys.Count > 1)
@@ -38,7 +38,7 @@ namespace Alma.DataAccess.MongoMapping
                          .WithParameter(new Autofac.Core.ResolvedParameter(
                              (pi, c) => pi.ParameterType == typeof(IMongoDatabase),
                              (pi, c) => c.ResolveNamed<IMongoDatabase>(
-                                 Config.ResolveConnectionName(pi.Member.DeclaringType.GetGenericArguments()[0]))))
+                                 Alma.Common.Config.ResolveConnectionName(pi.Member.DeclaringType.GetGenericArguments()[0]))))
                          .InstancePerLifetimeScope();
 
 
@@ -103,7 +103,7 @@ namespace Alma.DataAccess.MongoMapping
 
         private static void SetupLinq()
         {
-            if (Config.ORM == ORM.MongoMapping)
+            if (Alma.Common.Config.Settings.ORM == Common.ORM.MongoMapping)
             {
                 //LinqExtensions.Current = new MongoLinqExtensions();
 
@@ -112,7 +112,7 @@ namespace Alma.DataAccess.MongoMapping
 
         private static void SetupLog()
         {
-            if (Config.EnableLog)
+            if (Alma.Common.Config.Settings.Logging.Enable)
             {
 
             }
@@ -120,7 +120,7 @@ namespace Alma.DataAccess.MongoMapping
 
         private static IMongoClient GetClient(string connectionKey)
         {
-            var connectionString = Alma.Common.Config.ConnectionStrings[connectionKey];
+            var connectionString = Alma.Common.Config.Settings.GetConnectionString(connectionKey);
             if (connectionString == null || string.IsNullOrWhiteSpace(connectionString.ConnectionString))
                 throw new System.Configuration.ConfigurationErrorsException($"Cannot find connection string setting for {connectionKey}");
 
@@ -140,7 +140,7 @@ namespace Alma.DataAccess.MongoMapping
 
         private static string GetConnectionString(string connectionKey)
         {
-            var connectionString = Alma.Common.Config.ConnectionStrings[connectionKey];
+            var connectionString = Alma.Common.Config.Settings.GetConnectionString(connectionKey);
             if (connectionString == null || string.IsNullOrWhiteSpace(connectionString.ConnectionString))
                 throw new System.Configuration.ConfigurationErrorsException($"Cannot find connection string setting for {connectionKey}");
             return connectionString.ConnectionString;

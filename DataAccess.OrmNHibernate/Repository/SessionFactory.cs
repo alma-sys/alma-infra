@@ -1,4 +1,5 @@
-﻿using Alma.DataAccess.OrmNHibernate.Events;
+﻿using Alma.Common;
+using Alma.DataAccess.OrmNHibernate.Events;
 using NHibernate;
 using NHibernate.AdoNet;
 using NHibernate.Cfg;
@@ -29,7 +30,9 @@ namespace Alma.DataAccess.OrmNHibernate
         public static ISessionFactory GetSessionFactory(string connectionKey, params Assembly[] assemblies)
         {
             var cfg = new NHibernate.Cfg.Configuration();
-            switch (Config.DetectDBMS(connectionKey))
+            var sett = Alma.Common.Config.Settings;
+            var conn = sett.GetConnectionString(connectionKey);
+            switch (conn.Provider)
             {
                 case DBMS.MsSql:
 
@@ -41,12 +44,12 @@ namespace Alma.DataAccess.OrmNHibernate
                         db.Driver<NHibernate.Driver.SqlClientDriver>();
                         db.ConnectionStringName = connectionKey;
                         db.ConnectionProvider<ConnectionProvider>();
-                        db.PrepareCommands = Config.PrepareCommands;
+                        db.PrepareCommands = sett.PrepareCommands;
 
                         db.LogFormattedSql = true;
                         db.LogSqlInConsole = false;
-                        if (Config.IsolationLevel != null)
-                            db.IsolationLevel = Config.IsolationLevel.Value;
+                        if (sett.IsolationLevel != null)
+                            db.IsolationLevel = sett.IsolationLevel.Value;
                         //UseReflectionOptimizer
                     });
 
@@ -60,56 +63,34 @@ namespace Alma.DataAccess.OrmNHibernate
                         db.Driver<NHibernate.Driver.SQLite20Driver>();
                         db.ConnectionStringName = connectionKey;
                         db.ConnectionProvider<ConnectionProvider>();
-                        db.PrepareCommands = Config.PrepareCommands;
+                        db.PrepareCommands = sett.PrepareCommands;
                         db.LogFormattedSql = true;
                         db.LogSqlInConsole = false;
-                        if (Config.IsolationLevel != null)
-                            db.IsolationLevel = Config.IsolationLevel.Value;
+                        if (sett.IsolationLevel != null)
+                            db.IsolationLevel = sett.IsolationLevel.Value;
                         //UseReflectionOptimizer
                     });
                     break;
                 case DBMS.Oracle:
-                    if (Config.IsManagedOracle(connectionKey))
+                    cfg.DataBaseIntegration(db =>
                     {
-
-                        cfg.DataBaseIntegration(db =>
-                        {
-                            db.ConnectionProvider<NHibernate.Connection.DriverConnectionProvider>();
-                            db.Dialect<NHibernate.Dialect.Oracle10gDialect>();
-                            //db.Driver<DriverOracleManaged>();
+                        db.ConnectionProvider<NHibernate.Connection.DriverConnectionProvider>();
+                        db.Dialect<NHibernate.Dialect.Oracle10gDialect>();
+                        if (true /* isManagedOracle */)
                             db.Driver<NHibernate.Driver.OracleManagedDataClientDriver>();
-                            db.ConnectionStringName = connectionKey;
-                            db.ConnectionProvider<ConnectionProvider>();
-                            db.PrepareCommands = Config.PrepareCommands;
-                            db.LogFormattedSql = true;
-                            db.LogSqlInConsole = false;
-                            if (Config.IsolationLevel != null)
-                                db.IsolationLevel = Config.IsolationLevel.Value;
-                            db.Batcher<OracleLoggingBatchingBatcherFactory>();
-                            //UseReflectionOptimizer
-                        });
-                    }
-                    else
-                    {
-                        cfg.DataBaseIntegration(db =>
-                        {
-                            db.ConnectionProvider<NHibernate.Connection.DriverConnectionProvider>();
-                            db.Dialect<NHibernate.Dialect.Oracle10gDialect>();
-                            //db.Driver<DriverOracle>();
+                        else
                             db.Driver<NHibernate.Driver.OracleDataClientDriver>();
-                            db.ConnectionStringName = connectionKey;
-                            db.ConnectionProvider<ConnectionProvider>();
-                            db.PrepareCommands = Config.PrepareCommands;
-                            db.LogFormattedSql = true;
-                            db.LogSqlInConsole = false;
-                            if (Config.IsolationLevel != null)
-                                db.IsolationLevel = Config.IsolationLevel.Value;
-                            //UseReflectionOptimizer
-                            db.Batcher<OracleLoggingBatchingBatcherFactory>();
-                        });
-                    }
+                        db.ConnectionStringName = connectionKey;
+                        db.ConnectionProvider<ConnectionProvider>();
+                        db.PrepareCommands = sett.PrepareCommands;
+                        db.LogFormattedSql = true;
+                        db.LogSqlInConsole = false;
+                        if (sett.IsolationLevel != null)
+                            db.IsolationLevel = sett.IsolationLevel.Value;
+                        db.Batcher<OracleLoggingBatchingBatcherFactory>();
+                        //UseReflectionOptimizer
+                    });
                     break;
-
                 case DBMS.MySql:
 
                     cfg.DataBaseIntegration(db =>
@@ -120,20 +101,20 @@ namespace Alma.DataAccess.OrmNHibernate
                         db.Driver<NHibernate.Driver.MySqlDataDriver>();
                         db.ConnectionStringName = connectionKey;
                         db.ConnectionProvider<ConnectionProvider>();
-                        db.PrepareCommands = Config.PrepareCommands;
+                        db.PrepareCommands = sett.PrepareCommands;
                         db.LogFormattedSql = true;
                         db.LogSqlInConsole = false;
-                        if (Config.IsolationLevel != null)
-                            db.IsolationLevel = Config.IsolationLevel.Value;
+                        if (sett.IsolationLevel != null)
+                            db.IsolationLevel = sett.IsolationLevel.Value;
                         //UseReflectionOptimizer
                     });
 
                     break;
                 default:
-                    throw new NotImplementedException("Not implemented provider: " + Config.DetectDBMS(connectionKey));
+                    throw new NotImplementedException("Not implemented provider: " + conn.Provider);
             }
 
-            if (Config.EnableLog)
+            if (sett.Logging.Enable)
             {
                 cfg.SessionFactory()
                     .GenerateStatistics();
@@ -156,7 +137,7 @@ namespace Alma.DataAccess.OrmNHibernate
             }
             catch (HibernateException ex)
             {
-                if (ex.Message.Contains("NHibernate.Driver") && (Config.DetectDBMS(connectionKey) == DBMS.Oracle))
+                if (ex.Message.Contains("NHibernate.Driver") && (conn.Provider == DBMS.Oracle))
                 {
                     throw new System.Configuration.ConfigurationErrorsException(
 @"Cannot find Oracle.DataAcces or Oracle.ManagedDataAccess binaries in GAC or working directory. 
@@ -249,7 +230,7 @@ Remove all installed versions and install the required version and try again.", 
 
         private static void AddFilters(Configuration cfg, IEnumerable<Type> types)
         {
-            var logger = Config.EnableLog ? (Action<string>)((string text) => Trace.WriteLine(text, nameof(AddFilters))) : null;
+            var logger = Alma.Common.Config.Settings.Logging.Enable ? (Action<string>)((string text) => Trace.WriteLine(text, nameof(AddFilters))) : null;
 
             var filters = types.Where(x => typeof(Mapper.GlobalFilterMapping).IsAssignableFrom(x)).ToArray();
             logger?.Invoke($"Registering {filters.Length} repository global filters.");
@@ -262,7 +243,7 @@ Remove all installed versions and install the required version and try again.", 
         }
         private static void AddEvents(Configuration cfg, IEnumerable<Type> types)
         {
-            var logger = Config.EnableLog ? (Action<string>)((string text) => Trace.WriteLine(text, nameof(AddEvents))) : null;
+            var logger = Alma.Common.Config.Settings.Logging.Enable ? (Action<string>)((string text) => Trace.WriteLine(text, nameof(AddEvents))) : null;
 
             logger?.Invoke($"Registering {nameof(SavedDataEventHandler)} for listeners.");
 
@@ -280,10 +261,10 @@ Remove all installed versions and install the required version and try again.", 
 
             var hbm = mapper.CompileMappingForAllExplicitlyAddedEntities();
             hbm.autoimport = true;
-            hbm.defaultlazy = Config.EnableLazyLoad;
+            hbm.defaultlazy = Alma.Common.Config.Settings.EnableLazyLoad;
 
             cfg.AddMapping(hbm);
-            if (Config.ExecuteMigrations)
+            if (Alma.Common.Config.Settings.ExecuteMigrations)
                 cfg.AddSchemaValidationAndMigration();
         }
 

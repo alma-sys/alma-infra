@@ -6,7 +6,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Linq;
 
 namespace Alma.ExampleProject.Api
 {
@@ -31,7 +30,7 @@ namespace Alma.ExampleProject.Api
             services.AddMvc().AddControllersAsServices();
             services.AddLogging();
 
-            this.ApplicationContainer = DependencyResolverConfig.SetDependencyResolver(services);
+            this.ApplicationContainer = DependencyResolverConfig.SetDependencyResolver(services, this.Configuration);
 
             // Create the IServiceProvider based on the container.
             return new AutofacServiceProvider(this.ApplicationContainer);
@@ -71,9 +70,9 @@ namespace Alma.ExampleProject.Api
 
         public static void ConfigureAuth(IApplicationBuilder app, IContainer container)
         {
-            var key = Alma.Common.Config.AppSettings["alma:jwtkey"];
-            var issuer = Alma.Common.Config.AppSettings["alma:jwtissuer"];
-            var audiences = Alma.Common.Config.AppSettings["alma:jwtaudiences"]?.Split(";".ToCharArray(), StringSplitOptions.RemoveEmptyEntries).Select(t => t.Trim()).ToArray();
+            //var key = Alma.Common.Config.AppSettings["alma:jwtkey"];
+            //var issuer = Alma.Common.Config.AppSettings["alma:jwtissuer"];
+            //var audiences = Alma.Common.Config.AppSettings["alma:jwtaudiences"]?.Split(";".ToCharArray(), StringSplitOptions.RemoveEmptyEntries).Select(t => t.Trim()).ToArray();
 
             //ConfigureBasicAuth(app, container);
 

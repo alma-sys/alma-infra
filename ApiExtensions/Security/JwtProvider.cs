@@ -20,7 +20,7 @@ namespace Alma.ApiExtensions.Security
 
         public JwtProvider()
         {
-            _securityKey = new SymmetricSecurityKey(Config.JwtKey);
+            _securityKey = new SymmetricSecurityKey(Alma.Common.Config.Settings.Jwt.GetKey());
             _signingCredentials = new SigningCredentials(_securityKey, SecurityAlgorithms.HmacSha256);
             _jwtHeader = new JwtHeader(_signingCredentials);
         }
@@ -30,31 +30,31 @@ namespace Alma.ApiExtensions.Security
             if (string.IsNullOrWhiteSpace(login))
                 throw new ArgumentNullException(nameof(login));
 
-            var expires = DateTime.UtcNow.AddMinutes(Config.JwtExpiryInMintures);
+            var expires = DateTime.UtcNow.AddMinutes(Alma.Common.Config.Settings.Jwt.ExpiryInMintures);
 
             var claims = new List<Claim>();
             if (!string.IsNullOrWhiteSpace(given_name))
-            claims.Add(new Claim(JwtRegisteredClaimNames.GivenName, given_name));
+                claims.Add(new Claim(JwtRegisteredClaimNames.GivenName, given_name));
             if (!string.IsNullOrWhiteSpace(family_name))
-            claims.Add(new Claim(JwtRegisteredClaimNames.FamilyName, family_name));
+                claims.Add(new Claim(JwtRegisteredClaimNames.FamilyName, family_name));
             claims.Add(new Claim(JwtRegisteredClaimNames.Sub, login));
             claims.Add(new Claim(JwtRegisteredClaimNames.UniqueName, login));
 
             if (!string.IsNullOrWhiteSpace(email))
-            claims.Add(new Claim(JwtRegisteredClaimNames.Email, email));
+                claims.Add(new Claim(JwtRegisteredClaimNames.Email, email));
 
             if (roles != null)
                 foreach (var r in roles)
                     if (!string.IsNullOrWhiteSpace(r))
-                    	claims.Add(new Claim("role", r));
+                        claims.Add(new Claim("role", r));
 
             if (additional_claims != null)
                 foreach (var r in additional_claims)
                     claims.Add(r);
 
             var token = new JwtSecurityToken(
-                issuer: Config.JwtIssuer,
-                audience: Config.JwtAudiences[0],
+                issuer: Alma.Common.Config.Settings.Jwt.Issuer,
+                audience: Alma.Common.Config.Settings.Jwt.Audiences[0],
                 claims: claims,
                 expires: expires,
                 signingCredentials: _signingCredentials);
@@ -105,19 +105,19 @@ namespace Alma.ApiExtensions.Security
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             }).AddJwtBearer(options =>
             {
-                options.RequireHttpsMetadata = Config.Https;
+                options.RequireHttpsMetadata = Alma.Common.Config.Settings.Https;
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = true,
-                    ValidIssuer = Config.JwtIssuer,
+                    ValidIssuer = Alma.Common.Config.Settings.Jwt.Issuer,
 
                     ValidateAudience = true,
-                    ValidAudiences = Config.JwtAudiences,
+                    ValidAudiences = Alma.Common.Config.Settings.Jwt.Audiences,
 
                     ValidateLifetime = true,
 
                     ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Config.JwtKey),
+                    IssuerSigningKey = new SymmetricSecurityKey(Alma.Common.Config.Settings.Jwt.GetKey()),
 
                     NameClaimType = ClaimTypes.Name,
                     RoleClaimType = ClaimTypes.Role,

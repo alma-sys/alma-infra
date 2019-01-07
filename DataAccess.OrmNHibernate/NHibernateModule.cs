@@ -17,7 +17,7 @@ namespace Alma.DataAccess.OrmNHibernate
             SetupLog();
 
 
-            var assemblies = Config.MappedAssemblies;
+            var assemblies = Alma.Common.Config.MappedAssemblies;
             if (assemblies.Keys.Count > 1)
             {
                 foreach (var key in assemblies.Keys)
@@ -37,7 +37,7 @@ namespace Alma.DataAccess.OrmNHibernate
                          .WithParameter(new Autofac.Core.ResolvedParameter(
                              (pi, c) => pi.ParameterType == typeof(ISession),
                              (pi, c) => c.ResolveNamed<ISession>(
-                                 Config.ResolveConnectionName(pi.Member.DeclaringType.GetGenericArguments()[0]))))
+                                 Alma.Common.Config.ResolveConnectionName(pi.Member.DeclaringType.GetGenericArguments()[0]))))
                          .InstancePerLifetimeScope();
                 }
             }
@@ -100,7 +100,7 @@ namespace Alma.DataAccess.OrmNHibernate
 
         private static void SetupLinq()
         {
-            if (Config.ORM == ORM.NHibernate)
+            if (Alma.Common.Config.Settings.ORM == Common.ORM.NHibernate)
             {
                 LinqExtensions.Current = new NhLinqExtensions();
 
@@ -109,7 +109,7 @@ namespace Alma.DataAccess.OrmNHibernate
 
         private static void SetupLog()
         {
-            if (Config.EnableLog)
+            if (Alma.Common.Config.Settings.Logging.Enable)
             {
                 var hierarchy = (log4net.Repository.Hierarchy.Hierarchy)log4net.LogManager.GetRepository(System.Reflection.Assembly.GetExecutingAssembly());
                 // Remove any other appenders
@@ -149,7 +149,7 @@ namespace Alma.DataAccess.OrmNHibernate
         private static IDbCommand GetCommand(ISession session)
         {
             var command = session.Connection.CreateCommand();
-            if (Config.EnableMiniProfiler && command != null && command.GetType() != typeof(ProfiledDbCommand) && MiniProfiler.Current != null)
+            if (Alma.Common.Config.Settings.EnableProfiling && command != null && command.GetType() != typeof(ProfiledDbCommand) && MiniProfiler.Current != null)
                 command = new ProfiledDbCommand(command, command.Connection, MiniProfiler.Current);
 
             return command;

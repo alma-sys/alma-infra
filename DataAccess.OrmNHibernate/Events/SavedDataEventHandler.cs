@@ -73,7 +73,7 @@ namespace Alma.DataAccess.OrmNHibernate.Events
             var handlers = Container.Resolve(inumerable) as IEnumerable;
             foreach (var item in handlers)
             {
-                if (Config.EnableLog)
+                if (Alma.Common.Config.Settings.Logging.Enable)
                     Trace.WriteLine($"Executing handler {item} to {interfaceType.Name}...", nameof(SavedDataEventHandler));
                 handle.Invoke(item, new object[] { entity }); //devo tratar exceptions?
             }

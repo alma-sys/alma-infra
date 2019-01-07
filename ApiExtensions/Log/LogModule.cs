@@ -143,7 +143,7 @@ namespace Alma.ApiExtensions.Log
                 totalEmailSent = 0;
             }
             totalEmailSent++;
-            var totalEmails = ApiExtensions.Config.MaxLogEmailsPerDay;
+            var totalEmails = Alma.Common.Config.Settings.Logging.MaxEmailsPerDay;
 
             if (totalEmailSent <= totalEmails)
             {
@@ -153,7 +153,7 @@ namespace Alma.ApiExtensions.Log
                     try
                     {
                         var mail = new MailMessage();
-                        foreach (var email in ApiExtensions.Config.LogEmailDestinations)
+                        foreach (var email in Alma.Common.Config.Settings.Logging.MailDestinations)
                             mail.To.Add(email);
                         mail.IsBodyHtml = content.Contains("<body");
                         mail.Body = content;
@@ -162,11 +162,11 @@ namespace Alma.ApiExtensions.Log
                         var smtp = new SmtpClient();
 
 #if NETSTANDARD
-                        smtp.Host = SmtpHost;
-                        smtp.Port = SmtpPort;
-                        smtp.EnableSsl = SmtpSsl;
+                        smtp.Host = Alma.Common.Config.Settings.Smtp.Host;
+                        smtp.Port = Alma.Common.Config.Settings.Smtp.Port;
+                        smtp.EnableSsl = Alma.Common.Config.Settings.Smtp.Ssl;
                         smtp.UseDefaultCredentials = false;
-                        smtp.Credentials = new NetworkCredential(SmtpUserName, SmtpPassword);
+                        smtp.Credentials = new NetworkCredential(Alma.Common.Config.Settings.Smtp.UserName, Alma.Common.Config.Settings.Smtp.Password);
 #endif
 
                         smtp.Send(mail);
@@ -224,10 +224,5 @@ namespace Alma.ApiExtensions.Log
         }
 
 
-        private static string SmtpHost => Alma.Common.Config.AppSettings[Common.Config.cfgRoot + "smtp"];
-        private static int SmtpPort => Convert.ToInt32(Alma.Common.Config.AppSettings[Common.Config.cfgRoot + "smtp:port"]);
-        private static bool SmtpSsl => Convert.ToBoolean(Alma.Common.Config.AppSettings[Common.Config.cfgRoot + "smtp:ssl"]);
-        private static string SmtpUserName => Alma.Common.Config.AppSettings[Common.Config.cfgRoot + "smtp:userName"];
-        private static string SmtpPassword => Alma.Common.Config.AppSettings[Common.Config.cfgRoot + "smtp:password"];
     }
 }

@@ -12,7 +12,7 @@ namespace Alma.DataAccess.OrmEntityFramework
             SetupLog();
 
 
-            var assemblies = Config.MappedAssemblies;
+            var assemblies = Alma.Common.Config.MappedAssemblies;
             if (assemblies.Keys.Count > 1)
             {
                 foreach (var key in assemblies.Keys)
@@ -28,7 +28,7 @@ namespace Alma.DataAccess.OrmEntityFramework
                          .WithParameter(parameter: new Autofac.Core.ResolvedParameter(
                              (pi, c) => pi.ParameterType == typeof(EFDbContext),
                              (pi, c) => c.ResolveNamed<EFDbContext>(
-                                 Config.ResolveConnectionName(pi.Member.DeclaringType.GetGenericArguments()[0]))))
+                                 Alma.Common.Config.ResolveConnectionName(pi.Member.DeclaringType.GetGenericArguments()[0]))))
                                  .InstancePerRequest();
                 }
             }
@@ -47,7 +47,7 @@ namespace Alma.DataAccess.OrmEntityFramework
 
         private static void SetupLinq()
         {
-            if (Config.ORM == ORM.EntityFramework)
+            if (Alma.Common.Config.Settings.ORM == Common.ORM.EntityFramework)
             {
                 LinqExtensions.Current = new EfLinqExtensions();
             }

@@ -1,23 +1,19 @@
 ﻿using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System.Linq;
 
 namespace Alma.ExampleProject.Api
 {
     internal class DependencyResolverConfig
     {
-        public static Autofac.IContainer SetDependencyResolver(IServiceCollection services)
+        public static Autofac.IContainer SetDependencyResolver(IServiceCollection services, IConfiguration configuration)
         {
             var builder = new ContainerBuilder();
 
             builder.Populate(services);
 
-            var assembly = typeof(DependencyResolverConfig).Assembly;
-
-            builder.RegisterAssemblyModules(Alma.Common.Config.MappedAssemblies.SelectMany(x => x.Value).ToArray());
-
-            builder.RegisterModule<Alma.DataAccess.MongoMapping.MongoModule>();
+            Alma.Common.Config.Boot(configuration, builder);
 
 
             var container = builder.Build();

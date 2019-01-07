@@ -3,13 +3,13 @@ using System;
 using System.IO;
 using System.Threading;
 
-namespace Alma.ApiExtensions.Arquivo
+namespace Alma.ApiExtensions.File
 {
-    public class GerenciadorDeUploads
+    public class UploadManager
     {
-        static GerenciadorDeUploads()
+        static UploadManager()
         {
-            PathUploads = Path.Combine(System.IO.Path.GetTempPath(), Config.cfgUploads);
+            PathUploads = Path.Combine(System.IO.Path.GetTempPath(), $"{Guid.NewGuid().ToString().Substring(0, 5)}-Uploads");
             try
             {
                 if (!Directory.Exists(PathUploads))
@@ -24,19 +24,19 @@ namespace Alma.ApiExtensions.Arquivo
                     Directory.CreateDirectory(PathUploads);
                 }
 
-                lockLimpeza = new object();
-                Limpeza();
+                lockCleaning = new object();
+                DoClean();
             }
             catch (Exception e)
             {
-                throw new ApplicationException($"Erro ao inicializar o gerenciador de uploads, verifique permissões da pasta {PathUploads}", e);
+                throw new ApplicationException($"Error during upload manager initialization, please check permissions for '{PathUploads}'.", e);
             }
         }
 
 
 
-        public static String PathUploads { get; protected set; }
-        private static String PathSession
+        public static string PathUploads { get; protected set; }
+        private static string PathSession
         {
             get
             {
@@ -54,85 +54,85 @@ namespace Alma.ApiExtensions.Arquivo
                 return pathSession;
             }
         }
-        private static Object lockLimpeza;
-        private static DateTime ultimaLimpeza;
+        private static object lockCleaning;
+        private static DateTime lastCleaning;
 
-        static void Limpeza()
+        static void DoClean()
         {
-            if (Monitor.TryEnter(lockLimpeza, 10))
+            if (Monitor.TryEnter(lockCleaning, 10))
             {
-                if (ultimaLimpeza < DateTime.Now.AddMinutes(-10))
+                if (lastCleaning < DateTime.Now.AddMinutes(-10))
                 {
-                    var pastas = Directory.GetDirectories(PathUploads);
-                    foreach (var pasta in pastas)
+                    var folders = Directory.GetDirectories(PathUploads);
+                    foreach (var folder in folders)
                     {
-                        var arquivos = Directory.GetFiles(pasta);
-                        foreach (var arquivo in arquivos)
+                        var files = Directory.GetFiles(folder);
+                        foreach (var file in files)
                         {
-                            var fi = new FileInfo(arquivo);
+                            var fi = new FileInfo(file);
                             if (fi.CreationTime < DateTime.Now.AddMinutes(-30))
                             {
-                                File.Delete(arquivo);
+                                System.IO.File.Delete(file);
                             }
                         }
-                        if (Directory.GetFiles(pasta).Length == 0)
+                        if (Directory.GetFiles(folder).Length == 0)
                         {
-                            Directory.Delete(pasta);
+                            Directory.Delete(folder);
                         }
                     }
-                    ultimaLimpeza = DateTime.Now;
+                    lastCleaning = DateTime.Now;
                 }
-                Monitor.Exit(lockLimpeza);
+                Monitor.Exit(lockCleaning);
             }
         }
 
-        public static String Salvar(String nome, Byte[] arquivo)
+        public static string Save(String nome, Byte[] arquivo)
         {
-            return SalvarInterno(nome, arquivo);
+            return SaveImpl(nome, arquivo);
         }
 
-        public static FileInfo Arquivo(string key)
+        public static FileInfo File(string key)
         {
-            if (!String.IsNullOrWhiteSpace(key))
+            if (!string.IsNullOrWhiteSpace(key))
             {
-                String path = Path.Combine(PathSession, key);
-                if (File.Exists(path))
+                string path = Path.Combine(PathSession, key);
+                if (System.IO.File.Exists(path))
                 {
                     return new FileInfo(path);
                 }
             }
 
-            // Não achou nada
+            // Didn't find any
             return null;
         }
 
-        public static String Renomear(String arquivo, string nome = null)
+        public static string Rename(String arquivo, string nome = null)
         {
             var fi = new FileInfo(arquivo);
 
             nome = String.IsNullOrWhiteSpace(nome) ? fi.Name : nome;
 
-            string key = GerarKey(nome);
+            string key = GenerateKey(nome);
 
-            File.Move(arquivo, Path.Combine(PathUploads, key));
+            System.IO.File.Move(arquivo, Path.Combine(PathUploads, key));
 
             return key;
         }
 
-        private static String SalvarInterno(String nome, Byte[] arquivo)
+        private static String SaveImpl(String nome, Byte[] arquivo)
         {
-            string key = GerarKey(nome);
+            string key = GenerateKey(nome);
 
             var path = Path.Combine(PathSession, key);
-            File.WriteAllBytes(path, arquivo);
+            System.IO.File.WriteAllBytes(path, arquivo);
 
-            // Talvez fazer um timer
-            Limpeza();
+            // TODO: Check if a timer is needed
+            DoClean();
 
             return key;
         }
 
-        private static string GerarKey(string nome)
+        private static string GenerateKey(string nome)
         {
             return String.Format("{0}_@_{1}", Guid.NewGuid().ToString().Replace("-", "").Substring(0, 15).ToUpper(), nome);
         }
@@ -142,15 +142,15 @@ namespace Alma.ApiExtensions.Arquivo
             if (!String.IsNullOrWhiteSpace(key))
             {
                 String path = Path.Combine(PathSession, key);
-                if (File.Exists(path))
+                if (System.IO.File.Exists(path))
                 {
-                    return File.ReadAllBytes(path);
+                    return System.IO.File.ReadAllBytes(path);
                 }
             }
 
-            // Não achou nada
+            // Didn't find any
             return null;
-            //throw new FileNotFoundException("Arquivo temporário não encontrado");
+            //throw new FileNotFoundException("Cannot find temporary file.");
         }
     }
 }
