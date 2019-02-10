@@ -1,0 +1,43 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>Alma.DataAccess.OrmNHibernate</AssemblyName>
+    <RootNamespace>Alma.DataAccess.OrmNHibernate</RootNamespace>
+    <PackageId>Alma.DataAccess.OrmNHibernate</PackageId>
+
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+    <DisableImplicitAssetTargetFallback>true</DisableImplicitAssetTargetFallback>
+    <IsTestProject>false</IsTestProject>
+
+
+    <Description>Implements the data access layer for NHibernate ORM.</Description>
+    <Authors>$(Authors)</Authors>
+    <Company>$(Company)</Company>
+    <Product>$(Product)</Product>
+    <Copyright>$(Copyright)</Copyright>
+    <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+    <PackageProjectUrl>$(PROJECT_URL)</PackageProjectUrl>
+    <PackageIconUrl>$(ICON_URL)</PackageIconUrl>
+    <Configuration>$(Configuration)</Configuration>
+    <RepositoryUrl>$(REPOSITORY_URL)</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <None Include="..\LICENSE.md" Pack="true" PackagePath="$(PackageLicenseFile)"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="log4net" Version="2.0.8" />
+    <PackageReference Include="MiniProfiler.Shared" Version="4.0.119" />
+    <PackageReference Include="NHibernate" Version="5.1.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj" />
+    <ProjectReference Include="..\DataAccess\DataAccess.csproj" />
+    <ProjectReference Include="..\Domain\Domain.csproj" />
+  </ItemGroup>
+</Project>

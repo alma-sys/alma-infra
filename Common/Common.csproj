@@ -1,0 +1,43 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>Alma.Common</AssemblyName>
+    <RootNamespace>Alma.Common</RootNamespace>
+    <PackageId>Alma.Common</PackageId>
+    
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+    <DisableImplicitAssetTargetFallback>true</DisableImplicitAssetTargetFallback>
+    
+    <Description>Implements common classes for our modular applications.</Description>
+    <Authors>$(Authors)</Authors>
+    <Company>$(Company)</Company>
+    <Product>$(Product)</Product>
+    <Copyright>$(Copyright)</Copyright>
+    <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+    <PackageProjectUrl>$(PROJECT_URL)</PackageProjectUrl>
+    <PackageIconUrl>$(ICON_URL)</PackageIconUrl>
+    <Configuration>$(Configuration)</Configuration>
+    <RepositoryUrl>$(REPOSITORY_URL)</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    
+    <IsTestProject>false</IsTestProject>
+    
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <None Include="..\LICENSE.md" Pack="true" PackagePath="$(PackageLicenseFile)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Autofac" Version="4.8.1" />
+    <PackageReference Include="AutoMapper" Version="7.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="2.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="2.0.1" />
+    <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="2.1.0" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.4.1" />
+    <PackageReference Include="System.Globalization.Extensions" Version="4.3.0" />
+    <PackageReference Include="System.Linq.Parallel" Version="4.3.0" />
+  </ItemGroup>
+</Project>

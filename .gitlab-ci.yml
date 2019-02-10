@@ -1,5 +1,5 @@
 variables:
-  SOLUTION: "Alma.Infra.sln"
+  SOLUTION: "alma-Infrastructure.sln"
   CONFIGURATION: "Release"
 
   MSBUILD: "15.0"
@@ -16,24 +16,32 @@ variables:
   NUGETREPOSITORY: "https://dev.almasistemas.com.br/nuget/alma"
 
   AUTHORS: "Marcos Junior and Alex Duraes"
-  COMPANY: "Alma Sistemas"
-  PRODUCT: "Alma Infrastructure"
-  COPYRIGHT: "Copyright (c) Alma Sistemas"
-  URL: "dev.almasistemas.com.br"
-  URLICON: "dev.almasistemas.com.br/gitlab/uploads/appearance/header_logo/1/ghost-icon.png"
+  COMPANY: "Marcos Junior and Alex Duraes"
+  PRODUCT: "Common Infrastructure"
+  COPYRIGHT: "Copyright (c) Marcos Junior and Alex Duraes"
+  ICON_URL: "https://avatars2.githubusercontent.com/u/46223903?s=200&v=4"
+  PROJECT_URL: "https://github.com/alma-sys"
+  REPOSITORY_URL: "https://github.com/alma-sys/alma-infra"
 
 cache:
-    key: "$CI_PROJECT_PATH_$CI_BUILD_REF_NAME"
+    key: "${CI_PROJECT_PATH}_${CI_BUILD_REF_NAME}_${CI_PIPELINE_ID}"
     paths:
         - "packages"
         - "*/obj"
         - "*/*/obj"
         - "*/*/*/obj"
         - "*/*/*/*/obj"
+        - "*/bin"
+        - "*/*/bin"
+        - "*/*/*/bin"
+        - "*/*/*/*/bin"
 
 before_script:
-  - export PACKVERSION=3.`date -u +%y.%m%d.%H%M`;echo $PACKVERSION
-  - msbuild "$SOLUTION" -t:restore -tv:$MSBUILD -verbosity:$VERBOSITY -p:Configuration=$CONFIGURATION -p:VisualStudioVersion=$VISUALSTUDIO -p:GeneratePackageOnBuild=false
+  - export PACKVERSION=3.`date -u +%y.%m%d.%H%M`;
+  - if [[ $CI_COMMIT_REF_SLUG == *"beta"* ]]; then 
+  -     export VERSIONINFO="-beta"; 
+  - fi
+  - echo "Version=$PACKVERSION$VERSIONINFO";
 
 stages:
   - build
@@ -45,55 +53,60 @@ Build:
   variables:
     BUILDACTION: "Clean,Build"
   script:
-    - msbuild "$SOLUTION" -t:$BUILDACTION -tv:$MSBUILD -verbosity:$VERBOSITY -p:Configuration=$CONFIGURATION -p:VisualStudioVersion=$VISUALSTUDIO -p:GeneratePackageOnBuild=false
+    - nuget restore
+    - msbuild "$SOLUTION" -t:$BUILDACTION -tv:$MSBUILD -verbosity:$VERBOSITY -p:Configuration=$CONFIGURATION -p:VisualStudioVersion=$VISUALSTUDIO -p:Version=$PACKVERSION$VERSIONINFO -p:AssemblyVersion=$PACKVERSION -property:Authors="$AUTHORS" -property:Company="$COMPANY" -property:Product="$PRODUCT" -property:Copyright="$COPYRIGHT" -property:PROJECT_URL="$PROJECT_URL" -property:ICON_URL="$ICON_URL" -property:GeneratePackageOnBuild=true
   tags:
     - windows
+  only:
+    - branches
+    - merge_requests
 
 Test:
   stage: test
   variables:
+    GIT_STRATEGY: none
     BUILDACTION: "Clean,Build"
   script:
-    - msbuild "$SOLUTION" -t:$BUILDACTION -tv:$MSBUILD -verbosity:$VERBOSITY -p:Configuration=$CONFIGURATION -p:VisualStudioVersion=$VISUALSTUDIO -p:GeneratePackageOnBuild=false
     - gitlab-mstest.sh
   tags:
     - windows
+  only:
+    - branches
+    - merge_requests
   artifacts:
     when: always
     paths: 
       - TestResults/*.trx
       - TestResults/*.html
+# Disabled to set push using circleci. 
 
-ProGet:
-  stage: deploy
-  environment: Producao
-  variables:
-    BUILDACTION: "Clean,Restore,Build"
-    VERSIONINFO: ""
-  script:
-    - msbuild "$SOLUTION" -t:$BUILDACTION -tv:$MSBUILD -verbosity:$VERBOSITY -p:Configuration=$CONFIGURATION -p:VisualStudioVersion=$VISUALSTUDIO -p:Version=$PACKVERSION$VERSIONINFO -p:AssemblyVersion=$PACKVERSION -property:Authors="$AUTHORS" -property:Company="$COMPANY" -property:Product="$PRODUCT" -property:Copyright="$COPYRIGHT" -property:URL="$URL" -property:URLICON="$URLICON" -property:GeneratePackageOnBuild=true
-    - shopt -s globstar
-    - for i in **/bin/$CONFIGURATION/**/*.nupkg; do # Whitespace-safe and recursive
-    -     nuget push -ApiKey $NUGETAPIKEY -Source $NUGETREPOSITORY "$i"
-    - done
-  only:
-    - master
-  tags:
-    - windows
-
-ProGet:
-  stage: deploy
-  environment: Beta
-  variables:
-    BUILDACTION: "Clean,Restore,Build"
-    VERSIONINFO: "-beta"
-  script:
-    - msbuild "$SOLUTION" -t:$BUILDACTION -tv:$MSBUILD -verbosity:$VERBOSITY -p:Configuration=$CONFIGURATION -p:VisualStudioVersion=$VISUALSTUDIO -p:Version=$PACKVERSION$VERSIONINFO -p:AssemblyVersion=$PACKVERSION -property:Authors="$AUTHORS" -property:Company="$COMPANY" -property:Product="$PRODUCT" -property:Copyright="$COPYRIGHT" -property:URL=$URL -property:URLICON="$URLICON" -property:GeneratePackageOnBuild=true
-    - shopt -s globstar
-    - for i in **/bin/$CONFIGURATION/**/*.nupkg; do # Whitespace-safe and recursive
-    -     nuget push -ApiKey $NUGETAPIKEY -Source $NUGETREPOSITORY "$i"
-    - done
-  only:
-    - beta
-  tags:
-    - windows
+#Deploy:
+#  stage: deploy
+#  environment: PRODUCTION
+#  variables:
+#    GIT_STRATEGY: none
+#  script:
+#    - pwd
+#    - shopt -s globstar && for i in **/bin/$CONFIGURATION/**/*.nupkg; do # Whitespace-safe and recursive
+#    -     nuget push -ApiKey $NUGETAPIKEY -Source $NUGETREPOSITORY "$i"
+#    - done
+#  only:
+#    - master
+#  tags:
+#    - windows
+#
+#Deploy:
+#  stage: deploy
+#  environment: BETA
+#  variables:
+#    GIT_STRATEGY: none
+#  script:
+#    - pwd
+#    - shopt -s globstar && for i in **/bin/$CONFIGURATION/**/*.nupkg; do # Whitespace-safe and recursive
+#    -     nuget push -ApiKey $NUGETAPIKEY -Source $NUGETREPOSITORY "$i"
+#    - done
+#  only:
+#    - /^release\/.*beta.*/
+#  tags:
+#    - windows
+#

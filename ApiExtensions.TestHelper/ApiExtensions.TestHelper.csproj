@@ -1,0 +1,45 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>Alma.ApiExtensions.TestHelper</AssemblyName>
+    <RootNamespace>Alma.ApiExtensions.TestHelper</RootNamespace>
+    <PackageId>Alma.ApiExtensions.TestHelper</PackageId>
+
+    <IsPackable>true</IsPackable>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+    <DisableImplicitAssetTargetFallback>true</DisableImplicitAssetTargetFallback>
+
+    
+    <Description>Implements tools to help in unit and BDD tests.</Description>
+    <Authors>$(Authors)</Authors>
+    <Company>$(Company)</Company>
+    <Product>$(Product)</Product>
+    <Copyright>$(Copyright)</Copyright>
+    <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+    <PackageProjectUrl>$(PROJECT_URL)</PackageProjectUrl>
+    <PackageIconUrl>$(ICON_URL)</PackageIconUrl>
+    <Configuration>$(Configuration)</Configuration>
+    <RepositoryUrl>$(REPOSITORY_URL)</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+
+    <IsTestProject>false</IsTestProject>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <None Include="..\LICENSE.md" Pack="true" PackagePath="$(PackageLicenseFile)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.2.0" />
+    <PackageReference Include="RestSharp" Version="106.3.1" />
+    <PackageReference Include="SpecFlow" Version="3.0.154-beta" />
+    <PackageReference Include="xunit" Version="2.4.1" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj" />
+  </ItemGroup>
+</Project>

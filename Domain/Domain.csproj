@@ -1,0 +1,41 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>Alma.Domain</AssemblyName>
+    <RootNamespace>Alma.Domain</RootNamespace>
+    <PackageId>Alma.Domain</PackageId>
+
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+    <DisableImplicitAssetTargetFallback>true</DisableImplicitAssetTargetFallback>
+    <IsTestProject>false</IsTestProject>
+
+
+    <Description>Implements a base for domain and business logic.</Description>
+    <Authors>$(Authors)</Authors>
+    <Company>$(Company)</Company>
+    <Product>$(Product)</Product>
+    <Copyright>$(Copyright)</Copyright>
+    <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+    <PackageProjectUrl>$(PROJECT_URL)</PackageProjectUrl>
+    <PackageIconUrl>$(ICON_URL)</PackageIconUrl>
+    <Configuration>$(Configuration)</Configuration>
+    <RepositoryUrl>$(REPOSITORY_URL)</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\LICENSE.md" Pack="true" PackagePath="$(PackageLicenseFile)"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentValidation" Version="7.6.103" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj" />
+  </ItemGroup>
+ 
+</Project>

@@ -1,0 +1,50 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>Alma.ApiExtensions</AssemblyName>
+    <RootNamespace>Alma.ApiExtensions</RootNamespace>
+    <PackageId>Alma.ApiExtensions</PackageId>
+
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+    <DisableImplicitAssetTargetFallback>true</DisableImplicitAssetTargetFallback>
+
+    
+    <Description>Implements a base for Web Api and MVC Projects in AspNetCore.</Description>
+    <Authors>$(Authors)</Authors>
+    <Company>$(Company)</Company>
+    <Product>$(Product)</Product>
+    <Copyright>$(Copyright)</Copyright>
+    <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+    <PackageProjectUrl>$(PROJECT_URL)</PackageProjectUrl>
+    <PackageIconUrl>$(ICON_URL)</PackageIconUrl>
+    <Configuration>$(Configuration)</Configuration>
+    <RepositoryUrl>$(REPOSITORY_URL)</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+
+    <IsTestProject>false</IsTestProject>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <None Include="..\LICENSE.md" Pack="true" PackagePath="$(PackageLicenseFile)"/>
+  </ItemGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="HtmlAgilityPack" Version="1.8.4" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication" Version="2.0.4" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="2.0.4" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Formatters.Json" Version="2.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor" Version="2.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Razor" Version="2.0.1" />
+    <PackageReference Include="Microsoft.IdentityModel.Tokens.Saml" Version="5.2.4" />
+    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.2.4" />
+  </ItemGroup>
+
+  
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj" />
+  </ItemGroup>
+</Project>

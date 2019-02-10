@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Common\Common.csproj" />
+    <ProjectReference Include="..\..\DataAccess.OrmNHibernate\DataAccess.OrmNHibernate.csproj" />
+    <ProjectReference Include="..\..\DataAccess\DataAccess.csproj" />
+    <ProjectReference Include="..\..\Domain\Domain.csproj" />
+    <ProjectReference Include="..\ExampleProject.Domain\ExampleProject.Domain.csproj" />
+  </ItemGroup>
+
+</Project>
