@@ -78,8 +78,8 @@ namespace Alma.DataAccess.OrmNHibernate
                         db.Dialect<NHibernate.Dialect.Oracle10gDialect>();
                         if (true /* isManagedOracle */)
                             db.Driver<NHibernate.Driver.OracleManagedDataClientDriver>();
-                        else
-                            db.Driver<NHibernate.Driver.OracleDataClientDriver>();
+                        //else
+                        //    db.Driver<NHibernate.Driver.OracleDataClientDriver>();
                         db.ConnectionString = conn.ConnectionString;
                         db.ConnectionProvider<ConnectionProvider>();
                         db.PrepareCommands = sett.PrepareCommands;
