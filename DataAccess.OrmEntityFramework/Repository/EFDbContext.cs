@@ -37,7 +37,7 @@ namespace Alma.DataAccess.OrmEntityFramework
             }
         }
 
-        public IQueryable<T> Query<T>() where T : class
+        public new IQueryable<T> Query<T>() where T : class
         {
             return Set<T>().AsQueryable();
         }
